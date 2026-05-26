@@ -178,11 +178,16 @@ export default function FlowerHabit({
       <p className="font-mono text-[7.5px] uppercase tracking-[1.5px] text-bark text-center leading-tight w-14">
         {habit.name}
       </p>
-      {streak > 0 && (
-        <p className="font-mono text-[7px] text-soil opacity-50 -mt-0.5">
-          {streak}d
-        </p>
-      )}
+      <div
+        className={`flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-bark/5 transition-opacity duration-500 ${
+          streak === 0 ? "opacity-30" : "opacity-100"
+        }`}
+      >
+        <span className="text-[10px] leading-none">🌱</span>
+        <span className="font-mono text-[9px] font-medium text-bark leading-none">
+          {Math.max(1, streak)}
+        </span>
+      </div>
     </button>
   );
 }

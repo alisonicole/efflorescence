@@ -11,14 +11,6 @@ const BACKGROUND_IMAGES: Record<GardenState, string> = {
   radiant: "/images/garden-02.jpg",
 };
 
-const FOREGROUND_IMAGES: Record<GardenState, string> = {
-  dormant: "/images/plant-01.jpg",
-  stirring: "/images/plant-01.jpg",
-  tending: "/images/garden-03.jpg",
-  blooming: "/images/flower-01.jpg",
-  radiant: "/images/flower-01.jpg",
-};
-
 // Subtle tint overlay per spiral to hint at weather/mood
 const SPIRAL_TINT: Partial<Record<import("@/types").Spiral, string>> = {
   the_clock: "bg-yellow-100/20",
@@ -54,14 +46,6 @@ export default function GardenHero({
         fill
         className="object-cover animate-shimmer"
         priority
-      />
-
-      {/* Midground garden scene */}
-      <Image
-        src={FOREGROUND_IMAGES[gardenState]}
-        alt="Garden scene"
-        fill
-        className="object-cover mix-blend-multiply animate-sway"
       />
 
       {/* Weather tint overlay */}
