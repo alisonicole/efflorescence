@@ -1,8 +1,6 @@
 import { initParse } from "./parse";
 import Parse from "parse";
 
-initParse();
-
 interface GoogleCredentialPayload {
   sub: string;
   email: string;
