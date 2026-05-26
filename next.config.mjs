@@ -1,4 +1,11 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "lh3.googleusercontent.com" }, // Google profile photos
+      { protocol: "https", hostname: "files.back4app.com" }, // Back4App file storage
+    ],
+  },
+};
 
 export default nextConfig;

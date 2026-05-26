@@ -20,7 +20,7 @@ const FOREGROUND_IMAGES: Record<GardenState, string> = {
 };
 
 // Subtle tint overlay per spiral to hint at weather/mood
-const SPIRAL_TINT: Record<string, string> = {
+const SPIRAL_TINT: Partial<Record<import("@/types").Spiral, string>> = {
   the_clock: "bg-yellow-100/20",
   the_replay: "bg-blue-100/20",
   the_mirror: "bg-purple-100/20",
