@@ -29,6 +29,7 @@ export default function EntryEditor({
       return;
     }
 
+    let saved = false;
     try {
       const ParseEntry = Parse.Object.extend("JournalEntry");
       const entry = new ParseEntry();
@@ -38,10 +39,11 @@ export default function EntryEditor({
       if (spiralContext) entry.set("spiralContext", spiralContext);
       entry.setACL(new Parse.ACL(user));
       await entry.save();
-      onSaved();
+      saved = true;
     } finally {
       setSaving(false);
     }
+    if (saved) onSaved();
   }
 
   return (
