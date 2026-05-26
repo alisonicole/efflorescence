@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import CrisisModal from "./CrisisModal";
+import GroundModal from "./GroundModal";
 
-interface CrisisBarProps {
+interface GroundBarProps {
   onTendGarden: () => void;
 }
 
-export default function CrisisBar({ onTendGarden }: CrisisBarProps) {
+export default function GroundBar({ onTendGarden }: GroundBarProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -28,12 +28,12 @@ export default function CrisisBar({ onTendGarden }: CrisisBarProps) {
           onClick={() => setOpen(true)}
           className="text-[11px] text-clay border border-clay/40 rounded-pill px-3 py-1 hover:bg-clay/5"
         >
-          crisis mode
+          ground
         </button>
       </div>
 
       {open && (
-        <CrisisModal
+        <GroundModal
           onClose={() => setOpen(false)}
           onTendGarden={onTendGarden}
         />

@@ -3,19 +3,19 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
-type CrisisPath = "none" | "breathing";
+type GroundPath = "none" | "breathing";
 
-interface CrisisModalProps {
+interface GroundModalProps {
   onClose: () => void;
   onTendGarden: () => void;
 }
 
-export default function CrisisModal({
+export default function GroundModal({
   onClose,
   onTendGarden,
-}: CrisisModalProps) {
+}: GroundModalProps) {
   const router = useRouter();
-  const [path, setPath] = useState<CrisisPath>("none");
+  const [path, setPath] = useState<GroundPath>("none");
   const [secondsLeft, setSecondsLeft] = useState(600);
   const [breathPhase, setBreathPhase] = useState<"inhale" | "hold" | "exhale">(
     "inhale",
@@ -74,7 +74,7 @@ export default function CrisisModal({
             <div className="flex items-center gap-2 mb-1">
               <div className="w-2 h-2 rounded-full bg-clay" />
               <h2 className="font-serif text-lg text-bark">
-                Need a soft redirect?
+                Come back to the ground.
               </h2>
             </div>
             <p className="text-xs text-muted mb-6">Come here first.</p>
@@ -96,14 +96,12 @@ export default function CrisisModal({
 
             <button
               onClick={() => {
-                router.push("/journal/receipts");
+                router.push("/journal/the-why");
                 onClose();
               }}
               className="w-full text-left p-4 bg-white rounded-card mb-2 shadow-sm"
             >
-              <div className="text-sm font-medium text-bark">
-                Open The Receipts
-              </div>
+              <div className="text-sm font-medium text-bark">Open The Why</div>
               <div className="text-xs text-muted">
                 Read what you wrote. Remember why.
               </div>
