@@ -29,6 +29,10 @@ export function getInspireItems(
     return item.spirals.includes(spiral) || item.spirals.includes("all");
   });
 
-  const shuffled = eligible.sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, 3);
+  const copy = [...eligible];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy.slice(0, 3);
 }
