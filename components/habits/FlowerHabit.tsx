@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Parse from "parse";
 import { initParse } from "@/lib/parse";
+import { detectBlossomEarned } from "@/lib/garden";
 import type { Habit, HabitCategory } from "@/types";
 
 const CATEGORY_COLOR: Record<HabitCategory, string> = {
@@ -73,6 +74,33 @@ export default function FlowerHabit({
         completion.setACL(new Parse.ACL(user));
         await completion.save();
         onToggle(habit.objectId, true);
+
+        // Check if a blossom was earned (7-day streak milestone)
+        try {
+          const completionQuery = new Parse.Query(HabitCompletion);
+          completionQuery.equalTo("user", user);
+          completionQuery.equalTo("habitId", habit.objectId);
+          const allCompletions = await completionQuery.find();
+          const newStreak = allCompletions.length;
+          const prevStreak = newStreak - 1;
+
+          if (detectBlossomEarned(newStreak, prevStreak)) {
+            const ParseBlossom = Parse.Object.extend("BlossomEntry");
+            const blossom = new ParseBlossom();
+            const streakStart = new Date();
+            streakStart.setDate(streakStart.getDate() - (newStreak - 1));
+            blossom.set("user", user);
+            blossom.set("habitCategory", habit.category);
+            blossom.set("habitName", habit.name);
+            blossom.set("streakStartDate", streakStart);
+            blossom.set("streakEndDate", new Date());
+            blossom.set("streakLength", newStreak);
+            blossom.setACL(new Parse.ACL(user));
+            await blossom.save();
+          }
+        } catch {
+          // Blossom creation failure must not affect the habit completion record
+        }
       }
     } finally {
       setSaving(false);

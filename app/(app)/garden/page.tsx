@@ -15,6 +15,7 @@ import TopBar from "@/components/layout/TopBar";
 import GardenHero from "@/components/garden/GardenHero";
 import HabitGrid from "@/components/habits/HabitGrid";
 import OnboardingModal from "@/components/onboarding/OnboardingModal";
+import BlossomGrove from "@/components/garden/BlossomGrove";
 
 export default function GardenPage() {
   const [needsOnboarding, setNeedsOnboarding] = useState(false);
@@ -100,6 +101,9 @@ export default function GardenPage() {
             Tending today
           </p>
           <HabitGrid />
+        </div>
+        <div className="px-2.5">
+          <BlossomGrove />
         </div>
         <div className="px-2.5 pt-1">
           <Link
