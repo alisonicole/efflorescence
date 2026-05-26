@@ -89,6 +89,11 @@ export interface FullPictureItem {
   createdAt: Date;
 }
 
+export interface BlossomSpecies {
+  emoji: string;
+  name: string;
+}
+
 export interface BlossomEntry {
   objectId: string;
   habitCategory: HabitCategory;
