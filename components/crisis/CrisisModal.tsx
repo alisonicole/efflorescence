@@ -22,13 +22,7 @@ export default function CrisisModal({
   useEffect(() => {
     if (path !== "breathing") return;
     const interval = setInterval(() => {
-      setSecondsLeft((s) => {
-        if (s <= 1) {
-          clearInterval(interval);
-          return 0;
-        }
-        return s - 1;
-      });
+      setSecondsLeft((s) => Math.max(0, s - 1));
     }, 1000);
     return () => clearInterval(interval);
   }, [path]);
@@ -44,16 +38,21 @@ export default function CrisisModal({
       { phase: "exhale", duration: 8000 },
     ];
     let idx = 0;
-    function cycle() {
+    let timeoutId: ReturnType<typeof setTimeout>;
+    let cancelled = false;
+    function advance() {
+      if (cancelled) return;
       setBreathPhase(phases[idx].phase);
-      idx = (idx + 1) % phases.length;
+      timeoutId = setTimeout(() => {
+        idx = (idx + 1) % phases.length;
+        advance();
+      }, phases[idx].duration);
     }
-    cycle();
-    const interval = setInterval(
-      cycle,
-      phases[idx === 0 ? phases.length - 1 : idx - 1].duration,
-    );
-    return () => clearInterval(interval);
+    advance();
+    return () => {
+      cancelled = true;
+      clearTimeout(timeoutId);
+    };
   }, [path]);
 
   const minutes = Math.floor(secondsLeft / 60);

@@ -23,24 +23,26 @@ export default function OnboardingModal({ onComplete }: OnboardingModalProps) {
       return;
     }
 
-    user.set("healingStartDate", new Date(startDate));
-    await user.save();
+    try {
+      user.set("healingStartDate", new Date(`${startDate}T00:00:00`));
+      await user.save();
 
-    const ParseHabit = Parse.Object.extend("Habit");
-    const saves = DEFAULT_HABITS.map((h) => {
-      const habit = new ParseHabit();
-      habit.set("user", user);
-      habit.set("name", h.name);
-      habit.set("category", h.category);
-      habit.set("icon", h.icon);
-      habit.set("isActive", true);
-      habit.setACL(new Parse.ACL(user));
-      return habit.save();
-    });
-    await Promise.all(saves);
-
-    setSaving(false);
-    onComplete();
+      const ParseHabit = Parse.Object.extend("Habit");
+      const saves = DEFAULT_HABITS.map((h) => {
+        const habit = new ParseHabit();
+        habit.set("user", user);
+        habit.set("name", h.name);
+        habit.set("category", h.category);
+        habit.set("icon", h.icon);
+        habit.set("isActive", true);
+        habit.setACL(new Parse.ACL(user));
+        return habit.save();
+      });
+      await Promise.all(saves);
+      onComplete();
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (

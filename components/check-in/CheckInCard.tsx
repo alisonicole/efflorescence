@@ -34,6 +34,7 @@ export default function CheckInCard({
 
   async function handleSelect(spiral: Spiral) {
     if (saving) return;
+    const prev = selected;
     setSaving(true);
     setSelected(spiral);
     onSpiralSelect(spiral);
@@ -45,31 +46,35 @@ export default function CheckInCard({
       return;
     }
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
+    try {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
 
-    const CheckIn = Parse.Object.extend("CheckIn");
-    const query = new Parse.Query(CheckIn);
-    query.equalTo("user", user);
-    query.greaterThanOrEqualTo("date", today);
-    query.lessThan("date", tomorrow);
-    const existing = await query.first();
+      const CheckIn = Parse.Object.extend("CheckIn");
+      const query = new Parse.Query(CheckIn);
+      query.equalTo("user", user);
+      query.greaterThanOrEqualTo("date", today);
+      query.lessThan("date", tomorrow);
+      const existing = await query.first();
 
-    if (existing) {
-      existing.set("spiral", spiral);
-      await existing.save();
-    } else {
-      const checkIn = new CheckIn();
-      checkIn.set("user", user);
-      checkIn.set("date", new Date());
-      checkIn.set("spiral", spiral);
-      const acl = new Parse.ACL(user);
-      checkIn.setACL(acl);
-      await checkIn.save();
+      if (existing) {
+        existing.set("spiral", spiral);
+        await existing.save();
+      } else {
+        const checkIn = new CheckIn();
+        checkIn.set("user", user);
+        checkIn.set("date", new Date());
+        checkIn.set("spiral", spiral);
+        checkIn.setACL(new Parse.ACL(user));
+        await checkIn.save();
+      }
+    } catch {
+      setSelected(prev);
+    } finally {
+      setSaving(false);
     }
-    setSaving(false);
   }
 
   return (

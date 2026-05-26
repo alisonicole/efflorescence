@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Parse from "parse";
 import { initParse } from "@/lib/parse";
 import type { Habit } from "@/types";
@@ -17,10 +18,17 @@ export default function HabitCard({
   completedToday,
   onToggle,
 }: HabitCardProps) {
+  const [saving, setSaving] = useState(false);
+
   async function handleTap() {
+    if (saving) return;
+    setSaving(true);
     initParse();
     const user = Parse.User.current();
-    if (!user) return;
+    if (!user) {
+      setSaving(false);
+      return;
+    }
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -29,24 +37,27 @@ export default function HabitCard({
 
     const HabitCompletion = Parse.Object.extend("HabitCompletion");
 
-    if (completedToday) {
-      const query = new Parse.Query(HabitCompletion);
-      query.equalTo("user", user);
-      query.equalTo("habitId", habit.objectId);
-      query.greaterThanOrEqualTo("completedDate", today);
-      query.lessThan("completedDate", tomorrow);
-      const existing = await query.first();
-      if (existing) await existing.destroy();
-      onToggle(habit.objectId, false);
-    } else {
-      const completion = new HabitCompletion();
-      completion.set("user", user);
-      completion.set("habitId", habit.objectId);
-      completion.set("completedDate", new Date());
-      const acl = new Parse.ACL(user);
-      completion.setACL(acl);
-      await completion.save();
-      onToggle(habit.objectId, true);
+    try {
+      if (completedToday) {
+        const query = new Parse.Query(HabitCompletion);
+        query.equalTo("user", user);
+        query.equalTo("habitId", habit.objectId);
+        query.greaterThanOrEqualTo("completedDate", today);
+        query.lessThan("completedDate", tomorrow);
+        const existing = await query.first();
+        if (existing) await existing.destroy();
+        onToggle(habit.objectId, false);
+      } else {
+        const completion = new HabitCompletion();
+        completion.set("user", user);
+        completion.set("habitId", habit.objectId);
+        completion.set("completedDate", new Date());
+        completion.setACL(new Parse.ACL(user));
+        await completion.save();
+        onToggle(habit.objectId, true);
+      }
+    } finally {
+      setSaving(false);
     }
   }
 
@@ -56,6 +67,7 @@ export default function HabitCard({
   return (
     <button
       onClick={handleTap}
+      disabled={saving}
       className={`bg-white rounded-card p-2.5 text-left relative border-t-2 transition-colors ${
         completedToday ? "border-moss" : "border-border"
       }`}
