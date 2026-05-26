@@ -37,8 +37,13 @@ export function computeStreak(completionDates: Date[]): number {
       return date.getTime();
     }),
   );
+  // Allow streak anchored on today or yesterday (user may not have completed today yet)
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  const cursor = dateSet.has(today.getTime())
+    ? new Date(today)
+    : new Date(yesterday);
   let streak = 0;
-  const cursor = new Date(today);
   while (dateSet.has(cursor.getTime())) {
     streak++;
     cursor.setDate(cursor.getDate() - 1);

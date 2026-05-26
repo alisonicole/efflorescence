@@ -53,6 +53,19 @@ describe("computeStreak", () => {
     });
     expect(computeStreak(dates)).toBe(3);
   });
+  it("returns 1 for a completion yesterday (streak still active)", () => {
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    expect(computeStreak([d])).toBe(1);
+  });
+  it("returns 2 for consecutive completions yesterday and day before", () => {
+    const dates = [1, 2].map((daysAgo) => {
+      const d = new Date();
+      d.setDate(d.getDate() - daysAgo);
+      return d;
+    });
+    expect(computeStreak(dates)).toBe(2);
+  });
   it("returns 0 when most recent completion was 2 days ago", () => {
     const d = new Date();
     d.setDate(d.getDate() - 2);

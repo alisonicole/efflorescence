@@ -22,7 +22,7 @@ export const PROMPTS: Record<Spiral, string[]> = {
     "What does your life have room for now that it didn't before?",
   ],
   the_but_he: [
-    "What did the relationship cost you that you haven't fully acknowledged?",
+    "Write one sentence about what it cost you to love someone who hurt you.",
     "Describe a moment where you felt small. Just describe it. No analysis.",
     "What would 'being loved well' actually look like? Be specific.",
   ],
