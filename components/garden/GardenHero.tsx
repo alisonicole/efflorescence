@@ -3,6 +3,7 @@ import type { Season, GardenState, Spiral } from "@/types";
 import SeasonBadge from "./SeasonBadge";
 import DayCounter from "./DayCounter";
 import PlantASeedButton from "./PlantASeedButton";
+import SoilCorner from "./SoilCorner";
 
 const BACKGROUND_IMAGES: Record<GardenState, string> = {
   dormant: "/images/landscape-01.jpg",
@@ -69,7 +70,10 @@ export default function GardenHero({
         <DayCounter days={dayCount} />
       </div>
 
-      {/* Plant a seed — journal corner, bottom-left */}
+      {/* Journal corner — soil patches, bottom-left */}
+      <SoilCorner />
+
+      {/* Plant a seed — sits just above the soil corner */}
       <PlantASeedButton />
     </div>
   );
