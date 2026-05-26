@@ -6,7 +6,13 @@ import { initParse } from "@/lib/parse";
 import { groupCompletionsByDate, groupCheckInsByDate } from "@/lib/calendar";
 import TopBar from "@/components/layout/TopBar";
 import CalendarGrid from "@/components/calendar/CalendarGrid";
-import type { HabitCompletion, CheckIn, Habit } from "@/types";
+import type {
+  HabitCompletion,
+  CheckIn,
+  Habit,
+  HabitCategory,
+  Spiral,
+} from "@/types";
 
 export default function CalendarPage() {
   const [completions, setCompletions] = useState<HabitCompletion[]>([]);
@@ -21,46 +27,48 @@ export default function CalendarPage() {
     const user = Parse.User.current();
     if (!user) return;
 
-    const [completionResults, checkInResults, habitResults] = await Promise.all(
-      [
-        new Parse.Query("HabitCompletion")
-          .equalTo("user", user)
-          .limit(2000)
-          .find(),
-        new Parse.Query("CheckIn").equalTo("user", user).limit(2000).find(),
-        new Parse.Query("Habit")
-          .equalTo("user", user)
-          .equalTo("isActive", true)
-          .find(),
-      ],
-    );
+    try {
+      const [completionResults, checkInResults, habitResults] =
+        await Promise.all([
+          new Parse.Query("HabitCompletion")
+            .equalTo("user", user)
+            .limit(2000)
+            .find(),
+          new Parse.Query("CheckIn").equalTo("user", user).limit(2000).find(),
+          new Parse.Query("Habit")
+            .equalTo("user", user)
+            .equalTo("isActive", true)
+            .find(),
+        ]);
 
-    setCompletions(
-      completionResults.map((r) => ({
-        objectId: r.id,
-        habitId: r.get("habitId") as string,
-        completedDate: r.get("completedDate") as Date,
-      })),
-    );
-    setCheckIns(
-      checkInResults.map((r) => ({
-        objectId: r.id,
-        date: r.get("date") as Date,
-        spiral: r.get("spiral"),
-        createdAt: r.createdAt!,
-      })),
-    );
-    setHabits(
-      habitResults.map((r) => ({
-        objectId: r.id,
-        name: r.get("name") as string,
-        category: r.get("category"),
-        icon: r.get("icon") as string,
-        isActive: true,
-        createdAt: r.createdAt!,
-      })),
-    );
-    setLoading(false);
+      setCompletions(
+        completionResults.map((r) => ({
+          objectId: r.id,
+          habitId: r.get("habitId") as string,
+          completedDate: r.get("completedDate") as Date,
+        })),
+      );
+      setCheckIns(
+        checkInResults.map((r) => ({
+          objectId: r.id,
+          date: r.get("date") as Date,
+          spiral: r.get("spiral") as Spiral,
+          createdAt: r.createdAt!,
+        })),
+      );
+      setHabits(
+        habitResults.map((r) => ({
+          objectId: r.id,
+          name: r.get("name") as string,
+          category: r.get("category") as HabitCategory,
+          icon: r.get("icon") as string,
+          isActive: true,
+          createdAt: r.createdAt!,
+        })),
+      );
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -115,6 +123,7 @@ export default function CalendarPage() {
               spiralsByDate={spiralsByDate}
               completions={completions}
               checkIns={checkIns}
+              habits={habits}
               totalHabits={habits.length}
             />
           </>

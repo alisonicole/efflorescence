@@ -15,18 +15,22 @@ export default function FullPicture() {
     initParse();
     const user = Parse.User.current();
     if (!user) return;
-    const query = new Parse.Query("FullPictureItem");
-    query.equalTo("user", user);
-    query.ascending("createdAt");
-    const results = await query.find();
-    setItems(
-      results.map((r) => ({
-        objectId: r.id,
-        side: r.get("side") as "good" | "true",
-        text: r.get("text") as string,
-        createdAt: r.createdAt!,
-      })),
-    );
+    try {
+      const query = new Parse.Query("FullPictureItem");
+      query.equalTo("user", user);
+      query.ascending("createdAt");
+      const results = await query.find();
+      setItems(
+        results.map((r) => ({
+          objectId: r.id,
+          side: r.get("side") as "good" | "true",
+          text: r.get("text") as string,
+          createdAt: r.createdAt!,
+        })),
+      );
+    } catch {
+      // stale data is better than a broken spinner
+    }
   }, []);
 
   useEffect(() => {
@@ -49,11 +53,16 @@ export default function FullPicture() {
     item.set("side", side);
     item.set("text", trimmed);
     item.setACL(new Parse.ACL(user));
-    await item.save();
-    if (side === "good") setGoodText("");
-    else setTrueText("");
-    setAdding(false);
-    void load();
+    try {
+      await item.save();
+      if (side === "good") setGoodText("");
+      else setTrueText("");
+      void load();
+    } catch {
+      // save failed - leave text in input so user can retry
+    } finally {
+      setAdding(false);
+    }
   }
 
   const column = (

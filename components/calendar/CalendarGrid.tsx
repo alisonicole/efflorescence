@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { dateKey, computeHeatLevel, monthDays } from "@/lib/calendar";
 import DayDetailCard from "./DayDetailCard";
-import type { Spiral, HabitCompletion, CheckIn } from "@/types";
+import type { Spiral, HabitCompletion, CheckIn, Habit } from "@/types";
 import type { HeatLevel } from "@/lib/calendar";
 
 const HEAT_CLASSES: Record<HeatLevel, string> = {
@@ -30,6 +30,7 @@ interface CalendarGridProps {
   spiralsByDate: Record<string, Spiral>;
   completions: HabitCompletion[];
   checkIns: CheckIn[];
+  habits: Habit[];
   totalHabits: number;
 }
 
@@ -40,6 +41,7 @@ export default function CalendarGrid({
   spiralsByDate,
   completions,
   checkIns,
+  habits,
   totalHabits,
 }: CalendarGridProps) {
   const [selected, setSelected] = useState<string | null>(null);
@@ -95,6 +97,7 @@ export default function CalendarGrid({
           date={new Date(selected)}
           completions={selectedCompletions}
           checkIn={selectedCheckIn}
+          habits={habits}
           onClose={() => setSelected(null)}
         />
       )}

@@ -1,10 +1,11 @@
 import { SPIRAL_LABELS } from "@/types";
-import type { Spiral, HabitCompletion, CheckIn } from "@/types";
+import type { Spiral, HabitCompletion, CheckIn, Habit } from "@/types";
 
 interface DayDetailCardProps {
   date: Date;
   completions: HabitCompletion[];
   checkIn: CheckIn | undefined;
+  habits: Habit[];
   onClose: () => void;
 }
 
@@ -12,8 +13,12 @@ export default function DayDetailCard({
   date,
   completions,
   checkIn,
+  habits,
   onClose,
 }: DayDetailCardProps) {
+  const habitNameById = Object.fromEntries(
+    habits.map((h) => [h.objectId, h.name]),
+  );
   return (
     <div
       className="fixed inset-0 bg-black/40 z-50 flex items-end justify-center"
@@ -48,7 +53,7 @@ export default function DayDetailCard({
             <ul className="space-y-1">
               {completions.map((c) => (
                 <li key={c.objectId} className="text-sm text-bark">
-                  {c.habitId}
+                  {habitNameById[c.habitId] ?? c.habitId}
                 </li>
               ))}
             </ul>
