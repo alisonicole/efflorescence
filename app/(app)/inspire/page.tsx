@@ -16,7 +16,10 @@ export default function InspirePage() {
   const load = useCallback(async () => {
     initParse();
     const user = Parse.User.current();
-    if (!user) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
