@@ -14,7 +14,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const [todaySpiral, setTodaySpiral] = useState<Spiral | undefined>();
 
   useEffect(() => {
-    if (!loading && !user) router.replace("/");
+    if (!loading && !user) router.replace("/signin");
   }, [user, loading, router]);
 
   if (loading || !user) return null;
