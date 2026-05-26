@@ -1,0 +1,91 @@
+export type Spiral =
+  | "the_clock"
+  | "the_replay"
+  | "the_mirror"
+  | "the_what_if"
+  | "the_but_he"
+  | "actually_okay"
+  | "i_dont_know";
+
+export type HabitCategory =
+  | "water_meals"
+  | "outside"
+  | "no_contact"
+  | "no_stalking"
+  | "journaling"
+  | "talking";
+
+export type Season =
+  | "late_autumn"
+  | "winter"
+  | "early_spring"
+  | "full_spring"
+  | "summer";
+
+export type GardenState = "dormant" | "stirring" | "tending" | "blooming";
+
+export interface TenderUser {
+  objectId: string;
+  email: string;
+  name: string;
+  avatarUrl?: string;
+  healingStartDate: Date;
+}
+
+export interface CheckIn {
+  objectId: string;
+  date: Date;
+  spiral: Spiral;
+  createdAt: Date;
+}
+
+export interface Habit {
+  objectId: string;
+  name: string;
+  category: HabitCategory;
+  icon: string;
+  isActive: boolean;
+  createdAt: Date;
+}
+
+export interface HabitCompletion {
+  objectId: string;
+  habitId: string;
+  completedDate: Date;
+}
+
+export interface JournalEntry {
+  objectId: string;
+  content: string;
+  prompt: string;
+  spiralContext?: Spiral;
+  createdAt: Date;
+}
+
+export interface GardenData {
+  dayCount: number;
+  season: Season;
+  gardenState: GardenState;
+  todaySpiral?: Spiral;
+}
+
+export const SPIRAL_LABELS: Record<Spiral, string> = {
+  the_clock: "The Clock",
+  the_replay: "The Replay",
+  the_mirror: "The Mirror",
+  the_what_if: "The What If",
+  the_but_he: "The But He",
+  actually_okay: "Actually okay",
+  i_dont_know: "I don't know",
+};
+
+export const DEFAULT_HABITS: Array<{
+  name: string;
+  category: HabitCategory;
+  icon: string;
+}> = [
+  { name: "Water & meals", category: "water_meals", icon: "💧" },
+  { name: "Go outside", category: "outside", icon: "🌤" },
+  { name: "No contact", category: "no_contact", icon: "✂️" },
+  { name: "Journal", category: "journaling", icon: "🌱" },
+];
