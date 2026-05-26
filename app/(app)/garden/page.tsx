@@ -10,11 +10,12 @@ import {
 } from "@/lib/garden";
 import type { Spiral, GardenState, Season } from "@/types";
 
+import Link from "next/link";
 import TopBar from "@/components/layout/TopBar";
 import GardenHero from "@/components/garden/GardenHero";
 import HabitGrid from "@/components/habits/HabitGrid";
-import CrisisBar from "@/components/crisis/CrisisBar";
 import OnboardingModal from "@/components/onboarding/OnboardingModal";
+import BlossomGrove from "@/components/garden/BlossomGrove";
 
 export default function GardenPage() {
   const [needsOnboarding, setNeedsOnboarding] = useState(false);
@@ -101,7 +102,17 @@ export default function GardenPage() {
           </p>
           <HabitGrid />
         </div>
-        <CrisisBar onTendGarden={scrollToHabits} />
+        <div className="px-2.5">
+          <BlossomGrove />
+        </div>
+        <div className="px-2.5 pt-1">
+          <Link
+            href="/calendar"
+            className="text-[9px] uppercase tracking-wider text-muted underline"
+          >
+            view journey
+          </Link>
+        </div>
       </div>
     </>
   );

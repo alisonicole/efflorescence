@@ -6,9 +6,10 @@ import Image from "next/image";
 interface TopBarProps {
   title: string;
   subtitle: string;
+  action?: React.ReactNode;
 }
 
-export default function TopBar({ title, subtitle }: TopBarProps) {
+export default function TopBar({ title, subtitle, action }: TopBarProps) {
   const { user } = useAuth();
   const avatarUrl = user?.get("avatarUrl") as string | undefined;
 
@@ -22,18 +23,21 @@ export default function TopBar({ title, subtitle }: TopBarProps) {
           {subtitle}
         </p>
       </div>
-      <div className="w-8 h-8 rounded-full bg-border overflow-hidden flex items-center justify-center">
-        {avatarUrl ? (
-          <Image
-            src={avatarUrl}
-            alt="avatar"
-            width={32}
-            height={32}
-            className="object-cover"
-          />
-        ) : (
-          <span className="text-muted text-sm">👤</span>
-        )}
+      <div className="flex items-center gap-3">
+        {action && <div>{action}</div>}
+        <div className="w-8 h-8 rounded-full bg-border overflow-hidden flex items-center justify-center">
+          {avatarUrl ? (
+            <Image
+              src={avatarUrl}
+              alt="avatar"
+              width={32}
+              height={32}
+              className="object-cover"
+            />
+          ) : (
+            <span className="text-muted text-sm">👤</span>
+          )}
+        </div>
       </div>
     </div>
   );

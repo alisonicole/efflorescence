@@ -1,4 +1,9 @@
-import type { Season, GardenState } from "@/types";
+import type {
+  Season,
+  GardenState,
+  HabitCategory,
+  BlossomSpecies,
+} from "@/types";
 
 export function computeDayCount(healingStartDate: Date): number {
   const start = new Date(healingStartDate);
@@ -61,4 +66,25 @@ export const SEASON_LABELS: Record<Season, string> = {
   early_spring: "Early Spring",
   full_spring: "Full Spring",
   summer: "Summer",
+};
+
+/**
+ * Returns true when `streak` crosses a new 7-day multiple that `prevStreak` had not yet reached.
+ * Pass the streak value from before the current completion as `prevStreak`.
+ */
+export function detectBlossomEarned(
+  streak: number,
+  prevStreak: number,
+): boolean {
+  if (streak < 7) return false;
+  return Math.floor(streak / 7) > Math.floor(prevStreak / 7);
+}
+
+export const BLOSSOM_SPECIES: Record<HabitCategory, BlossomSpecies> = {
+  water_meals: { emoji: "🌼", name: "chamomile" },
+  outside: { emoji: "🌻", name: "sunflower" },
+  no_contact: { emoji: "🌹", name: "rose" },
+  no_stalking: { emoji: "💐", name: "wildflower" },
+  journaling: { emoji: "🌷", name: "tulip" },
+  talking: { emoji: "🌸", name: "cherry blossom" },
 };
