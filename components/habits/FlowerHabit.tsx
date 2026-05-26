@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Parse from "parse";
 import { initParse } from "@/lib/parse";
-import { detectBlossomEarned } from "@/lib/garden";
+import { detectBlossomEarned, computeStreak } from "@/lib/garden";
 import type { Habit, HabitCategory } from "@/types";
 
 const CATEGORY_COLOR: Record<HabitCategory, string> = {
@@ -81,8 +81,11 @@ export default function FlowerHabit({
           completionQuery.equalTo("user", user);
           completionQuery.equalTo("habitId", habit.objectId);
           const allCompletions = await completionQuery.find();
-          const newStreak = allCompletions.length;
-          const prevStreak = newStreak - 1;
+          const dates = allCompletions.map(
+            (c) => c.get("completedDate") as Date,
+          );
+          const newStreak = computeStreak(dates);
+          const prevStreak = newStreak > 0 ? newStreak - 1 : 0;
 
           if (detectBlossomEarned(newStreak, prevStreak)) {
             const ParseBlossom = Parse.Object.extend("BlossomEntry");

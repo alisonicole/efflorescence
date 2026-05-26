@@ -50,7 +50,10 @@ export default function BlossomGrove() {
       </p>
       <div className="flex flex-wrap gap-2">
         {blossoms.map((b) => {
-          const species = BLOSSOM_SPECIES[b.habitCategory];
+          const species = BLOSSOM_SPECIES[b.habitCategory] ?? {
+            emoji: "🌿",
+            name: "unknown",
+          };
           return (
             <div
               key={b.objectId}
@@ -59,10 +62,10 @@ export default function BlossomGrove() {
             >
               <span className="text-xl">{species.emoji}</span>
               <span className="font-mono text-[7px] text-muted">
-                {b.streakStartDate.toLocaleDateString("en-US", {
+                {b.streakStartDate?.toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",
-                })}
+                }) ?? null}
               </span>
             </div>
           );
