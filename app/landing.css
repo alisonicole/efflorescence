@@ -966,3 +966,106 @@
   color: rgba(245, 239, 228, 0.15);
   line-height: 2;
 }
+
+/* MOBILE BREAKPOINTS */
+@media (max-width: 768px) {
+  /* Nav */
+  .nav {
+    padding: 20px 24px;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  /* Hero */
+  .hero-content {
+    padding: 0 24px;
+    max-width: 100%;
+  }
+
+  .hero-botanical {
+    display: none;
+  }
+
+  .hero-cta {
+    display: block;
+    text-align: center;
+  }
+
+  .hero-scroll {
+    padding: 0 24px 48px;
+  }
+
+  /* Definition section */
+  .def-inner {
+    grid-template-columns: 1fr;
+    padding: 80px 24px;
+    gap: 48px;
+  }
+
+  .def-entry {
+    position: static;
+  }
+
+  /* Bridge */
+  .bridge {
+    padding: 80px 24px;
+  }
+
+  /* Meaning section */
+  .meaning-section {
+    padding: 80px 24px;
+  }
+
+  .meaning-header {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .pillars {
+    grid-template-columns: 1fr;
+  }
+
+  /* CTA section */
+  .cta-section {
+    padding: 100px 24px;
+  }
+
+  .cta-form {
+    flex-direction: column;
+  }
+
+  .cta-input {
+    border-right: 0.5px solid rgba(245, 239, 228, 0.15);
+    border-bottom: none;
+    border-radius: 2px 2px 0 0;
+  }
+
+  .cta-btn {
+    border-radius: 0 0 2px 2px;
+    padding: 14px;
+  }
+
+  /* Footer */
+  .footer {
+    flex-direction: column;
+    gap: 24px;
+    padding: 48px 24px;
+    align-items: flex-start;
+  }
+
+  .footer-right {
+    text-align: left;
+  }
+
+  .footer-wordmark {
+    font-size: 60px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-scroll {
+    display: none;
+  }
+}
