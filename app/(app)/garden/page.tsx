@@ -13,7 +13,6 @@ import type { Spiral, GardenState, Season } from "@/types";
 import TopBar from "@/components/layout/TopBar";
 import GardenHero from "@/components/garden/GardenHero";
 import HabitGrid from "@/components/habits/HabitGrid";
-import GroundBar from "@/components/ground/GroundBar";
 import OnboardingModal from "@/components/onboarding/OnboardingModal";
 
 export default function GardenPage() {
@@ -101,7 +100,6 @@ export default function GardenPage() {
           </p>
           <HabitGrid />
         </div>
-        <GroundBar onTendGarden={scrollToHabits} />
       </div>
     </>
   );
