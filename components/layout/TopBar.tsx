@@ -15,10 +15,10 @@ export default function TopBar({ title, subtitle }: TopBarProps) {
   return (
     <div className="flex justify-between items-start px-4 pt-3 pb-2 bg-cream">
       <div>
-        <h1 className="font-serif text-xl font-light tracking-wide text-bark">
+        <h1 className="font-display text-2xl font-light italic tracking-tight text-bark">
           {title}
         </h1>
-        <p className="text-[10px] uppercase tracking-widest text-muted">
+        <p className="font-mono text-[9px] uppercase tracking-[3px] text-soil opacity-60">
           {subtitle}
         </p>
       </div>

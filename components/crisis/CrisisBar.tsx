@@ -17,9 +17,11 @@ export default function CrisisBar({ onTendGarden }: CrisisBarProps) {
           <div className="w-2 h-2 rounded-full bg-clay flex-shrink-0" />
           <div>
             <p className="text-[11px] font-medium text-bark">
-              Need a soft redirect?
+              Come here first.
             </p>
-            <p className="text-[10px] text-muted">Come here first.</p>
+            <p className="font-mono text-[9px] text-soil opacity-60">
+              Just ten minutes.
+            </p>
           </div>
         </div>
         <button

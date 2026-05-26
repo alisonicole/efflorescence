@@ -88,7 +88,7 @@ export default function GardenPage() {
       {needsOnboarding && (
         <OnboardingModal onComplete={handleOnboardingComplete} />
       )}
-      <TopBar title="tender" subtitle={`Day ${dayCount} of healing`} />
+      <TopBar title="efflorescence" subtitle={`Day ${dayCount} of healing`} />
       <div className="space-y-2.5 pb-4">
         <GardenHero
           season={season}

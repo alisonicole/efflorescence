@@ -79,10 +79,10 @@ export default function CheckInCard({
 
   return (
     <div className="mx-2.5 bg-white rounded-card p-3.5 shadow-sm">
-      <p className="text-[10px] uppercase tracking-widest text-muted mb-1">
+      <p className="font-mono text-[9px] uppercase tracking-[3px] text-soil opacity-60 mb-1">
         Morning check-in
       </p>
-      <p className="font-serif text-sm italic text-bark mb-3">
+      <p className="font-display text-base italic font-light text-bark mb-3">
         "How are you today?"
       </p>
       <div className="flex flex-wrap gap-1.5">
