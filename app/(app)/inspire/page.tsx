@@ -39,6 +39,8 @@ export default function InspirePage() {
 
       const startDate = userData.get("healingStartDate") as Date | undefined;
       if (startDate) setDayCount(computeDayCount(new Date(startDate)));
+    } catch {
+      // silent fail — feed will show empty state
     } finally {
       setLoading(false);
     }
