@@ -4,6 +4,7 @@ import {
   computeSeason,
   computeGardenState,
   computeStreak,
+  detectBlossomEarned,
 } from "./garden";
 
 describe("computeDayCount", () => {
@@ -70,5 +71,23 @@ describe("computeStreak", () => {
     const d = new Date();
     d.setDate(d.getDate() - 2);
     expect(computeStreak([d])).toBe(0);
+  });
+});
+
+describe("detectBlossomEarned", () => {
+  it("returns false when streak is below 7", () => {
+    expect(detectBlossomEarned(6, 5)).toBe(false);
+  });
+  it("returns true when streak crosses 7 for the first time", () => {
+    expect(detectBlossomEarned(7, 6)).toBe(true);
+  });
+  it("returns false when streak was already past 7 with no new milestone", () => {
+    expect(detectBlossomEarned(10, 8)).toBe(false);
+  });
+  it("returns true when streak crosses 14", () => {
+    expect(detectBlossomEarned(14, 13)).toBe(true);
+  });
+  it("returns false when prev streak already past 14", () => {
+    expect(detectBlossomEarned(16, 14)).toBe(false);
   });
 });
