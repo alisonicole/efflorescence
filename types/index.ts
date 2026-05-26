@@ -64,7 +64,7 @@ export interface JournalEntry {
   content: string;
   prompt: string;
   spiralContext?: Spiral;
-  entryType?: "standard" | "rewrite" | "receipts";
+  entryType?: "standard" | "rewrite" | "the_why";
   pass1Content?: string;
   createdAt: Date;
 }
@@ -74,6 +74,41 @@ export interface GardenData {
   season: Season;
   gardenState: GardenState;
   todaySpiral?: Spiral;
+}
+
+export interface WhyEntry {
+  objectId: string;
+  content: string;
+  createdAt: Date;
+}
+
+export interface FullPictureItem {
+  objectId: string;
+  side: "good" | "true";
+  text: string;
+  createdAt: Date;
+}
+
+export interface BlossomEntry {
+  objectId: string;
+  habitCategory: HabitCategory;
+  habitName: string;
+  streakStartDate: Date;
+  streakEndDate: Date;
+  streakLength: number;
+  createdAt: Date;
+}
+
+export type InspireContentType = "science" | "note" | "milestone";
+
+export interface InspireItem {
+  id: string;
+  type: InspireContentType;
+  spirals: Array<Spiral | "all">;
+  dayRange?: [number, number];
+  milestoneDay?: 21 | 30 | 60 | 90;
+  title?: string;
+  body: string;
 }
 
 export const SPIRAL_LABELS: Record<Spiral, string> = {
