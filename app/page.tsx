@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { GoogleLogin } from "@react-oauth/google";
 import { useAuth } from "@/context/AuthContext";
@@ -10,6 +10,7 @@ import Image from "next/image";
 export default function SignInPage() {
   const { user, loading, refreshUser } = useAuth();
   const router = useRouter();
+  const [authError, setAuthError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!loading && user) router.replace("/garden");
@@ -19,9 +20,14 @@ export default function SignInPage() {
     credential?: string;
   }) {
     if (!credentialResponse.credential) return;
-    await loginWithGoogle(credentialResponse.credential);
-    refreshUser();
-    router.replace("/garden");
+    setAuthError(null);
+    try {
+      await loginWithGoogle(credentialResponse.credential);
+      refreshUser();
+      router.replace("/garden");
+    } catch {
+      setAuthError("Something went wrong signing in. Please try again.");
+    }
   }
 
   if (loading) return null;
@@ -47,11 +53,15 @@ export default function SignInPage() {
 
       <GoogleLogin
         onSuccess={handleGoogleSuccess}
-        onError={() => console.error("Google sign-in failed")}
+        onError={() => setAuthError("Google sign-in failed. Please try again.")}
         shape="pill"
         theme="outline"
         text="continue_with"
       />
+
+      {authError && (
+        <p className="mt-4 text-xs text-clay text-center">{authError}</p>
+      )}
     </div>
   );
 }

@@ -11,8 +11,12 @@ interface GoogleCredentialPayload {
 }
 
 function decodeJwt(token: string): GoogleCredentialPayload {
-  const base64 = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
-  return JSON.parse(atob(base64));
+  try {
+    const base64 = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+    return JSON.parse(atob(base64));
+  } catch {
+    throw new Error("Invalid Google credential token");
+  }
 }
 
 export async function loginWithGoogle(credential: string): Promise<Parse.User> {
