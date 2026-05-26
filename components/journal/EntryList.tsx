@@ -6,7 +6,11 @@ import { initParse } from "@/lib/parse";
 import type { JournalEntry } from "@/types";
 import EntryCard from "./EntryCard";
 
-export default function EntryList() {
+interface EntryListProps {
+  excludeTypes?: Array<"standard" | "rewrite" | "receipts">;
+}
+
+export default function EntryList({ excludeTypes }: EntryListProps) {
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -26,21 +30,34 @@ export default function EntryList() {
       query.limit(50);
       const results = await query.find();
 
-      setEntries(
-        results.map((e) => ({
-          objectId: e.id,
-          content: e.get("content"),
-          prompt: e.get("prompt") ?? "",
-          spiralContext: e.get("spiralContext"),
-          createdAt: e.createdAt!,
-        })),
-      );
+      const mapped: JournalEntry[] = results.map((e) => ({
+        objectId: e.id,
+        content: e.get("content"),
+        prompt: e.get("prompt") ?? "",
+        spiralContext: e.get("spiralContext"),
+        entryType: e.get("entryType"),
+        createdAt: e.createdAt!,
+      }));
+
+      const filtered = excludeTypes
+        ? mapped.filter(
+            (e) =>
+              !excludeTypes.includes(
+                (e.entryType ?? "standard") as
+                  | "standard"
+                  | "rewrite"
+                  | "receipts",
+              ),
+          )
+        : mapped;
+
+      setEntries(filtered);
     } catch {
       // silent fail
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [excludeTypes]);
 
   useEffect(() => {
     void loadEntries();

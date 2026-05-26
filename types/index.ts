@@ -22,7 +22,12 @@ export type Season =
   | "full_spring"
   | "summer";
 
-export type GardenState = "dormant" | "stirring" | "tending" | "blooming";
+export type GardenState =
+  | "dormant"
+  | "stirring"
+  | "tending"
+  | "blooming"
+  | "radiant";
 
 export interface TenderUser {
   objectId: string;
@@ -59,6 +64,8 @@ export interface JournalEntry {
   content: string;
   prompt: string;
   spiralContext?: Spiral;
+  entryType?: "standard" | "rewrite" | "receipts";
+  pass1Content?: string;
   createdAt: Date;
 }
 
@@ -77,6 +84,17 @@ export const SPIRAL_LABELS: Record<Spiral, string> = {
   the_but_he: "The But He",
   actually_okay: "Actually okay",
   i_dont_know: "I don't know",
+};
+
+export const SPIRAL_DESCRIPTIONS: Record<Spiral, string> = {
+  the_clock: "Counting how many days it's been. Wondering when it gets easier.",
+  the_replay:
+    "Going over what was said — what you said, what you should have said.",
+  the_mirror: "Wondering what's wrong with you. Why you weren't enough.",
+  the_what_if: "If you'd done things differently. If he'd chosen you.",
+  the_but_he: "He wasn't all bad. There were good parts. You miss them.",
+  actually_okay: "You're doing okay today. Maybe even better than okay.",
+  i_dont_know: "You can't name it. Something is just off.",
 };
 
 export const DEFAULT_HABITS: Array<{

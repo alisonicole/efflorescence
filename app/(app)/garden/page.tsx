@@ -12,7 +12,6 @@ import type { Spiral, GardenState, Season } from "@/types";
 
 import TopBar from "@/components/layout/TopBar";
 import GardenHero from "@/components/garden/GardenHero";
-import CheckInCard from "@/components/check-in/CheckInCard";
 import HabitGrid from "@/components/habits/HabitGrid";
 import CrisisBar from "@/components/crisis/CrisisBar";
 import OnboardingModal from "@/components/onboarding/OnboardingModal";
@@ -95,10 +94,6 @@ export default function GardenPage() {
           gardenState={gardenState}
           dayCount={dayCount}
           todaySpiral={todaySpiral}
-        />
-        <CheckInCard
-          onSpiralSelect={setTodaySpiral}
-          initialSpiral={todaySpiral}
         />
         <div ref={habitsRef}>
           <p className="text-[10px] uppercase tracking-widest text-muted px-2.5 mb-2">

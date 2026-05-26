@@ -5,7 +5,7 @@ import Parse from "parse";
 import { initParse } from "@/lib/parse";
 import { computeStreak } from "@/lib/garden";
 import type { Habit } from "@/types";
-import HabitCard from "./HabitCard";
+import FlowerHabit from "./FlowerHabit";
 
 export default function HabitGrid() {
   const [habits, setHabits] = useState<Habit[]>([]);
@@ -94,16 +94,20 @@ export default function HabitGrid() {
     );
 
   return (
-    <div className="grid grid-cols-2 gap-1.5 px-2.5">
-      {habits.map((habit) => (
-        <HabitCard
-          key={habit.objectId}
-          habit={habit}
-          streak={streaks[habit.objectId] ?? 0}
-          completedToday={completedToday.has(habit.objectId)}
-          onToggle={handleToggle}
-        />
-      ))}
+    <div className="mx-2.5 bg-white rounded-card px-3 pt-4 pb-2 shadow-sm">
+      <div className="flex justify-around items-end">
+        {habits.map((habit) => (
+          <FlowerHabit
+            key={habit.objectId}
+            habit={habit}
+            streak={streaks[habit.objectId] ?? 0}
+            completedToday={completedToday.has(habit.objectId)}
+            onToggle={handleToggle}
+          />
+        ))}
+      </div>
+      {/* Soil strip */}
+      <div className="mt-1 h-2 rounded-full bg-[#C4A882] opacity-30" />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 type CrisisPath = "none" | "breathing";
 
@@ -13,6 +14,7 @@ export default function CrisisModal({
   onClose,
   onTendGarden,
 }: CrisisModalProps) {
+  const router = useRouter();
   const [path, setPath] = useState<CrisisPath>("none");
   const [secondsLeft, setSecondsLeft] = useState(600);
   const [breathPhase, setBreathPhase] = useState<"inhale" | "hold" | "exhale">(
@@ -93,14 +95,17 @@ export default function CrisisModal({
             </button>
 
             <button
-              className="w-full text-left p-4 bg-white rounded-card mb-2 shadow-sm opacity-50 cursor-not-allowed"
-              disabled
+              onClick={() => {
+                router.push("/journal/receipts");
+                onClose();
+              }}
+              className="w-full text-left p-4 bg-white rounded-card mb-2 shadow-sm"
             >
               <div className="text-sm font-medium text-bark">
                 Open The Receipts
               </div>
               <div className="text-xs text-muted">
-                Coming soon — write yours first.
+                Read what you wrote. Remember why.
               </div>
             </button>
 

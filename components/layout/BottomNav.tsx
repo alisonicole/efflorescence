@@ -3,7 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export default function BottomNav() {
+interface BottomNavProps {
+  onCheckIn: () => void;
+}
+
+export default function BottomNav({ onCheckIn }: BottomNavProps) {
   const pathname = usePathname();
 
   return (
@@ -25,6 +29,18 @@ export default function BottomNav() {
           journal
         </span>
       </Link>
+
+      <button
+        onClick={onCheckIn}
+        className="flex flex-col items-center gap-0.5 -mt-4"
+      >
+        <span className="w-11 h-11 rounded-full bg-bark text-cream flex items-center justify-center text-xl shadow-md">
+          +
+        </span>
+        <span className="text-[9px] uppercase tracking-wider text-muted">
+          check in
+        </span>
+      </button>
 
       <div className="flex flex-col items-center gap-0.5 opacity-40 cursor-not-allowed">
         <span className="text-lg">🏛</span>

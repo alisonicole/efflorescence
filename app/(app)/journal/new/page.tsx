@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Parse from "parse";
 import { initParse } from "@/lib/parse";
 import { getPrompt } from "@/lib/prompts";
@@ -9,15 +9,27 @@ import type { Spiral } from "@/types";
 import TopBar from "@/components/layout/TopBar";
 import EntryEditor from "@/components/journal/EntryEditor";
 
-export default function NewEntryPage() {
+function NewEntryInner() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [prompt, setPrompt] = useState("");
   const [spiralContext, setSpiralContext] = useState<Spiral | undefined>();
 
   const loadPrompt = useCallback(async () => {
+    const paramSpiral = searchParams.get("spiral") as Spiral | null;
+
+    if (paramSpiral) {
+      setSpiralContext(paramSpiral);
+      setPrompt(getPrompt(paramSpiral));
+      return;
+    }
+
     initParse();
     const user = Parse.User.current();
-    if (!user) return;
+    if (!user) {
+      setPrompt(getPrompt());
+      return;
+    }
 
     try {
       const today = new Date();
@@ -37,7 +49,7 @@ export default function NewEntryPage() {
     } catch {
       setPrompt(getPrompt());
     }
-  }, []);
+  }, [searchParams]);
 
   useEffect(() => {
     void loadPrompt();
@@ -54,5 +66,13 @@ export default function NewEntryPage() {
         />
       </div>
     </>
+  );
+}
+
+export default function NewEntryPage() {
+  return (
+    <Suspense>
+      <NewEntryInner />
+    </Suspense>
   );
 }

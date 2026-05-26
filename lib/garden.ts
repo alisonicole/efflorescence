@@ -19,7 +19,11 @@ export function computeSeason(dayCount: number): Season {
   return "summer";
 }
 
-export function computeGardenState(completionsLast7Days: number): GardenState {
+export function computeGardenState(
+  completionsLast7Days: number,
+  streak: number = 0,
+): GardenState {
+  if (streak >= 30) return "radiant";
   if (completionsLast7Days === 0) return "dormant";
   if (completionsLast7Days <= 3) return "stirring";
   if (completionsLast7Days <= 10) return "tending";

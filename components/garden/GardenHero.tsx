@@ -3,20 +3,20 @@ import type { Season, GardenState, Spiral } from "@/types";
 import SeasonBadge from "./SeasonBadge";
 import DayCounter from "./DayCounter";
 
-// Map garden state to background image (season-matched where possible)
 const BACKGROUND_IMAGES: Record<GardenState, string> = {
   dormant: "/images/landscape-01.jpg",
   stirring: "/images/landscape-02.jpg",
   tending: "/images/garden-01.jpg",
   blooming: "/images/garden-02.jpg",
+  radiant: "/images/garden-02.jpg",
 };
 
-// Map garden state to foreground/midground overlay image
 const FOREGROUND_IMAGES: Record<GardenState, string> = {
   dormant: "/images/plant-01.jpg",
   stirring: "/images/plant-01.jpg",
   tending: "/images/garden-03.jpg",
   blooming: "/images/flower-01.jpg",
+  radiant: "/images/flower-01.jpg",
 };
 
 // Subtle tint overlay per spiral to hint at weather/mood
@@ -46,7 +46,7 @@ export default function GardenHero({
   const tint = todaySpiral ? (SPIRAL_TINT[todaySpiral] ?? "") : "";
 
   return (
-    <div className="mx-2.5 rounded-card overflow-hidden h-36 relative">
+    <div className="overflow-hidden h-[55vh] relative">
       {/* Background landscape */}
       <Image
         src={BACKGROUND_IMAGES[gardenState]}
@@ -72,7 +72,7 @@ export default function GardenHero({
       )}
 
       {/* Bottom gradient for depth */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-cream/70 via-black/10 to-transparent" />
 
       {/* Season badge top-left */}
       <div className="absolute top-2.5 left-3">
