@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import Parse from "parse";
 import { initParse } from "@/lib/parse";
 import {
@@ -12,18 +13,36 @@ import type { Spiral, GardenState, Season } from "@/types";
 
 import TopBar from "@/components/layout/TopBar";
 import GardenHero from "@/components/garden/GardenHero";
+import GardenTour from "@/components/garden/GardenTour";
 import HabitGrid from "@/components/habits/HabitGrid";
 import OnboardingModal from "@/components/onboarding/OnboardingModal";
 import BlossomGrove from "@/components/garden/BlossomGrove";
 
+const TOUR_KEY = "gardenTourSeen";
+
 export default function GardenPage() {
+  const searchParams = useSearchParams();
   const [needsOnboarding, setNeedsOnboarding] = useState(false);
+  const [showTour, setShowTour] = useState(false);
   const [todaySpiral, setTodaySpiral] = useState<Spiral | undefined>(undefined);
   const [dayCount, setDayCount] = useState(0);
   const [season, setSeason] = useState<Season>("late_autumn");
   const [gardenState, setGardenState] = useState<GardenState>("tending");
 
   const habitsRef = useRef<HTMLDivElement>(null);
+
+  // Show tour on first visit or when explicitly requested via ?tour=1.
+  useEffect(() => {
+    const forced = searchParams.get("tour") === "1";
+    const seen =
+      typeof window !== "undefined" && localStorage.getItem(TOUR_KEY);
+    if (forced || !seen) setShowTour(true);
+  }, [searchParams]);
+
+  function handleTourClose() {
+    localStorage.setItem(TOUR_KEY, "1");
+    setShowTour(false);
+  }
 
   const loadGardenData = useCallback(async () => {
     initParse();
@@ -65,7 +84,7 @@ export default function GardenPage() {
       const completions = await habitCompletionQuery.find();
       setGardenState(computeGardenState(completions.length));
     } catch {
-      // Silent fail - garden shows default state
+      // Silent fail — garden shows default state.
     }
   }, []);
 
@@ -78,15 +97,12 @@ export default function GardenPage() {
     void loadGardenData();
   }
 
-  function scrollToHabits() {
-    habitsRef.current?.scrollIntoView({ behavior: "smooth" });
-  }
-
   return (
     <>
       {needsOnboarding && (
         <OnboardingModal onComplete={handleOnboardingComplete} />
       )}
+      {showTour && !needsOnboarding && <GardenTour onClose={handleTourClose} />}
       <TopBar title="efflorescence" subtitle={`Day ${dayCount} of healing`} />
       <div className="space-y-2.5 pb-4">
         <GardenHero

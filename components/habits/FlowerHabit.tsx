@@ -26,6 +26,14 @@ const CATEGORY_COLOR: Record<HabitCategory, string> = {
   therapy: "#7A9BB5",
 };
 
+// Petal sets per stage: stage 4 = 2 petals, 5 = 4, 6 = 6, 7 = 8
+const PETAL_ANGLES: Record<number, number[]> = {
+  4: [0, 180],
+  5: [0, 90, 180, 270],
+  6: [0, 60, 120, 180, 240, 300],
+  7: [0, 45, 90, 135, 180, 225, 270, 315],
+};
+
 interface FlowerHabitProps {
   habit: Habit;
   streak: number;
@@ -33,8 +41,6 @@ interface FlowerHabitProps {
   isWilting: boolean;
   onToggle: (habitId: string, completed: boolean) => void;
 }
-
-const PETAL_ANGLES = [0, 45, 90, 135, 180, 225, 270, 315];
 
 export default function FlowerHabit({
   habit,
@@ -45,7 +51,6 @@ export default function FlowerHabit({
 }: FlowerHabitProps) {
   const [saving, setSaving] = useState(false);
   const [watering, setWatering] = useState(false);
-  // Local streak so the badge updates immediately without waiting for a reload.
   const [localStreak, setLocalStreak] = useState(streak);
 
   useEffect(() => {
@@ -53,6 +58,15 @@ export default function FlowerHabit({
   }, [streak]);
 
   const color = CATEGORY_COLOR[habit.category] ?? "#7A9E6E";
+  // Growth stage 0-7, capped at 7 for full bloom.
+  const stage = Math.min(localStreak, 7);
+  const svgOpacity = completedToday
+    ? 1
+    : isWilting
+      ? 0.5
+      : stage === 0
+        ? 0.45
+        : 0.65;
 
   async function handleTap() {
     if (saving) return;
@@ -96,7 +110,6 @@ export default function FlowerHabit({
         await completion.save();
         onToggle(habit.objectId, true);
 
-        // Compute updated streak and check for blossom milestone.
         try {
           const completionQuery = new Parse.Query(HabitCompletion);
           completionQuery.equalTo("user", user);
@@ -124,7 +137,7 @@ export default function FlowerHabit({
             await blossom.save();
           }
         } catch {
-          // Streak/blossom failure must not affect the completion record.
+          /* blossom failure must not affect completion */
         }
       }
     } finally {
@@ -137,7 +150,7 @@ export default function FlowerHabit({
 
   return (
     <div className="relative group flex flex-col items-center">
-      {/* Tooltip — z-50 so it layers above sibling bed cards */}
+      {/* Tooltip */}
       <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-36 bg-bark text-cream rounded-xl px-3 py-2 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 shadow-lg">
         <p className="font-mono text-[7px] uppercase tracking-wider opacity-50 mb-1">
           {flowerName}
@@ -163,16 +176,11 @@ export default function FlowerHabit({
           viewBox="0 0 56 76"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className={`transition-all duration-500 ${
-            completedToday
-              ? "drop-shadow-sm"
-              : isWilting
-                ? "opacity-50"
-                : "opacity-60"
-          }`}
+          style={{ opacity: svgOpacity }}
+          className="transition-all duration-500"
         >
           {isWilting ? (
-            // Wilting: stem curves and droops to the right, head hangs down.
+            // Wilting: stem curves and droops to the right.
             <>
               <path
                 d="M28 72 C28 58 31 48 38 36"
@@ -189,7 +197,6 @@ export default function FlowerHabit({
                 opacity="0.5"
                 transform="rotate(-35 22 58)"
               />
-              {/* Drooping bud — shifted right, angled down */}
               <ellipse
                 cx="40"
                 cy="26"
@@ -227,9 +234,116 @@ export default function FlowerHabit({
                 transform="rotate(32 44 37)"
               />
             </>
-          ) : (
+          ) : stage === 0 ? (
+            // Seed in dirt — never been completed.
             <>
-              {/* Straight stem for bud and bloomed states */}
+              <ellipse
+                cx="28"
+                cy="69"
+                rx="13"
+                ry="3.5"
+                fill="#C4A882"
+                opacity="0.55"
+              />
+              <ellipse
+                cx="28"
+                cy="66"
+                rx="3.5"
+                ry="2.5"
+                fill={color}
+                opacity="0.65"
+              />
+            </>
+          ) : stage === 1 ? (
+            // Sprout — first completion.
+            <>
+              <line
+                x1="28"
+                y1="56"
+                x2="28"
+                y2="72"
+                stroke="#4A6741"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <ellipse
+                cx="21"
+                cy="54"
+                rx="7"
+                ry="3.2"
+                fill="#7A9E6E"
+                opacity="0.8"
+                transform="rotate(-30 21 54)"
+              />
+              <ellipse
+                cx="35"
+                cy="54"
+                rx="7"
+                ry="3.2"
+                fill="#7A9E6E"
+                opacity="0.8"
+                transform="rotate(30 35 54)"
+              />
+            </>
+          ) : stage === 2 ? (
+            // Growing — stem rises, tiny bud forms.
+            <>
+              <line
+                x1="28"
+                y1="48"
+                x2="28"
+                y2="72"
+                stroke="#4A6741"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <ellipse
+                cx="21"
+                cy="63"
+                rx="6"
+                ry="3"
+                fill="#7A9E6E"
+                opacity="0.65"
+                transform="rotate(-35 21 63)"
+              />
+              <ellipse
+                cx="28"
+                cy="42"
+                rx="4"
+                ry="7"
+                fill={color}
+                opacity="0.5"
+              />
+              <ellipse
+                cx="28"
+                cy="43"
+                rx="2.5"
+                ry="5"
+                fill={color}
+                opacity="0.72"
+              />
+              <ellipse
+                cx="24"
+                cy="49"
+                rx="2.5"
+                ry="4"
+                fill="#4A6741"
+                opacity="0.5"
+                transform="rotate(-15 24 49)"
+              />
+              <ellipse
+                cx="32"
+                cy="49"
+                rx="2.5"
+                ry="4"
+                fill="#4A6741"
+                opacity="0.5"
+                transform="rotate(15 32 49)"
+              />
+            </>
+          ) : stage === 3 ? (
+            // Full stem + closed bud.
+            <>
               <line
                 x1="28"
                 y1="38"
@@ -248,63 +362,83 @@ export default function FlowerHabit({
                 opacity="0.65"
                 transform="rotate(-35 21 58)"
               />
-
-              {completedToday ? (
-                <>
-                  {PETAL_ANGLES.map((angle) => (
-                    <ellipse
-                      key={angle}
-                      cx="28"
-                      cy="17"
-                      rx="4.5"
-                      ry="8"
-                      fill={color}
-                      opacity="0.82"
-                      transform={`rotate(${angle} 28 28)`}
-                    />
-                  ))}
-                  <circle cx="28" cy="28" r="7" fill="#F5EFE4" />
-                  <circle cx="28" cy="28" r="5" fill={color} opacity="0.55" />
-                  <circle cx="28" cy="28" r="2.5" fill={color} opacity="0.9" />
-                </>
-              ) : (
-                <>
-                  <ellipse
-                    cx="28"
-                    cy="26"
-                    rx="6"
-                    ry="11"
-                    fill={color}
-                    opacity="0.45"
-                  />
-                  <ellipse
-                    cx="28"
-                    cy="27"
-                    rx="4"
-                    ry="8"
-                    fill={color}
-                    opacity="0.7"
-                  />
-                  <ellipse
-                    cx="22"
-                    cy="36"
-                    rx="3.5"
-                    ry="6"
-                    fill="#4A6741"
-                    opacity="0.55"
-                    transform="rotate(-20 22 36)"
-                  />
-                  <ellipse
-                    cx="34"
-                    cy="36"
-                    rx="3.5"
-                    ry="6"
-                    fill="#4A6741"
-                    opacity="0.55"
-                    transform="rotate(20 34 36)"
-                  />
-                </>
-              )}
+              <ellipse
+                cx="28"
+                cy="26"
+                rx="6"
+                ry="11"
+                fill={color}
+                opacity="0.45"
+              />
+              <ellipse
+                cx="28"
+                cy="27"
+                rx="4"
+                ry="8"
+                fill={color}
+                opacity="0.7"
+              />
+              <ellipse
+                cx="22"
+                cy="36"
+                rx="3.5"
+                ry="6"
+                fill="#4A6741"
+                opacity="0.55"
+                transform="rotate(-20 22 36)"
+              />
+              <ellipse
+                cx="34"
+                cy="36"
+                rx="3.5"
+                ry="6"
+                fill="#4A6741"
+                opacity="0.55"
+                transform="rotate(20 34 36)"
+              />
+            </>
+          ) : (
+            // Stages 4–7: blooming flower with growing petal count.
+            <>
+              <line
+                x1="28"
+                y1="38"
+                x2="28"
+                y2="72"
+                stroke="#4A6741"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <ellipse
+                cx="21"
+                cy="58"
+                rx="7"
+                ry="3.5"
+                fill="#7A9E6E"
+                opacity="0.65"
+                transform="rotate(-35 21 58)"
+              />
+              {(PETAL_ANGLES[stage] ?? PETAL_ANGLES[7]).map((angle) => (
+                <ellipse
+                  key={angle}
+                  cx="28"
+                  cy="17"
+                  rx="4.5"
+                  ry="8"
+                  fill={color}
+                  opacity="0.82"
+                  transform={`rotate(${angle} 28 28)`}
+                />
+              ))}
+              <circle cx="28" cy="28" r={stage === 7 ? 7 : 5} fill="#F5EFE4" />
+              <circle
+                cx="28"
+                cy="28"
+                r={stage === 7 ? 5 : 3.5}
+                fill={color}
+                opacity="0.55"
+              />
+              <circle cx="28" cy="28" r="2.5" fill={color} opacity="0.9" />
             </>
           )}
         </svg>
@@ -328,7 +462,7 @@ export default function FlowerHabit({
           >
             <span className="text-[10px] leading-none">🌱</span>
             <span className="font-mono text-[9px] font-medium text-bark leading-none">
-              {Math.max(1, localStreak)}
+              {localStreak}
             </span>
           </div>
         )}
