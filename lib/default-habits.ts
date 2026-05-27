@@ -104,7 +104,6 @@ export const HABIT_WHY: Record<HabitCategory, string> = Object.fromEntries(
 ) as Record<HabitCategory, string>;
 
 export async function seedDefaultHabits(user: Parse.User): Promise<void> {
-  if (user.get("habitsSeeded")) return;
   const ParseHabit = Parse.Object.extend("Habit");
   const habits = HABIT_METADATA.map((meta) => {
     const habit = new ParseHabit();

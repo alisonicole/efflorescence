@@ -29,13 +29,14 @@ export default function HabitGrid() {
       habitQuery.equalTo("isActive", true);
       const results = await habitQuery.find();
 
-      if (results.length === 0) {
-        const alreadySeeded = !!user.get("habitsSeeded");
-        if (!alreadySeeded) {
-          await seedDefaultHabits(user);
-          void loadHabits(); // reload after seeding
-          return;
+      if (!user.get("habitsSeeded")) {
+        // Delete any old-format habits so we can reseed with the new flower set.
+        if (results.length > 0) {
+          await Parse.Object.destroyAll(results);
         }
+        await seedDefaultHabits(user);
+        void loadHabits();
+        return;
       }
 
       const habitList: Habit[] = results.map((h) => ({
