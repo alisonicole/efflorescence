@@ -6,11 +6,17 @@ import { initParse } from "@/lib/parse";
 import type { JournalEntry } from "@/types";
 import EntryCard from "./EntryCard";
 
+type ExcludableType = "standard" | "rewrite" | "receipts" | "the_why";
+
 interface EntryListProps {
-  excludeTypes?: Array<"standard" | "rewrite" | "receipts">;
+  excludeTypes?: Array<ExcludableType>;
+  refreshKey?: number;
 }
 
-export default function EntryList({ excludeTypes }: EntryListProps) {
+export default function EntryList({
+  excludeTypes,
+  refreshKey,
+}: EntryListProps) {
   const [entries, setEntries] = useState<JournalEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -43,10 +49,7 @@ export default function EntryList({ excludeTypes }: EntryListProps) {
         ? mapped.filter(
             (e) =>
               !excludeTypes.includes(
-                (e.entryType ?? "standard") as
-                  | "standard"
-                  | "rewrite"
-                  | "receipts",
+                (e.entryType ?? "standard") as ExcludableType,
               ),
           )
         : mapped;
@@ -61,7 +64,7 @@ export default function EntryList({ excludeTypes }: EntryListProps) {
 
   useEffect(() => {
     void loadEntries();
-  }, [loadEntries]);
+  }, [loadEntries, refreshKey]);
 
   if (loading)
     return <p className="text-xs text-muted px-2.5">Loading entries...</p>;
