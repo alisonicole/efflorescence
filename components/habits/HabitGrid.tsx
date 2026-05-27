@@ -4,9 +4,21 @@ import { useEffect, useState } from "react";
 import Parse from "parse";
 import { initParse } from "@/lib/parse";
 import { computeStreak } from "@/lib/garden";
-import { seedDefaultHabits } from "@/lib/default-habits";
-import type { Habit } from "@/types";
+import { seedDefaultHabits, HABIT_METADATA } from "@/lib/default-habits";
+import type { Habit, HabitCategory } from "@/types";
 import FlowerHabit from "./FlowerHabit";
+
+type BedId = "detox" | "feed" | "heal";
+
+const CATEGORY_GROUP = Object.fromEntries(
+  HABIT_METADATA.map((m) => [m.category, m.group]),
+) as Record<HabitCategory, BedId>;
+
+const BEDS: { id: BedId; label: string; tagline: string }[] = [
+  { id: "detox", label: "Detox", tagline: "protect your peace" },
+  { id: "feed", label: "Feed", tagline: "tend to your body" },
+  { id: "heal", label: "Heal", tagline: "soften & grow" },
+];
 
 export default function HabitGrid() {
   const [habits, setHabits] = useState<Habit[]>([]);
@@ -105,20 +117,46 @@ export default function HabitGrid() {
     );
 
   return (
-    <div className="mx-2.5 bg-white rounded-card px-3 pt-4 pb-2 shadow-sm">
-      <div className="flex justify-around items-end">
-        {habits.map((habit) => (
-          <FlowerHabit
-            key={habit.objectId}
-            habit={habit}
-            streak={streaks[habit.objectId] ?? 0}
-            completedToday={completedToday.has(habit.objectId)}
-            onToggle={handleToggle}
-          />
-        ))}
-      </div>
-      {/* Soil strip */}
-      <div className="mt-1 h-2 rounded-full bg-[#C4A882] opacity-30" />
+    <div className="flex flex-col gap-2.5 mx-2.5">
+      {BEDS.map((bed) => {
+        const bedHabits = habits.filter(
+          (h) => CATEGORY_GROUP[h.category] === bed.id,
+        );
+        if (bedHabits.length === 0) return null;
+
+        return (
+          <div
+            key={bed.id}
+            className="bg-white rounded-card shadow-sm overflow-hidden"
+          >
+            {/* Bed header */}
+            <div className="px-3.5 pt-3 pb-0 flex items-baseline gap-2">
+              <span className="font-mono text-[8px] uppercase tracking-[2.5px] text-bark/60">
+                {bed.label}
+              </span>
+              <span className="font-mono text-[8px] text-bark/30 italic">
+                {bed.tagline}
+              </span>
+            </div>
+
+            {/* Flowers — 3-column grid keeps rows even */}
+            <div className="px-2 pt-2 grid grid-cols-3 justify-items-center gap-y-1">
+              {bedHabits.map((habit) => (
+                <FlowerHabit
+                  key={habit.objectId}
+                  habit={habit}
+                  streak={streaks[habit.objectId] ?? 0}
+                  completedToday={completedToday.has(habit.objectId)}
+                  onToggle={handleToggle}
+                />
+              ))}
+            </div>
+
+            {/* Soil strip */}
+            <div className="mt-1 mx-3.5 mb-3 h-1.5 rounded-full bg-[#C4A882] opacity-30" />
+          </div>
+        );
+      })}
     </div>
   );
 }
