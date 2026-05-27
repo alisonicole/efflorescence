@@ -307,7 +307,8 @@ export default function LandingPage() {
               </div>
               <div className="def-text">
                 The crystallization of a substance on a surface as it{" "}
-                <strong>loses moisture</strong> and reaches a new state.
+                <strong>reaches a new state</strong> — shedding what it no
+                longer needs.
               </div>
               <div className="def-sub">
                 When something releases what it&rsquo;s been holding — water,
@@ -399,28 +400,30 @@ export default function LandingPage() {
               <div className="pillar-num">01 — Garden</div>
               <div className="pillar-word">Tend.</div>
               <div className="pillar-body">
-                Your healing lives in a living garden that grows with every
-                small act of self-care. It never dies. It never resets. It
-                rests, and comes back — just like you.
+                A living habit tracker that grows with every small act of
+                self-care. Each habit becomes a flower — a seed on day one, in
+                full bloom by day seven. It never resets. It rests, and comes
+                back, just like you.
               </div>
             </div>
             <div className="pillar">
-              <div className="pillar-num">02 — Spirals</div>
-              <div className="pillar-word">Name it.</div>
+              <div className="pillar-num">02 — Journal</div>
+              <div className="pillar-word">Write it.</div>
               <div className="pillar-body">
-                Five named thought spirals — The Clock, The Replay, The Mirror,
-                The What If, The But He. When you&rsquo;re in one, the app meets
-                you there with the right intervention, not a generic
-                affirmation.
+                Four ways to process what happened: a daily diary, the full
+                picture of what was real, a rewrite of the story you keep
+                telling yourself, and the honest reason it ended. Words make the
+                invisible visible.
               </div>
             </div>
             <div className="pillar">
-              <div className="pillar-num">03 — Museum</div>
-              <div className="pillar-word">Remember.</div>
+              <div className="pillar-num">03 — Inspire</div>
+              <div className="pillar-word">Feel it.</div>
               <div className="pillar-body">
-                Every completed streak, every milestone, every plant you tended
-                — preserved as art. Proof, over time, that you have done hard
-                things. That you have finished things. That you have grown.
+                Science-backed context for what your body is going through,
+                gentle notes for exactly where you are today, and milestones
+                that mark how far you&rsquo;ve already come. You are not behind.
+                You are becoming.
               </div>
             </div>
           </div>
@@ -432,26 +435,18 @@ export default function LandingPage() {
       {/* CTA */}
       <section className="cta-section">
         <div className="cta-orb" />
-        <div className="cta-eyebrow">Join the Waitlist</div>
+        <div className="cta-eyebrow">Ready to begin</div>
         <div className="cta-heading">
           Your garden
           <br />
           is <span>waiting.</span>
         </div>
         <div className="cta-sub">
-          Efflorescence is coming. Be the first to tend to yours.
+          Efflorescence is here. Start tending today.
         </div>
-        <div className="cta-form">
-          <input
-            className="cta-input"
-            type="email"
-            placeholder="your@email.com"
-          />
-          <button className="cta-btn">Join</button>
-        </div>
-        <div className="cta-note">
-          No spam. No pressure. Just a quiet message when it&rsquo;s ready.
-        </div>
+        <Link className="hero-cta" href="/signin">
+          Enter the app
+        </Link>
       </section>
 
       {/* FOOTER */}
