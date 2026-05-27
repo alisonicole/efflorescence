@@ -19,7 +19,8 @@ export type HabitCategory =
   | "get_dressed"
   | "journal"
   | "just_for_you"
-  | "therapy";
+  | "therapy"
+  | "custom";
 
 export type Season =
   | "late_autumn"
@@ -57,6 +58,7 @@ export interface Habit {
   icon: string;
   isActive: boolean;
   createdAt: Date;
+  habitGroup?: string;
 }
 
 export interface HabitCompletion {

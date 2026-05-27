@@ -93,4 +93,5 @@ export const BLOSSOM_SPECIES: Record<HabitCategory, BlossomSpecies> = {
   journal: { emoji: "🪷", name: "iris" },
   just_for_you: { emoji: "💮", name: "peony" },
   therapy: { emoji: "💙", name: "forget-me-not" },
+  custom: { emoji: "🌱", name: "wildflower" },
 };

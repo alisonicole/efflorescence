@@ -24,6 +24,7 @@ const CATEGORY_COLOR: Record<HabitCategory, string> = {
   journal: "#7B6EA0",
   just_for_you: "#D48A9B",
   therapy: "#7A9BB5",
+  custom: "#B8A89A",
 };
 
 // Petal sets per stage: stage 4 = 2 petals, 5 = 4, 6 = 6, 7 = 8

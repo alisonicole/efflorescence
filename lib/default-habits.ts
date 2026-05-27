@@ -99,9 +99,12 @@ export const HABIT_METADATA: HabitMetadata[] = [
   },
 ];
 
-export const HABIT_WHY: Record<HabitCategory, string> = Object.fromEntries(
-  HABIT_METADATA.map((h) => [h.category, h.why]),
-) as Record<HabitCategory, string>;
+export const HABIT_WHY: Record<HabitCategory, string> = {
+  ...(Object.fromEntries(
+    HABIT_METADATA.map((h) => [h.category, h.why]),
+  ) as Record<HabitCategory, string>),
+  custom: "Something you're tending to, just for you.",
+};
 
 export async function seedDefaultHabits(user: Parse.User): Promise<void> {
   const ParseHabit = Parse.Object.extend("Habit");
