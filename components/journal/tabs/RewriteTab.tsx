@@ -43,6 +43,7 @@ export default function RewriteTab() {
       query.equalTo("user", user);
       query.equalTo("entryType", "rewrite");
       query.descending("createdAt");
+      query.limit(50);
       const results = await query.find();
       setHistory(
         results.map((r) => ({
@@ -58,11 +59,11 @@ export default function RewriteTab() {
     } finally {
       setLoadingHistory(false);
     }
-  }, [refreshKey]);
+  }, []);
 
   useEffect(() => {
     void loadHistory();
-  }, [loadHistory]);
+  }, [loadHistory, refreshKey]);
 
   async function handleComplete() {
     if (!pass2Text.trim() || saving) return;
@@ -106,7 +107,12 @@ export default function RewriteTab() {
           {(["the_but_he", "the_what_if"] as RewriteSpiral[]).map((s) => (
             <button
               key={s}
-              onClick={() => setSelectedSpiral(s)}
+              onClick={() => {
+                setSelectedSpiral(s);
+                setPass(1);
+                setPass1Text("");
+                setPass2Text("");
+              }}
               className={`flex-1 py-2 text-[9px] font-mono tracking-widest uppercase rounded-full border transition-colors ${
                 selectedSpiral === s
                   ? "bg-bark text-cream border-bark"
@@ -211,13 +217,17 @@ export default function RewriteTab() {
                 })}
               </span>
             </div>
-            <p className="font-mono text-[9px] uppercase tracking-widest text-muted mb-1">
-              Pass one
-            </p>
-            <p className="text-sm text-bark leading-relaxed mb-3 line-clamp-3">
-              {entry.pass1Content}
-            </p>
-            <hr className="border-border mb-3" />
+            {entry.pass1Content && (
+              <>
+                <p className="font-mono text-[9px] uppercase tracking-widest text-muted mb-1">
+                  Pass one
+                </p>
+                <p className="text-sm text-bark leading-relaxed mb-3 line-clamp-3">
+                  {entry.pass1Content}
+                </p>
+                <hr className="border-border mb-3" />
+              </>
+            )}
             <p className="font-mono text-[9px] uppercase tracking-widest text-muted mb-1">
               Pass two
             </p>
