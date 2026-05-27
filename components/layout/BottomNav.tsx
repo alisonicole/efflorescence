@@ -28,7 +28,7 @@ export default function BottomNav({ onGround }: BottomNavProps) {
   return (
     <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-app bg-white border-t border-border flex items-center justify-around px-4 py-2 pb-3 z-10">
       {tab("/garden", "🏡", "garden")}
-      {tab("/habits", "✓", "habits")}
+      {tab("/calendar", "◎", "journey")}
 
       <button
         onClick={onGround}

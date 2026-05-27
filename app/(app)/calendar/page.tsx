@@ -18,6 +18,7 @@ export default function CalendarPage() {
   const [completions, setCompletions] = useState<HabitCompletion[]>([]);
   const [checkIns, setCheckIns] = useState<CheckIn[]>([]);
   const [habits, setHabits] = useState<Habit[]>([]);
+  const [healingStartDate, setHealingStartDate] = useState<Date | undefined>();
   const [viewYear, setViewYear] = useState(new Date().getFullYear());
   const [viewMonth, setViewMonth] = useState(new Date().getMonth());
   const [loading, setLoading] = useState(true);
@@ -26,6 +27,9 @@ export default function CalendarPage() {
     initParse();
     const user = Parse.User.current();
     if (!user) return;
+
+    const rawStart = user.get("healingStartDate");
+    if (rawStart) setHealingStartDate(new Date(rawStart));
 
     try {
       const [completionResults, checkInResults, habitResults] =
@@ -125,6 +129,7 @@ export default function CalendarPage() {
               checkIns={checkIns}
               habits={habits}
               totalHabits={habits.length}
+              healingStartDate={healingStartDate}
             />
           </>
         )}

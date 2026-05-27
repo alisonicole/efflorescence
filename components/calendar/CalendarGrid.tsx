@@ -32,6 +32,7 @@ interface CalendarGridProps {
   checkIns: CheckIn[];
   habits: Habit[];
   totalHabits: number;
+  healingStartDate?: Date;
 }
 
 export default function CalendarGrid({
@@ -43,7 +44,9 @@ export default function CalendarGrid({
   checkIns,
   habits,
   totalHabits,
+  healingStartDate,
 }: CalendarGridProps) {
+  const breakupKey = healingStartDate ? dateKey(healingStartDate) : null;
   const [selected, setSelected] = useState<string | null>(null);
   const days = monthDays(year, month);
   const firstDow = days[0].getDay();
@@ -75,11 +78,12 @@ export default function CalendarGrid({
             totalHabits,
           );
           const spiral = spiralsByDate[key];
+          const isBreakup = key === breakupKey;
           return (
             <button
               key={key}
               onClick={() => setSelected(key)}
-              className={`relative aspect-square rounded flex items-center justify-center text-[9px] text-bark ${HEAT_CLASSES[heat]}`}
+              className={`relative aspect-square flex items-center justify-center text-[9px] text-bark ${HEAT_CLASSES[heat]} ${isBreakup ? "rounded-full ring-2 ring-bark/70 ring-offset-1 font-semibold" : "rounded"}`}
             >
               {day.getDate()}
               {spiral && (
