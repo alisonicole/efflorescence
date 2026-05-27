@@ -70,7 +70,7 @@ export interface JournalEntry {
   content: string;
   prompt: string;
   spiralContext?: Spiral;
-  entryType?: "standard" | "rewrite" | "the_why";
+  entryType?: "standard" | "rewrite" | "the_why" | "receipts";
   pass1Content?: string;
   createdAt: Date;
 }
