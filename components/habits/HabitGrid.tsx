@@ -24,6 +24,8 @@ export default function HabitGrid() {
   const [habits, setHabits] = useState<Habit[]>([]);
   const [completedToday, setCompletedToday] = useState<Set<string>>(new Set());
   const [streaks, setStreaks] = useState<Record<string, number>>({});
+  // Habits that have at least one completion — used to detect wilting state.
+  const [hasCompleted, setHasCompleted] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     loadHabits();
@@ -42,7 +44,6 @@ export default function HabitGrid() {
       const results = await habitQuery.find();
 
       if (!user.get("habitsSeeded")) {
-        // Delete any old-format habits so we can reseed with the new flower set.
         if (results.length > 0) {
           await Parse.Object.destroyAll(results);
         }
@@ -77,6 +78,11 @@ export default function HabitGrid() {
 
       const todaySet = new Set<string>();
       const streakMap: Record<string, number> = {};
+      const hasCompletedSet = new Set<string>();
+
+      for (const c of completions) {
+        hasCompletedSet.add(c.get("habitId") as string);
+      }
 
       for (const habit of habitList) {
         const habitCompletions = completions
@@ -96,8 +102,9 @@ export default function HabitGrid() {
 
       setCompletedToday(todaySet);
       setStreaks(streakMap);
+      setHasCompleted(hasCompletedSet);
     } catch {
-      // silently preserve existing empty state; user can pull-to-refresh
+      // silently preserve existing empty state
     }
   }
 
@@ -125,10 +132,8 @@ export default function HabitGrid() {
         if (bedHabits.length === 0) return null;
 
         return (
-          <div
-            key={bed.id}
-            className="bg-white rounded-card shadow-sm overflow-hidden"
-          >
+          // No overflow-hidden here — tooltips need to escape the card boundary.
+          <div key={bed.id} className="bg-white rounded-card shadow-sm">
             {/* Bed header */}
             <div className="px-3.5 pt-3 pb-0 flex items-baseline gap-2">
               <span className="font-mono text-[8px] uppercase tracking-[2.5px] text-bark/60">
@@ -140,16 +145,25 @@ export default function HabitGrid() {
             </div>
 
             {/* Flowers — 3-column grid keeps rows even */}
-            <div className="px-2 pt-2 grid grid-cols-3 justify-items-center gap-y-1">
-              {bedHabits.map((habit) => (
-                <FlowerHabit
-                  key={habit.objectId}
-                  habit={habit}
-                  streak={streaks[habit.objectId] ?? 0}
-                  completedToday={completedToday.has(habit.objectId)}
-                  onToggle={handleToggle}
-                />
-              ))}
+            <div className="px-2 pt-4 grid grid-cols-3 justify-items-center gap-y-1">
+              {bedHabits.map((habit) => {
+                const streak = streaks[habit.objectId] ?? 0;
+                const doneToday = completedToday.has(habit.objectId);
+                const isWilting =
+                  !doneToday &&
+                  streak === 0 &&
+                  hasCompleted.has(habit.objectId);
+                return (
+                  <FlowerHabit
+                    key={habit.objectId}
+                    habit={habit}
+                    streak={streak}
+                    completedToday={doneToday}
+                    isWilting={isWilting}
+                    onToggle={handleToggle}
+                  />
+                );
+              })}
             </div>
 
             {/* Soil strip */}

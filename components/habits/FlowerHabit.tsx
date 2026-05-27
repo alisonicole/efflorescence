@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Parse from "parse";
 import { initParse } from "@/lib/parse";
 import {
@@ -12,24 +12,25 @@ import { HABIT_WHY } from "@/lib/default-habits";
 import type { Habit, HabitCategory } from "@/types";
 
 const CATEGORY_COLOR: Record<HabitCategory, string> = {
-  no_contact: "#6B8F6E", // thistle green
-  no_stalking: "#D4823A", // marigold orange
-  no_old_photos: "#9B8DB5", // lavender purple
-  eat_water: "#D4B483", // chamomile wheat
-  move_body: "#E8C547", // sunflower yellow
-  fresh_air: "#8FB5A0", // daisy sage
-  talk: "#C97A8A", // dahlia rose
-  sleep: "#5C6B8A", // night blue
-  get_dressed: "#C4B447", // dandelion gold
-  journal: "#7B6EA0", // iris purple
-  just_for_you: "#D48A9B", // peony pink
-  therapy: "#7A9BB5", // forget-me-not blue
+  no_contact: "#6B8F6E",
+  no_stalking: "#D4823A",
+  no_old_photos: "#9B8DB5",
+  eat_water: "#D4B483",
+  move_body: "#E8C547",
+  fresh_air: "#8FB5A0",
+  talk: "#C97A8A",
+  sleep: "#5C6B8A",
+  get_dressed: "#C4B447",
+  journal: "#7B6EA0",
+  just_for_you: "#D48A9B",
+  therapy: "#7A9BB5",
 };
 
 interface FlowerHabitProps {
   habit: Habit;
   streak: number;
   completedToday: boolean;
+  isWilting: boolean;
   onToggle: (habitId: string, completed: boolean) => void;
 }
 
@@ -39,10 +40,18 @@ export default function FlowerHabit({
   habit,
   streak,
   completedToday,
+  isWilting,
   onToggle,
 }: FlowerHabitProps) {
   const [saving, setSaving] = useState(false);
   const [watering, setWatering] = useState(false);
+  // Local streak so the badge updates immediately without waiting for a reload.
+  const [localStreak, setLocalStreak] = useState(streak);
+
+  useEffect(() => {
+    setLocalStreak(streak);
+  }, [streak]);
+
   const color = CATEGORY_COLOR[habit.category] ?? "#7A9E6E";
 
   async function handleTap() {
@@ -76,6 +85,7 @@ export default function FlowerHabit({
         query.lessThan("completedDate", tomorrow);
         const existing = await query.first();
         if (existing) await existing.destroy();
+        setLocalStreak(Math.max(0, localStreak - 1));
         onToggle(habit.objectId, false);
       } else {
         const completion = new HabitCompletion();
@@ -86,7 +96,7 @@ export default function FlowerHabit({
         await completion.save();
         onToggle(habit.objectId, true);
 
-        // Check if a blossom was earned (7-day streak milestone)
+        // Compute updated streak and check for blossom milestone.
         try {
           const completionQuery = new Parse.Query(HabitCompletion);
           completionQuery.equalTo("user", user);
@@ -96,7 +106,8 @@ export default function FlowerHabit({
             (c) => c.get("completedDate") as Date,
           );
           const newStreak = computeStreak(dates);
-          const prevStreak = newStreak > 0 ? newStreak - 1 : 0;
+          setLocalStreak(newStreak);
+          const prevStreak = Math.max(0, newStreak - 1);
 
           if (detectBlossomEarned(newStreak, prevStreak)) {
             const ParseBlossom = Parse.Object.extend("BlossomEntry");
@@ -113,7 +124,7 @@ export default function FlowerHabit({
             await blossom.save();
           }
         } catch {
-          // Blossom creation failure must not affect the habit completion record
+          // Streak/blossom failure must not affect the completion record.
         }
       }
     } finally {
@@ -126,13 +137,14 @@ export default function FlowerHabit({
 
   return (
     <div className="relative group flex flex-col items-center">
-      {/* Hover tooltip */}
-      <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-36 bg-bark text-cream rounded-xl px-3 py-2 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-30 shadow-lg">
+      {/* Tooltip — z-50 so it layers above sibling bed cards */}
+      <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-36 bg-bark text-cream rounded-xl px-3 py-2 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50 shadow-lg">
         <p className="font-mono text-[7px] uppercase tracking-wider opacity-50 mb-1">
           {flowerName}
         </p>
         <p className="text-[10px] leading-snug">{why}</p>
       </div>
+
       <button
         onClick={handleTap}
         disabled={saving}
@@ -151,86 +163,148 @@ export default function FlowerHabit({
           viewBox="0 0 56 76"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className={`transition-all duration-500 ${completedToday ? "drop-shadow-sm" : "opacity-60"}`}
+          className={`transition-all duration-500 ${
+            completedToday
+              ? "drop-shadow-sm"
+              : isWilting
+                ? "opacity-50"
+                : "opacity-60"
+          }`}
         >
-          {/* Stem */}
-          <line
-            x1="28"
-            y1="38"
-            x2="28"
-            y2="72"
-            stroke="#4A6741"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-          />
-          {/* Leaf */}
-          <ellipse
-            cx="21"
-            cy="58"
-            rx="7"
-            ry="3.5"
-            fill="#7A9E6E"
-            opacity="0.65"
-            transform="rotate(-35 21 58)"
-          />
-
-          {completedToday ? (
+          {isWilting ? (
+            // Wilting: stem curves and droops to the right, head hangs down.
             <>
-              {PETAL_ANGLES.map((angle) => (
-                <ellipse
-                  key={angle}
-                  cx="28"
-                  cy="17"
-                  rx="4.5"
-                  ry="8"
-                  fill={color}
-                  opacity="0.82"
-                  transform={`rotate(${angle} 28 28)`}
-                />
-              ))}
-              {/* Center disk */}
-              <circle cx="28" cy="28" r="7" fill="#F5EFE4" />
-              <circle cx="28" cy="28" r="5" fill={color} opacity="0.55" />
-              <circle cx="28" cy="28" r="2.5" fill={color} opacity="0.9" />
-            </>
-          ) : (
-            <>
-              {/* Bud petals closed */}
+              <path
+                d="M28 72 C28 58 31 48 38 36"
+                stroke="#4A6741"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
               <ellipse
-                cx="28"
+                cx="22"
+                cy="58"
+                rx="7"
+                ry="3.5"
+                fill="#7A9E6E"
+                opacity="0.5"
+                transform="rotate(-35 22 58)"
+              />
+              {/* Drooping bud — shifted right, angled down */}
+              <ellipse
+                cx="40"
                 cy="26"
                 rx="6"
                 ry="11"
                 fill={color}
-                opacity="0.45"
+                opacity="0.3"
+                transform="rotate(22 40 26)"
               />
               <ellipse
-                cx="28"
+                cx="40"
                 cy="27"
                 rx="4"
                 ry="8"
                 fill={color}
-                opacity="0.7"
-              />
-              {/* Sepals */}
-              <ellipse
-                cx="22"
-                cy="36"
-                rx="3.5"
-                ry="6"
-                fill="#4A6741"
-                opacity="0.55"
-                transform="rotate(-20 22 36)"
+                opacity="0.45"
+                transform="rotate(22 40 27)"
               />
               <ellipse
                 cx="34"
-                cy="36"
+                cy="35"
                 rx="3.5"
                 ry="6"
                 fill="#4A6741"
-                opacity="0.55"
-                transform="rotate(20 34 36)"
+                opacity="0.4"
+                transform="rotate(8 34 35)"
               />
+              <ellipse
+                cx="44"
+                cy="37"
+                rx="3.5"
+                ry="6"
+                fill="#4A6741"
+                opacity="0.4"
+                transform="rotate(32 44 37)"
+              />
+            </>
+          ) : (
+            <>
+              {/* Straight stem for bud and bloomed states */}
+              <line
+                x1="28"
+                y1="38"
+                x2="28"
+                y2="72"
+                stroke="#4A6741"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
+              <ellipse
+                cx="21"
+                cy="58"
+                rx="7"
+                ry="3.5"
+                fill="#7A9E6E"
+                opacity="0.65"
+                transform="rotate(-35 21 58)"
+              />
+
+              {completedToday ? (
+                <>
+                  {PETAL_ANGLES.map((angle) => (
+                    <ellipse
+                      key={angle}
+                      cx="28"
+                      cy="17"
+                      rx="4.5"
+                      ry="8"
+                      fill={color}
+                      opacity="0.82"
+                      transform={`rotate(${angle} 28 28)`}
+                    />
+                  ))}
+                  <circle cx="28" cy="28" r="7" fill="#F5EFE4" />
+                  <circle cx="28" cy="28" r="5" fill={color} opacity="0.55" />
+                  <circle cx="28" cy="28" r="2.5" fill={color} opacity="0.9" />
+                </>
+              ) : (
+                <>
+                  <ellipse
+                    cx="28"
+                    cy="26"
+                    rx="6"
+                    ry="11"
+                    fill={color}
+                    opacity="0.45"
+                  />
+                  <ellipse
+                    cx="28"
+                    cy="27"
+                    rx="4"
+                    ry="8"
+                    fill={color}
+                    opacity="0.7"
+                  />
+                  <ellipse
+                    cx="22"
+                    cy="36"
+                    rx="3.5"
+                    ry="6"
+                    fill="#4A6741"
+                    opacity="0.55"
+                    transform="rotate(-20 22 36)"
+                  />
+                  <ellipse
+                    cx="34"
+                    cy="36"
+                    rx="3.5"
+                    ry="6"
+                    fill="#4A6741"
+                    opacity="0.55"
+                    transform="rotate(20 34 36)"
+                  />
+                </>
+              )}
             </>
           )}
         </svg>
@@ -238,16 +312,26 @@ export default function FlowerHabit({
         <p className="font-mono text-[7.5px] uppercase tracking-[1.5px] text-bark text-center leading-tight w-14">
           {habit.name}
         </p>
-        <div
-          className={`flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-bark/5 transition-opacity duration-500 ${
-            streak === 0 ? "opacity-30" : "opacity-100"
-          }`}
-        >
-          <span className="text-[10px] leading-none">🌱</span>
-          <span className="font-mono text-[9px] font-medium text-bark leading-none">
-            {Math.max(1, streak)}
-          </span>
-        </div>
+
+        {isWilting ? (
+          <div className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-bark/5 opacity-40">
+            <span className="text-[10px] leading-none">🥀</span>
+            <span className="font-mono text-[9px] font-medium text-bark leading-none">
+              0
+            </span>
+          </div>
+        ) : (
+          <div
+            className={`flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-bark/5 transition-opacity duration-500 ${
+              localStreak === 0 ? "opacity-30" : "opacity-100"
+            }`}
+          >
+            <span className="text-[10px] leading-none">🌱</span>
+            <span className="font-mono text-[9px] font-medium text-bark leading-none">
+              {Math.max(1, localStreak)}
+            </span>
+          </div>
+        )}
       </button>
     </div>
   );
