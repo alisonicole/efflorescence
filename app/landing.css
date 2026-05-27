@@ -967,8 +967,657 @@
   line-height: 2;
 }
 
+/* SCREENS SECTION */
+.screens-section {
+  background: var(--charcoal-mid);
+  padding: 140px 64px;
+  position: relative;
+  overflow: hidden;
+}
+
+.screens-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.3;
+}
+
+.screens-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.screens-header {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.screens-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  opacity: 0.45;
+  margin-bottom: 24px;
+}
+
+.screens-title {
+  font-family: var(--font-display);
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 300;
+  line-height: 1.1;
+  color: var(--cream);
+  letter-spacing: -0.5px;
+  margin-bottom: 20px;
+}
+
+.screens-title em {
+  font-style: italic;
+  color: var(--blush);
+}
+
+.screens-sub {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(245, 239, 228, 0.4);
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+/* Growth path */
+.growth-path {
+  background: rgba(245, 239, 228, 0.03);
+  border: 0.5px solid rgba(245, 239, 228, 0.07);
+  border-radius: 20px;
+  padding: 40px 48px;
+  margin-bottom: 56px;
+}
+
+.growth-path-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(245, 239, 228, 0.25);
+  margin-bottom: 32px;
+}
+
+.growth-path-stages {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  position: relative;
+}
+
+.growth-path-stages::before {
+  content: "";
+  position: absolute;
+  bottom: 68px;
+  left: 3%;
+  right: 3%;
+  height: 0.5px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(245, 239, 228, 0.1),
+    rgba(245, 239, 228, 0.1),
+    transparent
+  );
+}
+
+.growth-path-stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  position: relative;
+  z-index: 1;
+}
+
+.growth-stage-day {
+  font-family: var(--font-mono);
+  font-size: 7px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(245, 239, 228, 0.3);
+}
+
+.growth-stage-name {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: rgba(245, 239, 228, 0.35);
+  font-style: italic;
+}
+
+.growth-stage-name.bloom {
+  color: var(--blush);
+  opacity: 0.9;
+}
+
+/* Phone screens grid */
+.screens-phones {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.screen-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.screen-card-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: rgba(245, 239, 228, 0.25);
+}
+
+/* Phone shell */
+.lp-phone {
+  width: 100%;
+  max-width: 220px;
+  aspect-ratio: 220 / 460;
+  background: #f5efe4;
+  border-radius: 28px;
+  box-shadow:
+    0 0 0 1px rgba(61, 43, 31, 0.08),
+    0 8px 32px rgba(0, 0, 0, 0.35),
+    0 32px 80px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  color: #3d2b1f;
+}
+
+.lp-phone-topbar {
+  padding: 12px 14px 8px;
+  background: #f5efe4;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-shrink: 0;
+  border-bottom: 1px solid rgba(61, 43, 31, 0.04);
+}
+
+.lp-phone-title {
+  font-family: Georgia, serif;
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 400;
+  color: #3d2b1f;
+  line-height: 1.1;
+  letter-spacing: -0.3px;
+}
+
+.lp-phone-subtitle {
+  font-family: "Courier New", monospace;
+  font-size: 6.5px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #6b4e3d;
+  opacity: 0.5;
+  margin-top: 2px;
+}
+
+.lp-phone-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #e8ddd6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+.lp-phone-content {
+  flex: 1;
+  overflow: hidden;
+  padding: 8px 8px 0;
+}
+
+.lp-section-label {
+  font-family: "Courier New", monospace;
+  font-size: 6.5px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: #8c7b72;
+  opacity: 0.55;
+  margin-bottom: 6px;
+  padding: 0 2px;
+}
+
+/* Flower beds */
+.lp-bed {
+  background: white;
+  border-radius: 10px;
+  margin-bottom: 5px;
+  box-shadow: 0 1px 4px rgba(61, 43, 31, 0.06);
+  overflow: hidden;
+}
+
+.lp-bed-header {
+  padding: 6px 8px 3px;
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+}
+
+.lp-bed-label {
+  font-family: "Courier New", monospace;
+  font-size: 6.5px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #3d2b1f;
+  opacity: 0.55;
+}
+
+.lp-bed-tagline {
+  font-family: "Courier New", monospace;
+  font-size: 6.5px;
+  color: #3d2b1f;
+  opacity: 0.3;
+  font-style: italic;
+}
+
+.lp-bed-flowers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
+  padding: 3px 4px 0;
+}
+
+.lp-bed-soil {
+  height: 2px;
+  background: #c4a882;
+  opacity: 0.25;
+  margin: 3px 8px 6px;
+  border-radius: 2px;
+}
+
+.lp-flower-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.lp-flower-name {
+  font-family: "Courier New", monospace;
+  font-size: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #3d2b1f;
+  text-align: center;
+  line-height: 1.3;
+  width: 42px;
+}
+
+.lp-flower-streak {
+  font-family: "Courier New", monospace;
+  font-size: 6.5px;
+  color: #3d2b1f;
+  opacity: 0.5;
+  text-align: center;
+}
+
+/* Bottom nav */
+.lp-phone-nav {
+  flex-shrink: 0;
+  height: 48px;
+  background: white;
+  border-top: 1px solid #e8ddd6;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 4px;
+}
+
+.lp-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+}
+
+.lp-nav-icon {
+  font-size: 13px;
+  line-height: 1;
+}
+
+.lp-nav-lbl {
+  font-family: "Courier New", monospace;
+  font-size: 5px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #8c7b72;
+  opacity: 0.5;
+}
+
+.lp-nav-lbl.active {
+  color: #3d2b1f;
+  opacity: 1;
+  font-weight: 700;
+}
+
+.lp-nav-ground {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #c97a6e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  box-shadow: 0 2px 8px rgba(201, 122, 110, 0.35);
+}
+
+/* Calendar */
+.lp-cal-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  padding: 0 2px;
+}
+
+.lp-cal-arrow {
+  font-size: 12px;
+  color: #8c7b72;
+  opacity: 0.5;
+}
+
+.lp-cal-month {
+  font-family: "Courier New", monospace;
+  font-size: 7px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #8c7b72;
+}
+
+.lp-cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.lp-cal-dow {
+  font-family: "Courier New", monospace;
+  font-size: 5.5px;
+  text-align: center;
+  color: #8c7b72;
+  opacity: 0.5;
+  padding-bottom: 2px;
+}
+
+.lp-cal-day {
+  aspect-ratio: 1;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Courier New", monospace;
+  font-size: 6.5px;
+  color: #3d2b1f;
+  position: relative;
+}
+
+.lp-cal-empty {
+  background: transparent !important;
+}
+
+.lp-cal-circled {
+  border-radius: 50%;
+  box-shadow: 0 0 0 1.5px rgba(61, 43, 31, 0.6);
+  font-weight: 600;
+}
+
+.lp-cal-dot {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  width: 2.5px;
+  height: 2.5px;
+  border-radius: 50%;
+}
+
+.lp-cal-summary {
+  margin-top: 8px;
+  padding: 7px 9px;
+  background: white;
+  border-radius: 9px;
+  box-shadow: 0 1px 4px rgba(61, 43, 31, 0.06);
+}
+
+.lp-cal-summary-date {
+  font-family: "Courier New", monospace;
+  font-size: 5.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #8c7b72;
+  opacity: 0.5;
+  margin-bottom: 3px;
+}
+
+.lp-cal-summary-line {
+  font-size: 7.5px;
+  color: #3d2b1f;
+  opacity: 0.85;
+  line-height: 1.4;
+}
+
+.lp-cal-bar {
+  height: 3px;
+  background: #e8ddd6;
+  border-radius: 2px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.lp-cal-bar-fill {
+  height: 100%;
+  width: 67%;
+  background: #7a9e6e;
+  border-radius: 2px;
+}
+
+/* Journal */
+.lp-journal-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 8px;
+  background: rgba(61, 43, 31, 0.04);
+  border-radius: 7px;
+  padding: 2px;
+}
+
+.lp-journal-tab {
+  flex: 1;
+  text-align: center;
+  font-family: "Courier New", monospace;
+  font-size: 5.5px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 3px 1px;
+  border-radius: 5px;
+  color: #8c7b72;
+  opacity: 0.5;
+}
+
+.lp-journal-tab.active {
+  background: white;
+  color: #3d2b1f;
+  opacity: 1;
+  box-shadow: 0 1px 3px rgba(61, 43, 31, 0.08);
+}
+
+.lp-journal-prompt {
+  font-family: "Courier New", monospace;
+  font-size: 7px;
+  color: #8c7b72;
+  opacity: 0.6;
+  margin-bottom: 7px;
+  letter-spacing: 0.3px;
+}
+
+.lp-journal-entry {
+  background: white;
+  border-radius: 9px;
+  padding: 8px;
+  box-shadow: 0 1px 4px rgba(61, 43, 31, 0.06);
+  margin-bottom: 5px;
+}
+
+.lp-entry-date {
+  font-family: "Courier New", monospace;
+  font-size: 6px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.lp-pros-list,
+.lp-cons-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5px;
+}
+
+.lp-list-row {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.lp-list-sign {
+  font-size: 7.5px;
+  font-family: "Courier New", monospace;
+  flex-shrink: 0;
+}
+
+.lp-plus {
+  color: #7a9e6e;
+  opacity: 0.7;
+}
+
+.lp-minus {
+  color: #c97a6e;
+  opacity: 0.6;
+}
+
+.lp-entry-text {
+  font-size: 7px;
+  color: #3d2b1f;
+  line-height: 1.4;
+  opacity: 0.85;
+}
+
+/* Inspire */
+.lp-inspire-card {
+  background: white;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0 2px 8px rgba(61, 43, 31, 0.07);
+  margin-bottom: 6px;
+}
+
+.lp-inspire-type {
+  font-family: "Courier New", monospace;
+  font-size: 6px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #c97a6e;
+  opacity: 0.8;
+  margin-bottom: 7px;
+}
+
+.lp-inspire-body {
+  font-size: 8.5px;
+  line-height: 1.55;
+  color: #3d2b1f;
+  opacity: 0.85;
+  margin-bottom: 8px;
+}
+
+.lp-inspire-divider {
+  height: 1px;
+  background: #e8ddd6;
+  margin: 6px 0;
+}
+
+.lp-inspire-source {
+  font-family: "Courier New", monospace;
+  font-size: 6px;
+  color: #8c7b72;
+  opacity: 0.4;
+  letter-spacing: 0.5px;
+}
+
+.lp-inspire-note {
+  background: #faf0ec;
+  border-radius: 9px;
+  padding: 9px;
+  border-left: 2px solid #c97a6e;
+  margin-bottom: 6px;
+}
+
+.lp-inspire-note-label {
+  font-family: "Courier New", monospace;
+  font-size: 5.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #c97a6e;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+.lp-inspire-note-body {
+  font-size: 8px;
+  line-height: 1.5;
+  color: #3d2b1f;
+  opacity: 0.7;
+  font-style: italic;
+}
+
+.lp-inspire-milestone {
+  background: white;
+  border-radius: 9px;
+  padding: 9px;
+  box-shadow: 0 1px 4px rgba(61, 43, 31, 0.05);
+}
+
 /* MOBILE BREAKPOINTS */
 @media (max-width: 768px) {
+  /* Screens section */
+  .screens-section {
+    padding: 80px 24px;
+  }
+
+  .growth-path {
+    padding: 28px 20px;
+    overflow-x: auto;
+  }
+
+  .growth-path-stages {
+    min-width: 480px;
+  }
+
+  .screens-phones {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
   /* Nav */
   .nav {
     padding: 20px 24px;

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import "./landing.css";
+import LandingScreens from "@/components/landing/LandingScreens";
 
 export const metadata = {
   title: "Efflorescence — You were always the garden.",
@@ -425,6 +426,8 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      <LandingScreens />
 
       {/* CTA */}
       <section className="cta-section">
