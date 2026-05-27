@@ -47,7 +47,7 @@ export default function PlantASeedButton() {
               <div className="flex flex-col gap-2.5">
                 {/* Card 1 — Gratitude */}
                 <button
-                  onClick={() => navigate("/journal/new")}
+                  onClick={() => navigate("/journal")}
                   className="w-full text-left flex items-start gap-3.5 p-4 rounded-xl bg-bark/[0.04] border border-bark/8 active:scale-[0.99] transition-transform"
                 >
                   <span className="text-xl mt-0.5">🌱</span>
@@ -63,7 +63,7 @@ export default function PlantASeedButton() {
 
                 {/* Card 2 — Rewrite Room */}
                 <button
-                  onClick={() => navigate("/journal/receipts")}
+                  onClick={() => navigate("/journal")}
                   className="w-full text-left flex items-start gap-3.5 p-4 rounded-xl border active:scale-[0.99] transition-transform"
                   style={{
                     background: "rgba(61,43,31,0.07)",

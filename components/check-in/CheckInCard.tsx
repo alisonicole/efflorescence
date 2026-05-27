@@ -40,7 +40,7 @@ export default function CheckInCard({
     if (saving) return;
     setSelected(spiral);
     onSpiralSelect(spiral);
-    router.push(`/journal/new?spiral=${spiral}`);
+    router.push("/journal");
     void saveCheckIn(spiral);
   }
 

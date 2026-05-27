@@ -96,7 +96,7 @@ export default function GroundModal({
 
             <button
               onClick={() => {
-                router.push("/journal/the-why");
+                router.push("/journal");
                 onClose();
               }}
               className="w-full text-left p-4 bg-white rounded-card mb-2 shadow-sm"

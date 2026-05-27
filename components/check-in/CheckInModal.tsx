@@ -41,7 +41,7 @@ export default function CheckInModal({
     if (saving) return;
     onSpiralSelect(spiral);
     onClose();
-    router.push(`/journal/new?spiral=${spiral}`);
+    router.push("/journal");
     void saveCheckIn(spiral);
   }
 
