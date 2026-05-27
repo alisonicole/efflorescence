@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Parse from "parse";
 import { initParse } from "@/lib/parse";
 import { computeStreak } from "@/lib/garden";
+import { seedDefaultHabits } from "@/lib/default-habits";
 import type { Habit } from "@/types";
 import FlowerHabit from "./FlowerHabit";
 
@@ -27,6 +28,15 @@ export default function HabitGrid() {
       habitQuery.equalTo("user", user);
       habitQuery.equalTo("isActive", true);
       const results = await habitQuery.find();
+
+      if (results.length === 0) {
+        const alreadySeeded = !!user.get("habitsSeeded");
+        if (!alreadySeeded) {
+          await seedDefaultHabits(user);
+          void loadHabits(); // reload after seeding
+          return;
+        }
+      }
 
       const habitList: Habit[] = results.map((h) => ({
         objectId: h.id,

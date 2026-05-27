@@ -8,12 +8,18 @@ export type Spiral =
   | "i_dont_know";
 
 export type HabitCategory =
-  | "water_meals"
-  | "outside"
   | "no_contact"
   | "no_stalking"
-  | "journaling"
-  | "talking";
+  | "no_old_photos"
+  | "eat_water"
+  | "move_body"
+  | "fresh_air"
+  | "talk"
+  | "sleep"
+  | "get_dressed"
+  | "journal"
+  | "just_for_you"
+  | "therapy";
 
 export type Season =
   | "late_autumn"
@@ -136,14 +142,3 @@ export const SPIRAL_DESCRIPTIONS: Record<Spiral, string> = {
   actually_okay: "You're doing okay today. Maybe even better than okay.",
   i_dont_know: "You can't name it. Something is just off.",
 };
-
-export const DEFAULT_HABITS: Array<{
-  name: string;
-  category: HabitCategory;
-  icon: string;
-}> = [
-  { name: "Water & meals", category: "water_meals", icon: "💧" },
-  { name: "Go outside", category: "outside", icon: "🌤" },
-  { name: "No contact", category: "no_contact", icon: "✂️" },
-  { name: "Journal", category: "journaling", icon: "🌱" },
-];

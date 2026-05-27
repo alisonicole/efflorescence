@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Parse from "parse";
 import { initParse } from "@/lib/parse";
-import { DEFAULT_HABITS } from "@/types";
+import { seedDefaultHabits } from "@/lib/default-habits";
 
 interface OnboardingModalProps {
   onComplete: () => void;
@@ -29,18 +29,7 @@ export default function OnboardingModal({ onComplete }: OnboardingModalProps) {
       user.set("healingStartDate", new Date(`${startDate}T00:00:00`));
       await user.save();
 
-      const ParseHabit = Parse.Object.extend("Habit");
-      const saves = DEFAULT_HABITS.map((h) => {
-        const habit = new ParseHabit();
-        habit.set("user", user);
-        habit.set("name", h.name);
-        habit.set("category", h.category);
-        habit.set("icon", h.icon);
-        habit.set("isActive", true);
-        habit.setACL(new Parse.ACL(user));
-        return habit.save();
-      });
-      await Promise.all(saves);
+      await seedDefaultHabits(user);
       setStep(2);
     } finally {
       setSaving(false);

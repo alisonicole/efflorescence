@@ -81,10 +81,16 @@ export function detectBlossomEarned(
 }
 
 export const BLOSSOM_SPECIES: Record<HabitCategory, BlossomSpecies> = {
-  water_meals: { emoji: "🌼", name: "chamomile" },
-  outside: { emoji: "🌻", name: "sunflower" },
-  no_contact: { emoji: "🌹", name: "rose" },
-  no_stalking: { emoji: "💐", name: "wildflower" },
-  journaling: { emoji: "🌷", name: "tulip" },
-  talking: { emoji: "🌸", name: "cherry blossom" },
+  no_contact: { emoji: "🌿", name: "thistle" },
+  no_stalking: { emoji: "🌼", name: "marigold" },
+  no_old_photos: { emoji: "🪻", name: "lavender" },
+  eat_water: { emoji: "🍵", name: "chamomile" },
+  move_body: { emoji: "🌻", name: "sunflower" },
+  fresh_air: { emoji: "🌸", name: "daisy" },
+  talk: { emoji: "🌺", name: "dahlia" },
+  sleep: { emoji: "🌙", name: "evening primrose" },
+  get_dressed: { emoji: "🌱", name: "dandelion" },
+  journal: { emoji: "🪷", name: "iris" },
+  just_for_you: { emoji: "💮", name: "peony" },
+  therapy: { emoji: "💙", name: "forget-me-not" },
 };

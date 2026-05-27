@@ -3,16 +3,27 @@
 import { useState } from "react";
 import Parse from "parse";
 import { initParse } from "@/lib/parse";
-import { detectBlossomEarned, computeStreak } from "@/lib/garden";
+import {
+  detectBlossomEarned,
+  computeStreak,
+  BLOSSOM_SPECIES,
+} from "@/lib/garden";
+import { HABIT_WHY } from "@/lib/default-habits";
 import type { Habit, HabitCategory } from "@/types";
 
 const CATEGORY_COLOR: Record<HabitCategory, string> = {
-  water_meals: "#7A9E6E",
-  outside: "#B8935A",
-  no_contact: "#C97A6E",
-  no_stalking: "#8A7BA0",
-  journaling: "#4A6741",
-  talking: "#DBA898",
+  no_contact: "#6B8F6E", // thistle green
+  no_stalking: "#D4823A", // marigold orange
+  no_old_photos: "#9B8DB5", // lavender purple
+  eat_water: "#D4B483", // chamomile wheat
+  move_body: "#E8C547", // sunflower yellow
+  fresh_air: "#8FB5A0", // daisy sage
+  talk: "#C97A8A", // dahlia rose
+  sleep: "#5C6B8A", // night blue
+  get_dressed: "#C4B447", // dandelion gold
+  journal: "#7B6EA0", // iris purple
+  just_for_you: "#D48A9B", // peony pink
+  therapy: "#7A9BB5", // forget-me-not blue
 };
 
 interface FlowerHabitProps {
@@ -110,115 +121,134 @@ export default function FlowerHabit({
     }
   }
 
+  const why = HABIT_WHY[habit.category];
+  const flowerName = BLOSSOM_SPECIES[habit.category]?.name ?? habit.category;
+
   return (
-    <button
-      onClick={handleTap}
-      disabled={saving}
-      className="flex flex-col items-center gap-1 relative transition-transform active:scale-95"
-      aria-label={`${habit.name}${completedToday ? " (done)" : ""}`}
-    >
-      {watering && (
-        <span className="absolute -top-1 left-1/2 text-[11px] pointer-events-none animate-water-drop z-10">
-          💧
-        </span>
-      )}
-
-      <svg
-        width="56"
-        height="76"
-        viewBox="0 0 56 76"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        className={`transition-all duration-500 ${completedToday ? "drop-shadow-sm" : "opacity-60"}`}
+    <div className="relative group flex flex-col items-center">
+      {/* Hover tooltip */}
+      <div className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 w-36 bg-bark text-cream rounded-xl px-3 py-2 text-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-30 shadow-lg">
+        <p className="font-mono text-[7px] uppercase tracking-wider opacity-50 mb-1">
+          {flowerName}
+        </p>
+        <p className="text-[10px] leading-snug">{why}</p>
+      </div>
+      <button
+        onClick={handleTap}
+        disabled={saving}
+        className="flex flex-col items-center gap-1 relative transition-transform active:scale-95"
+        aria-label={`${habit.name}${completedToday ? " (done)" : ""}`}
       >
-        {/* Stem */}
-        <line
-          x1="28"
-          y1="38"
-          x2="28"
-          y2="72"
-          stroke="#4A6741"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-        />
-        {/* Leaf */}
-        <ellipse
-          cx="21"
-          cy="58"
-          rx="7"
-          ry="3.5"
-          fill="#7A9E6E"
-          opacity="0.65"
-          transform="rotate(-35 21 58)"
-        />
+        {watering && (
+          <span className="absolute -top-1 left-1/2 text-[11px] pointer-events-none animate-water-drop z-10">
+            💧
+          </span>
+        )}
 
-        {completedToday ? (
-          <>
-            {PETAL_ANGLES.map((angle) => (
+        <svg
+          width="56"
+          height="76"
+          viewBox="0 0 56 76"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className={`transition-all duration-500 ${completedToday ? "drop-shadow-sm" : "opacity-60"}`}
+        >
+          {/* Stem */}
+          <line
+            x1="28"
+            y1="38"
+            x2="28"
+            y2="72"
+            stroke="#4A6741"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+          {/* Leaf */}
+          <ellipse
+            cx="21"
+            cy="58"
+            rx="7"
+            ry="3.5"
+            fill="#7A9E6E"
+            opacity="0.65"
+            transform="rotate(-35 21 58)"
+          />
+
+          {completedToday ? (
+            <>
+              {PETAL_ANGLES.map((angle) => (
+                <ellipse
+                  key={angle}
+                  cx="28"
+                  cy="17"
+                  rx="4.5"
+                  ry="8"
+                  fill={color}
+                  opacity="0.82"
+                  transform={`rotate(${angle} 28 28)`}
+                />
+              ))}
+              {/* Center disk */}
+              <circle cx="28" cy="28" r="7" fill="#F5EFE4" />
+              <circle cx="28" cy="28" r="5" fill={color} opacity="0.55" />
+              <circle cx="28" cy="28" r="2.5" fill={color} opacity="0.9" />
+            </>
+          ) : (
+            <>
+              {/* Bud petals closed */}
               <ellipse
-                key={angle}
                 cx="28"
-                cy="17"
-                rx="4.5"
+                cy="26"
+                rx="6"
+                ry="11"
+                fill={color}
+                opacity="0.45"
+              />
+              <ellipse
+                cx="28"
+                cy="27"
+                rx="4"
                 ry="8"
                 fill={color}
-                opacity="0.82"
-                transform={`rotate(${angle} 28 28)`}
+                opacity="0.7"
               />
-            ))}
-            {/* Center disk */}
-            <circle cx="28" cy="28" r="7" fill="#F5EFE4" />
-            <circle cx="28" cy="28" r="5" fill={color} opacity="0.55" />
-            <circle cx="28" cy="28" r="2.5" fill={color} opacity="0.9" />
-          </>
-        ) : (
-          <>
-            {/* Bud petals closed */}
-            <ellipse
-              cx="28"
-              cy="26"
-              rx="6"
-              ry="11"
-              fill={color}
-              opacity="0.45"
-            />
-            <ellipse cx="28" cy="27" rx="4" ry="8" fill={color} opacity="0.7" />
-            {/* Sepals */}
-            <ellipse
-              cx="22"
-              cy="36"
-              rx="3.5"
-              ry="6"
-              fill="#4A6741"
-              opacity="0.55"
-              transform="rotate(-20 22 36)"
-            />
-            <ellipse
-              cx="34"
-              cy="36"
-              rx="3.5"
-              ry="6"
-              fill="#4A6741"
-              opacity="0.55"
-              transform="rotate(20 34 36)"
-            />
-          </>
-        )}
-      </svg>
+              {/* Sepals */}
+              <ellipse
+                cx="22"
+                cy="36"
+                rx="3.5"
+                ry="6"
+                fill="#4A6741"
+                opacity="0.55"
+                transform="rotate(-20 22 36)"
+              />
+              <ellipse
+                cx="34"
+                cy="36"
+                rx="3.5"
+                ry="6"
+                fill="#4A6741"
+                opacity="0.55"
+                transform="rotate(20 34 36)"
+              />
+            </>
+          )}
+        </svg>
 
-      <p className="font-mono text-[7.5px] uppercase tracking-[1.5px] text-bark text-center leading-tight w-14">
-        {habit.name}
-      </p>
-      <div
-        className={`flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-bark/5 transition-opacity duration-500 ${
-          streak === 0 ? "opacity-30" : "opacity-100"
-        }`}
-      >
-        <span className="text-[10px] leading-none">🌱</span>
-        <span className="font-mono text-[9px] font-medium text-bark leading-none">
-          {Math.max(1, streak)}
-        </span>
-      </div>
-    </button>
+        <p className="font-mono text-[7.5px] uppercase tracking-[1.5px] text-bark text-center leading-tight w-14">
+          {habit.name}
+        </p>
+        <div
+          className={`flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-bark/5 transition-opacity duration-500 ${
+            streak === 0 ? "opacity-30" : "opacity-100"
+          }`}
+        >
+          <span className="text-[10px] leading-none">🌱</span>
+          <span className="font-mono text-[9px] font-medium text-bark leading-none">
+            {Math.max(1, streak)}
+          </span>
+        </div>
+      </button>
+    </div>
   );
 }
