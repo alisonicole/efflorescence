@@ -10,7 +10,11 @@ import GroundModal from "@/components/ground/GroundModal";
 const DAILY_KEY = "dailyCheckIn";
 
 function todayStamp() {
-  return new Date().toISOString().slice(0, 10);
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
 }
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
@@ -18,6 +22,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const [dailyOpen, setDailyOpen] = useState(false);
   const [groundOpen, setGroundOpen] = useState(false);
+  const [checkInFromGround, setCheckInFromGround] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) router.replace("/signin");
@@ -54,6 +59,21 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         <GroundModal
           onClose={() => setGroundOpen(false)}
           onTendGarden={() => router.push("/garden")}
+          onCheckIn={() => {
+            setGroundOpen(false);
+            setCheckInFromGround(true);
+          }}
+        />
+      )}
+
+      {checkInFromGround && (
+        <DailyCheckIn
+          onNavigate={(path) => router.push(path)}
+          onGround={() => {
+            setCheckInFromGround(false);
+            setGroundOpen(true);
+          }}
+          onClose={() => setCheckInFromGround(false)}
         />
       )}
     </div>

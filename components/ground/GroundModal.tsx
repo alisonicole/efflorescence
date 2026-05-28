@@ -8,11 +8,13 @@ type GroundPath = "none" | "breathing";
 interface GroundModalProps {
   onClose: () => void;
   onTendGarden: () => void;
+  onCheckIn?: () => void;
 }
 
 export default function GroundModal({
   onClose,
   onTendGarden,
+  onCheckIn,
 }: GroundModalProps) {
   const router = useRouter();
   const [path, setPath] = useState<GroundPath>("none");
@@ -78,6 +80,20 @@ export default function GroundModal({
               </h2>
             </div>
             <p className="text-xs text-muted mb-6">Come here first.</p>
+
+            {onCheckIn && (
+              <button
+                onClick={onCheckIn}
+                className="w-full text-left p-4 bg-white rounded-card mb-2 shadow-sm"
+              >
+                <div className="text-sm font-medium text-bark">
+                  Check in with yourself
+                </div>
+                <div className="text-xs text-muted">
+                  Name how you&rsquo;re feeling right now.
+                </div>
+              </button>
+            )}
 
             <button
               onClick={() => {

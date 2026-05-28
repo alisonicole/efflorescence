@@ -43,7 +43,10 @@ export default function EntryEditor({
     } finally {
       setSaving(false);
     }
-    if (saved) onSaved();
+    if (saved) {
+      setContent("");
+      onSaved();
+    }
   }
 
   return (
