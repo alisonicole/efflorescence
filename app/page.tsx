@@ -222,7 +222,7 @@ export default function LandingPage() {
               <a href="#">The Garden</a>
             </li>
             <li>
-              <a href="#">Join Waitlist</a>
+              <a href="#science">The Science</a>
             </li>
           </ul>
           <Link className="nav-enter" href="/signin">
@@ -431,6 +431,140 @@ export default function LandingPage() {
       </section>
 
       <LandingScreens />
+
+      {/* THE SCIENCE */}
+      <section className="science-section" id="science">
+        <div className="science-inner">
+          <div className="science-header">
+            <div className="science-eyebrow">Evidence-Based Design</div>
+            <h2 className="science-title">
+              Every feature
+              <br />
+              <em>earns its place.</em>
+            </h2>
+            <p className="science-intro">
+              Grief is not a mindset problem. It is a{" "}
+              <strong>neurological event</strong> that disrupts memory
+              consolidation, reward circuitry, and the prefrontal cortex&rsquo;s
+              ability to regulate emotion. Every feature in Efflorescence is
+              built around what the evidence says actually moves people through
+              it.
+            </p>
+          </div>
+
+          <div className="science-grid">
+            {[
+              {
+                icon: "🌀",
+                title: "Spiral Check-In",
+                tag: "Affective Labeling",
+                body: "Naming an emotion reduces amygdala activation by ~30%, even while still experiencing it.",
+                citation: "Lieberman et al., 2007",
+              },
+              {
+                icon: "🌱",
+                title: "The Garden",
+                tag: "Behavioral Activation",
+                body: "Behavioral activation alone is as effective as full CBT for depression. Action precedes mood.",
+                citation: "Jacobson et al., 1996",
+              },
+              {
+                icon: "🔒",
+                title: "No-Contact Habits",
+                tag: "Dopamine Regulation",
+                body: "Romantic rejection activates the same reward circuitry as cocaine withdrawal.",
+                citation: "Fisher et al., 2010",
+              },
+              {
+                icon: "🌬",
+                title: "4-7-8 Breathing",
+                tag: "Polyvagal Theory",
+                body: "Extended exhale activates the vagus nerve, measurably reducing cortisol within minutes.",
+                citation: "Porges, 2011",
+              },
+              {
+                icon: "✍️",
+                title: "The Diary",
+                tag: "Expressive Writing",
+                body: "15-20 minutes of expressive writing over 3-4 days reduces depression and improves immune function.",
+                citation: "Pennebaker & Beall, 1986",
+              },
+              {
+                icon: "⚖️",
+                title: "Full Picture",
+                tag: "Cognitive Reappraisal",
+                body: "Grief produces selective memory — we suppress the difficult. Full Picture counters this documented bias.",
+                citation: "Bonanno, 2004",
+              },
+              {
+                icon: "🔄",
+                title: "Rewrite Room",
+                tag: "Cognitive Restructuring",
+                body: "Identifying and rewriting distorted thoughts changes their emotional charge and narrative identity.",
+                citation: "Beck, 1979",
+              },
+              {
+                icon: "🌿",
+                title: "The Why",
+                tag: "Implementation Intentions",
+                body: "Pre-committed values sustain behavior under emotional flooding, when prefrontal reasoning is compromised.",
+                citation: "Gollwitzer, 1999",
+              },
+              {
+                icon: "✨",
+                title: "Inspire Feed",
+                tag: "Psychoeducation",
+                body: "Understanding what is happening neurologically measurably reduces distress, even without changing the situation.",
+                citation: "Bonanno, 2004",
+              },
+              {
+                icon: "📅",
+                title: "66-Day Streak",
+                tag: "Habit Formation",
+                body: "Average time to automaticity is 66 days. Missing one day has no measurable effect on long-term habit formation.",
+                citation: "Lally et al., 2010",
+              },
+              {
+                icon: "🌸",
+                title: "Milestone Cards",
+                tag: "Reinforcement Scheduling",
+                body: "Predictable reinforcement at meaningful thresholds sustains motivation through the hardest stretches.",
+                citation: "Skinner",
+              },
+              {
+                icon: "🗓",
+                title: "Journey Calendar",
+                tag: "Self-Monitoring",
+                body: "Tracking behavior increases its likelihood of continuing. Visual progress counters grief&rsquo;s distortion of time.",
+                citation: "Kanfer, 1970",
+              },
+            ].map((f) => (
+              <div key={f.title} className="sci-card">
+                <div className="sci-card-icon">{f.icon}</div>
+                <div className="sci-card-title">{f.title}</div>
+                <div className="sci-card-tag">{f.tag}</div>
+                <p className="sci-card-body">{f.body}</p>
+                <div className="sci-card-citation">{f.citation}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="science-model">
+            <div className="science-model-eyebrow">The Therapeutic Model</div>
+            <div className="science-model-title">
+              <em>Multi-modal by design.</em>
+            </div>
+            <p className="science-model-body">
+              No single modality is sufficient for the full complexity of
+              post-breakup grief. Efflorescence draws from CBT, behavioral
+              activation, somatic/polyvagal, narrative therapy, and positive
+              psychology — each targeting a different system that grief
+              disrupts. Combined, they are more effective than any single
+              approach.
+            </p>
+          </div>
+        </div>
+      </section>
 
       {/* CTA */}
       <section className="cta-section">
