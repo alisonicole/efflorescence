@@ -13,6 +13,7 @@ import HabitGrid from "@/components/habits/HabitGrid";
 import OnboardingModal from "@/components/onboarding/OnboardingModal";
 import BlossomGrove from "@/components/garden/BlossomGrove";
 import GratitudeJar from "@/components/garden/GratitudeJar";
+import PushPermission from "@/components/notifications/PushPermission";
 
 const TOUR_KEY = "gardenTourSeen";
 
@@ -68,6 +69,7 @@ export default function GardenPage() {
       {showTour && !needsOnboarding && <GardenTour onClose={handleTourClose} />}
       <TopBar title="efflorescence" subtitle={`Day ${dayCount} of healing`} />
       <div className="space-y-2.5 pb-4">
+        <PushPermission />
         <div className="px-0">
           <p className="text-[10px] uppercase tracking-widest text-muted px-2.5 mb-2 pt-2">
             Tending today
