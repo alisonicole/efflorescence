@@ -59,12 +59,14 @@ export interface Habit {
   isActive: boolean;
   createdAt: Date;
   habitGroup?: string;
+  lastCelebrated?: number;
 }
 
 export interface HabitCompletion {
   objectId: string;
   habitId: string;
   completedDate: Date;
+  isRestDay?: boolean;
 }
 
 export interface JournalEntry {
@@ -72,7 +74,13 @@ export interface JournalEntry {
   content: string;
   prompt: string;
   spiralContext?: Spiral;
-  entryType?: "standard" | "rewrite" | "the_why" | "receipts" | "affirmation";
+  entryType?:
+    | "standard"
+    | "rewrite"
+    | "the_why"
+    | "receipts"
+    | "affirmation"
+    | "weekly_reflection";
   pass1Content?: string;
   createdAt: Date;
 }
@@ -135,7 +143,7 @@ export const SPIRAL_LABELS: Record<Spiral, string> = {
   the_replay: "The Replay",
   the_mirror: "The Mirror",
   the_what_if: "The What If",
-  the_but_he: "The But He",
+  the_but_he: "The Old Story",
   actually_okay: "Actually okay",
   i_dont_know: "I don't know",
 };
@@ -145,8 +153,8 @@ export const SPIRAL_DESCRIPTIONS: Record<Spiral, string> = {
   the_replay:
     "Going over what was said — what you said, what you should have said.",
   the_mirror: "Wondering what's wrong with you. Why you weren't enough.",
-  the_what_if: "If you'd done things differently. If he'd chosen you.",
-  the_but_he: "He wasn't all bad. There were good parts. You miss them.",
+  the_what_if: "If you'd done things differently. If it had gone another way.",
+  the_but_he: "The good parts were real. You miss them. That's allowed.",
   actually_okay: "You're doing okay today. Maybe even better than okay.",
   i_dont_know: "You can't name it. Something is just off.",
 };

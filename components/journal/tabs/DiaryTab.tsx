@@ -12,12 +12,19 @@ const DIARY_EXCLUDE_TYPES: ExcludableType[] = [
   "the_why",
 ];
 
-export default function DiaryTab() {
+export default function DiaryTab({
+  initialPrompt = "",
+}: {
+  initialPrompt?: string;
+}) {
   const [refreshKey, setRefreshKey] = useState(0);
 
   return (
     <div className="space-y-2.5 pb-4">
-      <EntryEditor prompt="" onSaved={() => setRefreshKey((k) => k + 1)} />
+      <EntryEditor
+        prompt={initialPrompt}
+        onSaved={() => setRefreshKey((k) => k + 1)}
+      />
       <EntryList excludeTypes={DIARY_EXCLUDE_TYPES} refreshKey={refreshKey} />
     </div>
   );

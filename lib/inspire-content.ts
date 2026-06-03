@@ -34,7 +34,7 @@ This is why the bar here is "did you try" — not because we're lowering standar
     title: "What happens at 66 days",
     body: `Around the 60-day mark, something shifts. The behavior stops requiring conscious effort and starts requiring conscious resistance to skip. That inversion — from effort to skip to effort to stop — is what automaticity feels like from the inside.
 
-You probably won't notice when it happens. You'll just realize one day that you went outside without deciding to. That you ate breakfast without negotiating with yourself. That the urge to check his profile passed through you like weather instead of landing like a demand.
+You probably won't notice when it happens. You'll just realize one day that you went outside without deciding to. That you ate breakfast without negotiating with yourself. That the urge to reach out passed through you like weather instead of landing like a demand.
 
 That's the 66-day threshold. You're building toward it right now.`,
   },
@@ -44,9 +44,9 @@ That's the 66-day threshold. You're building toward it right now.`,
     spirals: ["the_what_if", "the_but_he"],
     dayRange: [1, 30],
     title: "The neuroscience of the urge to reconnect",
-    body: `Romantic rejection activates the same neural regions as cocaine withdrawal. This is not a metaphor — it's an fMRI finding (Fisher et al., 2010). The brain in early post-breakup grief looks, on a scan, like a brain in withdrawal.
+    body: `Romantic rejection activates the same neural regions as cocaine withdrawal. This is not a metaphor — it's an fMRI finding (Fisher et al., 2010). The brain in early grief looks, on a scan, like a brain in withdrawal.
 
-This means the urge to text him at 11pm is not a character flaw or a sign you made the wrong decision. It is your dopamine system doing what dopamine systems do when a reward source is removed. It will ask for the drug. It will be loud about it.
+This means the urge to reach out at 11pm is not a character flaw or a sign you made the wrong decision. It is your dopamine system doing what dopamine systems do when a reward source is removed. It will ask for the drug. It will be loud about it.
 
 The ask is not to feel nothing. The ask is to give it ten minutes before you respond.`,
   },
@@ -102,7 +102,7 @@ This is why replaying the argument in March doesn't stop the guilt — because g
     spirals: ["the_mirror"],
     dayRange: [1, 45],
     title: "The comparison trap — what's actually happening",
-    body: `When you compare yourself to whoever he's with now (or whoever you imagine he's with), your brain is running a very specific algorithm: it is trying to locate the variable that explains the outcome. If she is prettier, smarter, less complicated — then there's a reason. Then you have something to fix.
+    body: `When you compare yourself to whoever they're with now (or whoever you imagine they're with), your brain is running a very specific algorithm: it is trying to locate the variable that explains the outcome. If they are prettier, smarter, less complicated — then there's a reason. Then you have something to fix.
 
 The relief that comes from finding a reason is temporary and false. Because relationships don't end because of a missing variable. They end because of accumulated incompatibility, timing, fear, or simply because one person stopped choosing the other. None of that is located in her face.
 
@@ -114,9 +114,9 @@ The algorithm is running because uncertainty is painful. It is not running becau
     spirals: ["the_mirror"],
     dayRange: [1, 30],
     title: 'What "not enough" is actually about',
-    body: `The feeling of not being enough is almost never about the specific relationship you just lost. Research on self-esteem and romantic attachment consistently shows that the "not enough" story predates the relationship — it's a pre-existing framework that the breakup activated, not caused.
+    body: `The feeling of not being enough is almost never about the specific relationship you just lost. Research on self-esteem and romantic attachment consistently shows that the "not enough" story predates the relationship — it's a pre-existing framework that the loss activated, not caused.
 
-Which means: fixing the thing you think he left you for won't fix the feeling. The feeling lives somewhere older than him.
+Which means: fixing the thing you're convinced is the reason won't fix the feeling. The feeling lives somewhere older than this.
 
 This is harder news in the short term and significantly better news in the long term.`,
   },
@@ -126,11 +126,11 @@ This is harder news in the short term and significantly better news in the long 
     spirals: ["the_but_he"],
     dayRange: [1, 60],
     title: "Why you remember the good parts",
-    body: `Selective memory in grief is not denial and it's not weakness — it's a feature, not a bug. The brain prioritizes emotionally significant positive memories because they were attached to reward. The good times with him were neurologically reinforcing. The painful times, unless they were traumatic, were not stored with the same intensity.
+    body: `Selective memory in grief is not denial and it's not weakness — it's a feature, not a bug. The brain prioritizes emotionally significant positive memories because they were attached to reward. The good times were neurologically reinforcing. The painful times, unless they were traumatic, were not stored with the same intensity.
 
-This means the version of him you miss is a real person — just not a complete one. You are missing a curated highlight reel that your own brain produced. The full version includes the parts you've been leaving out.
+This means the version of them you miss is real — just not complete. You are missing a curated highlight reel that your own brain produced. The full version includes the parts you've been leaving out.
 
-The Why exists for this exact reason.`,
+Your Commitments exist for this exact reason.`,
   },
   {
     id: "SCI-012",
@@ -140,7 +140,7 @@ The Why exists for this exact reason.`,
     title: "How love and harm can coexist",
     body: `Attachment and pain can exist simultaneously in the same relationship without one canceling the other out. This is one of the most disorienting findings in relationship psychology — people can be genuinely, deeply loved by someone who also consistently hurt them.
 
-This means loving him was not a mistake. It was not evidence that you're broken or that your judgment failed. Love is not a diagnostic tool for whether a relationship was healthy.
+This means loving them was not a mistake. It was not evidence that you're broken or that your judgment failed. Love is not a diagnostic tool for whether a relationship was healthy.
 
 It just means you loved someone who couldn't meet you where you needed to be met. Those two things are both true. Neither cancels the other.`,
   },
@@ -166,7 +166,7 @@ Numbness is not the absence of feeling. It is the presence of a system that has 
 
 Neuroimaging studies of grief show that recovery is not a reduction in the number of times the loss is thought about — it's a change in the emotional charge attached to those thoughts. The memory doesn't disappear. It just stops activating the pain response at the same intensity.
 
-An okay day is not a day when you don't think about him. It's a day when the thought passes through without taking the whole day with it. You're having more of those. That's the data.`,
+An okay day is not a day when you don't think about them. It's a day when the thought passes through without taking the whole day with it. You're having more of those. That's the data.`,
   },
   {
     id: "SCI-015",
@@ -268,7 +268,7 @@ These are averages, not schedules. But the arc is consistent enough to be useful
     id: "NOTE-014",
     type: "note",
     spirals: ["the_mirror"],
-    body: '"Not enough" is a feeling, not a fact. It arrived before him and it will leave after him. It was never really about him.',
+    body: '"Not enough" is a feeling, not a fact. It arrived before this and it will leave after it. It was never really about them.',
   },
   {
     id: "NOTE-015",
@@ -292,13 +292,13 @@ These are averages, not schedules. But the arc is consistent enough to be useful
     id: "NOTE-018",
     type: "note",
     spirals: ["the_mirror"],
-    body: "The things about yourself you're currently auditing were there when he chose you too. This is worth sitting with.",
+    body: "The things about yourself you're currently auditing were there at the start too. This is worth sitting with.",
   },
   {
     id: "NOTE-019",
     type: "note",
     spirals: ["the_what_if"],
-    body: "The version of him you miss most is a version your brain assembled from the best parts. He is a real person who also includes the rest of it.",
+    body: "The version of them you miss most is a version your brain assembled from the best parts. They are a real person who also includes the rest of it.",
   },
   {
     id: "NOTE-020",
@@ -316,13 +316,13 @@ These are averages, not schedules. But the arc is consistent enough to be useful
     id: "NOTE-022",
     type: "note",
     spirals: ["the_what_if"],
-    body: '"What if he was the one" is a question your brain asks when it wants relief from uncertainty. It is not a question that has a true answer. It is a question that has a more useful answer.',
+    body: '"What if they were the one" is a question your brain asks when it wants relief from uncertainty. It is not a question that has a true answer. It is a question that has a more useful answer.',
   },
   {
     id: "NOTE-023",
     type: "note",
     spirals: ["the_what_if"],
-    body: "You are not going to text him. Not because you don't want to. Because you already know how that ends.",
+    body: "You are not going to reach out. Not because you don't want to. Because you already know how that ends.",
   },
   {
     id: "NOTE-024",
@@ -334,13 +334,13 @@ These are averages, not schedules. But the arc is consistent enough to be useful
     id: "NOTE-025",
     type: "note",
     spirals: ["the_what_if"],
-    body: 'What would you tell a friend who said "what if he was the one" at midnight? You already know the answer. Tell yourself that.',
+    body: 'What would you tell a friend who said "what if they were the one" at midnight? You already know the answer. Tell yourself that.',
   },
   {
     id: "NOTE-026",
     type: "note",
     spirals: ["the_but_he"],
-    body: "He was good to you when you were sick. He was also the rest of it. Both of those things are true and neither one cancels the other out.",
+    body: "They were good to you when you were sick. They were also the rest of it. Both of those things are true and neither one cancels the other out.",
   },
   {
     id: "NOTE-027",
@@ -370,13 +370,13 @@ These are averages, not schedules. But the arc is consistent enough to be useful
     id: "NOTE-031",
     type: "note",
     spirals: ["the_but_he"],
-    body: "You can hold space for the good things he did and still know that leaving was right. Those two things are allowed to coexist.",
+    body: "You can hold space for the good things and still know that leaving was right. Those two things are allowed to coexist.",
   },
   {
     id: "NOTE-032",
     type: "note",
     spirals: ["the_but_he"],
-    body: "The version of him you're defending right now — does he know you're defending him? Is he doing the same for you?",
+    body: "The version of them you're defending right now — do they know you're defending them? Are they doing the same for you?",
   },
   {
     id: "NOTE-033",

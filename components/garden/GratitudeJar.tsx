@@ -25,7 +25,7 @@ function pebbleProps(idx: number) {
   const jitterY = ((idx * 23 + col * 17) % 8) - 4;
   const cx = 28 + col * 24 + jitterX;
   // fill from bottom: row 0 is lowest
-  const cy = 145 - row * 20 + jitterY;
+  const cy = 172 - row * 20 + jitterY;
   const rx = 7 + ((idx * 11) % 5);
   const ry = 5 + ((idx * 7) % 4);
   const color = PEBBLE_COLORS[idx % PEBBLE_COLORS.length];

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { GroundContext } from "@/context/GroundContext";
 import BottomNav from "@/components/layout/BottomNav";
 import DailyCheckIn from "@/components/check-in/DailyCheckIn";
 import GroundModal from "@/components/ground/GroundModal";
@@ -43,39 +44,41 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   if (loading || !user) return null;
 
   return (
-    <div className="app-shell pb-16">
-      {children}
-      <BottomNav onGround={() => setGroundOpen(true)} />
+    <GroundContext.Provider value={{ openGround: () => setGroundOpen(true) }}>
+      <div className="app-shell pb-16">
+        {children}
+        <BottomNav onGround={() => setGroundOpen(true)} />
 
-      {dailyOpen && (
-        <DailyCheckIn
-          onNavigate={(path) => router.push(path)}
-          onGround={() => setGroundOpen(true)}
-          onClose={handleDailyClose}
-        />
-      )}
+        {dailyOpen && (
+          <DailyCheckIn
+            onNavigate={(path) => router.push(path)}
+            onGround={() => setGroundOpen(true)}
+            onClose={handleDailyClose}
+          />
+        )}
 
-      {groundOpen && (
-        <GroundModal
-          onClose={() => setGroundOpen(false)}
-          onTendGarden={() => router.push("/garden")}
-          onCheckIn={() => {
-            setGroundOpen(false);
-            setCheckInFromGround(true);
-          }}
-        />
-      )}
+        {groundOpen && (
+          <GroundModal
+            onClose={() => setGroundOpen(false)}
+            onTendGarden={() => router.push("/garden")}
+            onCheckIn={() => {
+              setGroundOpen(false);
+              setCheckInFromGround(true);
+            }}
+          />
+        )}
 
-      {checkInFromGround && (
-        <DailyCheckIn
-          onNavigate={(path) => router.push(path)}
-          onGround={() => {
-            setCheckInFromGround(false);
-            setGroundOpen(true);
-          }}
-          onClose={() => setCheckInFromGround(false)}
-        />
-      )}
-    </div>
+        {checkInFromGround && (
+          <DailyCheckIn
+            onNavigate={(path) => router.push(path)}
+            onGround={() => {
+              setCheckInFromGround(false);
+              setGroundOpen(true);
+            }}
+            onClose={() => setCheckInFromGround(false)}
+          />
+        )}
+      </div>
+    </GroundContext.Provider>
   );
 }

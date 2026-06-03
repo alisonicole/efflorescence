@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Parse from "parse";
 import { initParse } from "@/lib/parse";
 import {
@@ -40,6 +40,7 @@ interface FlowerHabitProps {
   streak: number;
   completedToday: boolean;
   isWilting: boolean;
+  restToday?: boolean;
   onToggle: (habitId: string, completed: boolean) => void;
 }
 
@@ -48,28 +49,81 @@ export default function FlowerHabit({
   streak,
   completedToday,
   isWilting,
+  restToday: restTodayProp = false,
   onToggle,
 }: FlowerHabitProps) {
   const [saving, setSaving] = useState(false);
   const [watering, setWatering] = useState(false);
   const [localStreak, setLocalStreak] = useState(streak);
+  const [restToday, setRestToday] = useState(restTodayProp);
+  const pressTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const longPressTriggered = useRef(false);
 
   useEffect(() => {
     setLocalStreak(streak);
   }, [streak]);
 
+  useEffect(() => {
+    setRestToday(restTodayProp);
+  }, [restTodayProp]);
+
   const color = CATEGORY_COLOR[habit.category] ?? "#7A9E6E";
-  // Growth stage 0-7, capped at 7 for full bloom.
   const stage = Math.min(localStreak, 7);
-  const svgOpacity = completedToday
-    ? 1
-    : isWilting
-      ? 0.5
-      : stage === 0
-        ? 0.45
-        : 0.65;
+  const svgOpacity = restToday
+    ? 0.6
+    : completedToday
+      ? 1
+      : isWilting
+        ? 0.5
+        : stage === 0
+          ? 0.45
+          : 0.65;
+
+  function handleTouchStart() {
+    longPressTriggered.current = false;
+    pressTimer.current = setTimeout(() => {
+      longPressTriggered.current = true;
+      void handleRestDay();
+    }, 500);
+  }
+
+  function handleTouchEnd() {
+    clearTimeout(pressTimer.current);
+  }
+
+  async function handleRestDay() {
+    if (completedToday || saving) return;
+    setSaving(true);
+    initParse();
+    const user = Parse.User.current();
+    if (!user) {
+      setSaving(false);
+      return;
+    }
+    try {
+      const HabitCompletion = Parse.Object.extend("HabitCompletion");
+      const completion = new HabitCompletion();
+      completion.set("user", user);
+      completion.set("habitId", habit.objectId);
+      completion.set("completedDate", new Date());
+      completion.set("isRestDay", true);
+      completion.setACL(new Parse.ACL(user));
+      await completion.save();
+      setRestToday(true);
+      setLocalStreak((s) => s + 1);
+      onToggle(habit.objectId, true);
+    } catch {
+      // silent
+    } finally {
+      setSaving(false);
+    }
+  }
 
   async function handleTap() {
+    if (longPressTriggered.current) {
+      longPressTriggered.current = false;
+      return;
+    }
     if (saving) return;
     setSaving(true);
     if (!completedToday) {
@@ -161,6 +215,9 @@ export default function FlowerHabit({
 
       <button
         onClick={handleTap}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        onTouchCancel={handleTouchEnd}
         disabled={saving}
         className="flex flex-col items-center gap-1 relative transition-transform active:scale-95"
         aria-label={`${habit.name}${completedToday ? " (done)" : ""}`}
@@ -453,6 +510,13 @@ export default function FlowerHabit({
             <span className="text-[10px] leading-none">🥀</span>
             <span className="font-mono text-[9px] font-medium text-bark leading-none">
               0
+            </span>
+          </div>
+        ) : restToday ? (
+          <div className="flex items-center gap-0.5 px-1.5 py-0.5 rounded-full bg-bark/5">
+            <span className="text-[10px] leading-none">🌙</span>
+            <span className="font-mono text-[9px] font-medium text-bark leading-none">
+              {localStreak}
             </span>
           </div>
         ) : (

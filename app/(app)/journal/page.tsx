@@ -1,24 +1,25 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import TopBar from "@/components/layout/TopBar";
 import DiaryTab from "@/components/journal/tabs/DiaryTab";
 import FullPictureTab from "@/components/journal/tabs/FullPictureTab";
-import RewriteTab from "@/components/journal/tabs/RewriteTab";
 import AffirmationsTab from "@/components/journal/tabs/AffirmationsTab";
 import WhyTab from "@/components/journal/tabs/WhyTab";
 
-type JournalTab = "diary" | "full_picture" | "rewrite" | "affirmations" | "why";
+type JournalTab = "diary" | "full_picture" | "affirmations" | "why";
 
 const TABS: { id: JournalTab; label: string }[] = [
   { id: "diary", label: "Diary" },
   { id: "full_picture", label: "Full Picture" },
-  { id: "rewrite", label: "Rewrite Room" },
   { id: "affirmations", label: "Affirmations" },
   { id: "why", label: "Commitments" },
 ];
 
 export default function JournalPage() {
+  const searchParams = useSearchParams();
+  const initialPrompt = searchParams.get("prompt") ?? "";
   const [activeTab, setActiveTab] = useState<JournalTab>("diary");
 
   return (
@@ -41,9 +42,8 @@ export default function JournalPage() {
           ))}
         </div>
       </div>
-      {activeTab === "diary" && <DiaryTab />}
+      {activeTab === "diary" && <DiaryTab initialPrompt={initialPrompt} />}
       {activeTab === "full_picture" && <FullPictureTab />}
-      {activeTab === "rewrite" && <RewriteTab />}
       {activeTab === "affirmations" && <AffirmationsTab />}
       {activeTab === "why" && <WhyTab />}
     </>

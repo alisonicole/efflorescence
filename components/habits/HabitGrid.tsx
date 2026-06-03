@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import Parse from "parse";
 import { initParse } from "@/lib/parse";
 import { computeStreak } from "@/lib/garden";
-import { seedDefaultHabits, HABIT_METADATA } from "@/lib/default-habits";
+import { HABIT_METADATA } from "@/lib/default-habits";
+import SuggestedSeeds from "./SuggestedSeeds";
 import type { Habit, HabitCategory } from "@/types";
 import FlowerHabit from "./FlowerHabit";
 
@@ -22,11 +23,23 @@ const STANDARD_BEDS: { id: BedId; label: string; tagline: string }[] = [
 
 const GROW_ICONS = ["🌱", "🌿", "🌻", "🌺", "💮", "🌙", "🦋", "🍃", "✨", "💫"];
 
+const MILESTONES = [7, 21, 30] as const;
+const MILESTONE_COPY: Record<number, string> = {
+  7: "Seven days of showing up. That's a real streak — your brain is building something.",
+  21: "21 days. The neural pathway exists. You are someone who does this now.",
+  30: "30 days. Acute distress modulates around here. The nervous system downregulates. You built this.",
+};
+
 export default function HabitGrid() {
   const [habits, setHabits] = useState<Habit[]>([]);
   const [completedToday, setCompletedToday] = useState<Set<string>>(new Set());
+  const [restToday, setRestToday] = useState<Set<string>>(new Set());
   const [streaks, setStreaks] = useState<Record<string, number>>({});
   const [hasCompleted, setHasCompleted] = useState<Set<string>>(new Set());
+  const [milestone, setMilestone] = useState<{
+    habit: Habit;
+    days: number;
+  } | null>(null);
 
   // GROW creation sheet state
   const [plantOpen, setPlantOpen] = useState(false);
@@ -55,13 +68,6 @@ export default function HabitGrid() {
       habitQuery.equalTo("isActive", true);
       const results = await habitQuery.find();
 
-      if (!user.get("habitsSeeded")) {
-        if (results.length > 0) await Parse.Object.destroyAll(results);
-        await seedDefaultHabits(user);
-        void loadHabits();
-        return;
-      }
-
       const habitList: Habit[] = results.map((h) => ({
         objectId: h.id,
         name: h.get("name") as string,
@@ -70,6 +76,7 @@ export default function HabitGrid() {
         isActive: h.get("isActive") as boolean,
         createdAt: h.createdAt!,
         habitGroup: h.get("habitGroup") as string | undefined,
+        lastCelebrated: (h.get("lastCelebrated") as number | undefined) ?? 0,
       }));
       setHabits(habitList);
 
@@ -88,6 +95,7 @@ export default function HabitGrid() {
       const completions = await completionQuery.find();
 
       const todaySet = new Set<string>();
+      const restSet = new Set<string>();
       const streakMap: Record<string, number> = {};
       const hasCompletedSet = new Set<string>();
 
@@ -96,24 +104,47 @@ export default function HabitGrid() {
       }
 
       for (const habit of habitList) {
-        const habitCompletions = completions
-          .filter((c) => c.get("habitId") === habit.objectId)
-          .map((c) => c.get("completedDate") as Date);
+        const habitCompletions = completions.filter(
+          (c) => c.get("habitId") === habit.objectId,
+        );
+        const dates = habitCompletions.map(
+          (c) => c.get("completedDate") as Date,
+        );
 
-        const isTodayDone = habitCompletions.some((d) => {
-          const dd = new Date(d);
+        const todayCompletion = habitCompletions.find((c) => {
+          const dd = new Date(c.get("completedDate") as Date);
           dd.setHours(0, 0, 0, 0);
           return (
             dd.getTime() >= today.getTime() && dd.getTime() < tomorrow.getTime()
           );
         });
-        if (isTodayDone) todaySet.add(habit.objectId);
-        streakMap[habit.objectId] = computeStreak(habitCompletions);
+
+        if (todayCompletion) {
+          todaySet.add(habit.objectId);
+          if (todayCompletion.get("isRestDay")) restSet.add(habit.objectId);
+        }
+        streakMap[habit.objectId] = computeStreak(dates);
       }
 
       setCompletedToday(todaySet);
+      setRestToday(restSet);
       setStreaks(streakMap);
       setHasCompleted(hasCompletedSet);
+
+      // Check for uncelebrated milestones (show one at a time, highest priority first)
+      let found = false;
+      for (const habit of habitList) {
+        if (found) break;
+        const streak = streakMap[habit.objectId] ?? 0;
+        const lastCelebrated = habit.lastCelebrated ?? 0;
+        for (const m of MILESTONES) {
+          if (streak >= m && lastCelebrated < m) {
+            setMilestone({ habit, days: m });
+            found = true;
+            break;
+          }
+        }
+      }
     } catch {
       // silently preserve existing empty state
     }
@@ -159,6 +190,30 @@ export default function HabitGrid() {
     });
   }
 
+  async function dismissMilestone() {
+    if (!milestone) return;
+    const { habit, days } = milestone;
+    setMilestone(null);
+    // Persist so it won't show again
+    initParse();
+    const user = Parse.User.current();
+    if (!user) return;
+    try {
+      const ParseHabit = Parse.Object.extend("Habit");
+      const query = new Parse.Query(ParseHabit);
+      const parseHabit = await query.get(habit.objectId);
+      parseHabit.set("lastCelebrated", days);
+      await parseHabit.save();
+      setHabits((prev) =>
+        prev.map((h) =>
+          h.objectId === habit.objectId ? { ...h, lastCelebrated: days } : h,
+        ),
+      );
+    } catch {
+      // non-critical
+    }
+  }
+
   const growHabits = habits.filter((h) => h.habitGroup === "grow");
 
   function renderBed(
@@ -197,6 +252,7 @@ export default function HabitGrid() {
                   streak={streak}
                   completedToday={doneToday}
                   isWilting={isWilting}
+                  restToday={restToday.has(habit.objectId)}
                   onToggle={handleToggle}
                 />
               );
@@ -209,15 +265,8 @@ export default function HabitGrid() {
     );
   }
 
-  if (
-    habits.filter((h) => h.habitGroup !== "grow").length === 0 &&
-    habits.length === 0
-  )
-    return (
-      <p className="text-[11px] text-muted px-2.5">
-        No habits yet — they'll appear after onboarding.
-      </p>
-    );
+  if (habits.length === 0)
+    return <SuggestedSeeds onAdded={() => void loadHabits()} />;
 
   return (
     <>
@@ -325,6 +374,30 @@ export default function HabitGrid() {
               plant a seed
             </span>
           </button>
+        </div>
+      )}
+
+      {/* Milestone overlay */}
+      {milestone && (
+        <div className="fixed inset-0 bg-bark/60 z-50 flex items-center justify-center px-6 backdrop-blur-sm">
+          <div className="bg-cream rounded-card px-7 py-8 w-full max-w-app text-center animate-slide-up">
+            <p className="text-5xl mb-4">🌸</p>
+            <p className="font-mono text-[9px] uppercase tracking-[3px] text-bark/50 mb-1">
+              {milestone.habit.name}
+            </p>
+            <p className="font-display italic text-bark text-2xl mb-4">
+              {milestone.days} days.
+            </p>
+            <p className="text-sm text-bark/70 leading-relaxed mb-6">
+              {MILESTONE_COPY[milestone.days]}
+            </p>
+            <button
+              onClick={() => void dismissMilestone()}
+              className="w-full bg-bark text-cream rounded-card py-3 text-sm font-medium"
+            >
+              Seal it
+            </button>
+          </div>
         </div>
       )}
     </>

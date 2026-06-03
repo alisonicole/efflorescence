@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Parse from "parse";
 import { initParse } from "@/lib/parse";
-import { seedDefaultHabits } from "@/lib/default-habits";
 
 interface OnboardingModalProps {
   onComplete: () => void;
@@ -28,8 +27,6 @@ export default function OnboardingModal({ onComplete }: OnboardingModalProps) {
     try {
       user.set("healingStartDate", new Date(`${startDate}T00:00:00`));
       await user.save();
-
-      await seedDefaultHabits(user);
       setStep(2);
     } finally {
       setSaving(false);

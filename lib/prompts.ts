@@ -2,7 +2,7 @@ import type { Spiral } from "@/types";
 
 export const PROMPTS: Record<Spiral, string[]> = {
   the_clock: [
-    "Name something you built in the last year that has nothing to do with him.",
+    "Name something you built in the last year that is entirely yours.",
     "What's one thing you want for your life in five years that's entirely yours?",
     "List three things you've already done that younger you would be proud of.",
   ],
@@ -18,7 +18,7 @@ export const PROMPTS: Record<Spiral, string[]> = {
   ],
   the_what_if: [
     "What did the relationship cost you that you haven't fully acknowledged?",
-    "Write one true thing about him that wasn't okay.",
+    "Write one true thing about the situation that wasn't okay.",
     "What does your life have room for now that it didn't before?",
   ],
   the_but_he: [
