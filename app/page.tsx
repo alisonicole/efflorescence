@@ -253,6 +253,10 @@ export default function LandingPage() {
         <div className="hero-scroll">
           <div className="scroll-line" />
           <div className="scroll-label">Scroll</div>
+          <div className="scroll-arrow">
+            <span />
+            <span />
+          </div>
         </div>
       </section>
 

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Efflorescence - Research-Backed Features</title>
+  <style>
+    :root {
+      --cream: #EDE6D8;
+      --card-bg: #F5EFE4;
+      --bark: #3D2B1F;
+      --clay: #C97A6E;
+      --gold: #B8935A;
+      --sage: #7A9E6E;
+      --muted: #8C7B6E;
+      --border: rgba(61,43,31,0.12);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--cream);
+      color: var(--bark);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      padding: 48px 24px 80px;
+    }
+
+    .page-header {
+      max-width: 760px;
+      margin: 0 auto 64px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      font-family: "Courier New", monospace;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-family: Georgia, serif;
+      font-size: 34px;
+      font-weight: normal;
+      font-style: italic;
+      color: var(--bark);
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .intro-text {
+      font-size: 15px;
+      color: var(--muted);
+      max-width: 580px;
+      margin: 0 auto;
+      line-height: 1.75;
+    }
+
+    .intro-text strong {
+      color: var(--bark);
+      font-weight: 600;
+    }
+
+    /* Section headers */
+    .section-label {
+      font-family: "Courier New", monospace;
+      font-size: 9px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--clay);
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    /* Feature grid */
+    .features-grid {
+      max-width: 900px;
+      margin: 0 auto 80px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 2px 12px rgba(61,43,31,0.06);
+      border: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .feature-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .icon-clay    { background: rgba(201,122,110,0.12); }
+    .icon-sage    { background: rgba(122,158,110,0.12); }
+    .icon-gold    { background: rgba(184,147,90,0.12); }
+    .icon-bark    { background: rgba(61,43,31,0.08); }
+
+    .feature-title {
+      font-family: Georgia, serif;
+      font-size: 17px;
+      font-style: italic;
+      color: var(--bark);
+      margin-bottom: 2px;
+    }
+
+    .feature-tag {
+      font-family: "Courier New", monospace;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .feature-section-title {
+      font-family: "Courier New", monospace;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 4px;
+    }
+
+    .feature-body p {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .feature-body p strong {
+      color: var(--bark);
+      font-weight: 600;
+    }
+
+    .feature-sections {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .research-pill {
+      display: inline-block;
+      background: rgba(61,43,31,0.06);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-family: "Courier New", monospace;
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* Divider */
+    .divider {
+      max-width: 120px;
+      height: 1px;
+      background: var(--border);
+      margin: 48px auto;
+    }
+
+    /* Therapeutic model section */
+    .model-section {
+      max-width: 760px;
+      margin: 0 auto;
+      background: var(--bark);
+      border-radius: 20px;
+      padding: 48px;
+      color: var(--cream);
+    }
+
+    .model-section .eyebrow {
+      color: var(--clay);
+      text-align: left;
+      margin-bottom: 12px;
+    }
+
+    .model-section h2 {
+      font-family: Georgia, serif;
+      font-size: 26px;
+      font-weight: normal;
+      font-style: italic;
+      margin-bottom: 20px;
+      color: var(--cream);
+      line-height: 1.3;
+    }
+
+    .model-section p {
+      font-size: 14px;
+      color: rgba(237,230,216,0.75);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    .model-section p:last-child {
+      margin-bottom: 0;
+    }
+
+    .model-pillars {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 32px;
+    }
+
+    .model-pillar {
+      background: rgba(237,230,216,0.06);
+      border-radius: 12px;
+      padding: 20px;
+      border: 1px solid rgba(237,230,216,0.1);
+    }
+
+    .model-pillar-name {
+      font-family: "Courier New", monospace;
+      font-size: 9px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--clay);
+      margin-bottom: 8px;
+    }
+
+    .model-pillar-desc {
+      font-size: 12px;
+      color: rgba(237,230,216,0.65);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 32px 16px 60px; }
+      h1 { font-size: 26px; }
+      .features-grid { grid-template-columns: 1fr; }
+      .model-section { padding: 32px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <p class="eyebrow">Efflorescence - Evidence-Based Design</p>
+    <h1>Every feature earns its place.</h1>
+    <p class="intro-text">
+      Grief is not a mindset problem. It is a <strong>neurological event</strong> that disrupts memory consolidation, reward circuitry, and the prefrontal cortex's ability to regulate emotion. Every feature in Efflorescence is built around what the evidence says actually moves people through it - not inspiration alone, but the science of how the brain heals.
+    </p>
+  </header>
+
+  <!-- Feature Cards -->
+  <p class="section-label">12 Features + the Research Behind Them</p>
+
+  <div class="features-grid">
+
+    <!-- 1. Spiral Naming -->
+    <div class="feature-card">
+      <div class="feature-header">
+        <div class="feature-icon icon-clay">🌀</div>
+        <div>
+          <div class="feature-title">Spiral Check-In</div>
+          <div class="feature-tag">Affective Labeling</div>
+        </div>
+      </div>
+      <div class="feature-sections">
+        <div class="feature-body">
+          <p class="feature-section-title">What it does</p>
+          <p>Each day, the user names which emotional spiral they're caught in: The Clock, The Replay, The Mirror, The What If, The But He, I Don't Know, or Actually Okay.</p>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">The research</p>
+          <p>Lieberman et al. (2007) found that <strong>naming an emotion reduces amygdala activation by approximately 30%</strong>, even when the person is still experiencing the emotion. The act of labeling shifts processing from the limbic system toward the prefrontal cortex.</p>
+          <span class="research-pill">Lieberman et al., 2007 - UCLA</span>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">Why it helps post-breakup</p>
+          <p>Romantic rejection activates the same brain regions as physical pain. Naming the specific spiral - not just "sad" - creates enough cognitive distance to reduce the overwhelming quality of the feeling.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Habit Garden -->
+    <div class="feature-card">
+      <div class="feature-header">
+        <div class="feature-icon icon-sage">🌱</div>
+        <div>
+          <div class="feature-title">The Garden</div>
+          <div class="feature-tag">Behavioral Activation</div>
+        </div>
+      </div>
+      <div class="feature-sections">
+        <div class="feature-body">
+          <p class="feature-section-title">What it does</p>
+          <p>A visual habit tracker where each habit is a flower that grows over 7 days of tending. Small, manageable actions: water intake, a walk, sleep, cooking a meal. Flowers bloom, then reset to seed.</p>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">The research</p>
+          <p>Jacobson et al. (1996) demonstrated that <strong>behavioral activation alone is as effective as full CBT for depression</strong>. Martell (2001) extended this - the mechanism is not mood-first-then-action, but action-first-then-mood. Doing small things breaks the withdrawal cycle that grief creates.</p>
+          <span class="research-pill">Jacobson et al., 1996 + Martell, 2001</span>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">Why it helps post-breakup</p>
+          <p>After a breakup, the default is contraction: less movement, less routine, more rumination. The garden makes small actions feel meaningful and visible, countering the motivational deficit of grief.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. No-Contact Habits -->
+    <div class="feature-card">
+      <div class="feature-header">
+        <div class="feature-icon icon-clay">🔒</div>
+        <div>
+          <div class="feature-title">No-Contact Habits</div>
+          <div class="feature-tag">Dopamine Regulation</div>
+        </div>
+      </div>
+      <div class="feature-sections">
+        <div class="feature-body">
+          <p class="feature-section-title">What it does</p>
+          <p>Optional habit seeds for no-contact streaks - not checking social media, not texting, not looking up an ex. Tracked the same way as other habits, with the same flower growth visualization.</p>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">The research</p>
+          <p>Fisher et al. (2010) used fMRI to show that <strong>romantic rejection activates the same reward circuitry as cocaine withdrawal</strong> - the nucleus accumbens, the VTA, dopamine pathways. The urge to check is the withdrawal symptom, not the love itself.</p>
+          <span class="research-pill">Fisher et al., 2010 - Rutgers University</span>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">Why it helps post-breakup</p>
+          <p>Each check creates a small dopamine hit followed by a crash, re-triggering the addiction cycle. Tracking avoidance as a habit makes the biological mechanism legible and gives it a container.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. 4-7-8 Breathing -->
+    <div class="feature-card">
+      <div class="feature-header">
+        <div class="feature-icon icon-sage">🌬</div>
+        <div>
+          <div class="feature-title">4-7-8 Breathing</div>
+          <div class="feature-tag">Polyvagal / Somatic</div>
+        </div>
+      </div>
+      <div class="feature-sections">
+        <div class="feature-body">
+          <p class="feature-section-title">What it does</p>
+          <p>Guided breathing in the Ground menu: inhale 4 counts, hold 7, exhale 8. A 10-minute timer with phase cues. Available any time, accessible from the bottom navigation.</p>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">The research</p>
+          <p>Porges' Polyvagal Theory (2011) explains that <strong>extended exhale activates the vagus nerve</strong>, shifting the nervous system from sympathetic (fight/flight) to parasympathetic (rest/digest). Cortisol measurably decreases within minutes of extended exhalation.</p>
+          <span class="research-pill">Porges, 2011 - Polyvagal Theory</span>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">Why it helps post-breakup</p>
+          <p>Grief activates the stress response chronically. When a spiral hits, the body is in physiological alarm. Breathing is the fastest evidence-based tool to interrupt that state before any cognitive work is possible.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. Diary / Expressive Writing -->
+    <div class="feature-card">
+      <div class="feature-header">
+        <div class="feature-icon icon-gold">✍️</div>
+        <div>
+          <div class="feature-title">The Diary</div>
+          <div class="feature-tag">Expressive Writing</div>
+        </div>
+      </div>
+      <div class="feature-sections">
+        <div class="feature-body">
+          <p class="feature-section-title">What it does</p>
+          <p>Open journal with spiral-matched prompts. Write anything. Entries are saved, searchable, and displayed with date. Prompts rotate based on the user's active spiral at check-in.</p>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">The research</p>
+          <p>Pennebaker and Beall (1986) launched a field: <strong>15-20 minutes of expressive writing, 3-4 days, measurably reduces depression and improves immune function</strong>. Over 50 replications have confirmed the effect. Writing about difficult experiences creates narrative coherence, which reduces the intrusive quality of the memory.</p>
+          <span class="research-pill">Pennebaker & Beall, 1986 + 50+ replications</span>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">Why it helps post-breakup</p>
+          <p>Post-breakup rumination is unstructured replay. Writing structures it - it has a beginning, middle, and end. That containment reduces the spinning quality of grief thoughts.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. Full Picture Tab -->
+    <div class="feature-card">
+      <div class="feature-header">
+        <div class="feature-icon icon-clay">⚖️</div>
+        <div>
+          <div class="feature-title">Full Picture</div>
+          <div class="feature-tag">Cognitive Reappraisal</div>
+        </div>
+      </div>
+      <div class="feature-sections">
+        <div class="feature-body">
+          <p class="feature-section-title">What it does</p>
+          <p>A structured tab for writing the real pros and cons of the relationship - not to be harsh, but to counterbalance the idealization that grief creates. The list is private, persistent, and revisitable.</p>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">The research</p>
+          <p>Gross and John (2003) established cognitive reappraisal as the most effective emotion regulation strategy for long-term wellbeing. Bonanno (2004) specifically documented <strong>selective memory in grief: we remember the good and suppress the difficult</strong>, which prolongs idealization and the attachment cycle.</p>
+          <span class="research-pill">Gross & John, 2003 + Bonanno, 2004</span>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">Why it helps post-breakup</p>
+          <p>The brain in grief actively edits out the reasons the relationship ended. Full Picture is a record of reality that the user writes when they're clear enough to do so, to read when they're not.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. Rewrite Room -->
+    <div class="feature-card">
+      <div class="feature-header">
+        <div class="feature-icon icon-gold">🔄</div>
+        <div>
+          <div class="feature-title">Rewrite Room</div>
+          <div class="feature-tag">Cognitive Restructuring + Narrative Therapy</div>
+        </div>
+      </div>
+      <div class="feature-sections">
+        <div class="feature-body">
+          <p class="feature-section-title">What it does</p>
+          <p>A guided space to take a thought from the spiral and rewrite it. Two-panel: the original thought, then a reframe. Not toxic positivity - a more complete, accurate version of the same story.</p>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">The research</p>
+          <p>Beck's cognitive restructuring (1979) showed that <strong>identifying and rewriting distorted thoughts changes their emotional charge</strong>. White and Epston's narrative therapy extends this: the story we tell about an experience is not fixed - the same events can be re-storied to foreground different meanings, fundamentally changing how the person relates to what happened.</p>
+          <span class="research-pill">Beck, 1979 + White & Epston, 1990</span>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">Why it helps post-breakup</p>
+          <p>Breakup narratives often calcify: "I wasn't enough," "I'll never find this again." The Rewrite Room interrupts the calcification before it becomes the identity the person carries forward.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8. The Why Tab -->
+    <div class="feature-card">
+      <div class="feature-header">
+        <div class="feature-icon icon-bark">🌿</div>
+        <div>
+          <div class="feature-title">The Why</div>
+          <div class="feature-tag">Implementation Intentions</div>
+        </div>
+      </div>
+      <div class="feature-sections">
+        <div class="feature-body">
+          <p class="feature-section-title">What it does</p>
+          <p>A dedicated tab where users write their reason for healing: what they want for themselves, who they want to become, what life they're tending toward. Referenced from the Ground menu when a spiral hits.</p>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">The research</p>
+          <p>Gollwitzer (1999) on implementation intentions showed that <strong>if-then planning dramatically increases follow-through on difficult goals</strong> - the mechanism is pre-commitment: the decision is made before the emotional state floods the system. Value clarification (ACT therapy) anchors behavior to identity, not willpower.</p>
+          <span class="research-pill">Gollwitzer, 1999 + Hayes ACT Framework</span>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">Why it helps post-breakup</p>
+          <p>In the middle of a spiral, prefrontal reasoning is compromised. The Why is something the user wrote when they were clear. Reading their own words bypasses the argument-in-the-moment and reconnects to a deeper signal.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. Inspire Feed -->
+    <div class="feature-card">
+      <div class="feature-header">
+        <div class="feature-icon icon-gold">✨</div>
+        <div>
+          <div class="feature-title">Inspire Feed</div>
+          <div class="feature-tag">Psychoeducation</div>
+        </div>
+      </div>
+      <div class="feature-sections">
+        <div class="feature-body">
+          <p class="feature-section-title">What it does</p>
+          <p>A daily card feed with science-based context about what the brain does during grief, why spirals happen, and what helps. Matched to the user's current spiral. Includes milestone cards at 21, 30, 60, 90 days.</p>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">The research</p>
+          <p>Bonanno (2004) documented that <strong>psychoeducation about grief - understanding what is happening neurologically - measurably reduces distress</strong>, even when nothing about the situation changes. The experience of "I am not broken, this is what grief does to a brain" shifts the person's relationship to the symptom.</p>
+          <span class="research-pill">Bonanno, 2004 - Columbia University</span>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">Why it helps post-breakup</p>
+          <p>Most people going through a breakup believe the intensity of their suffering means something is wrong with them. The Inspire feed contextualizes the experience as neurological and temporary, which reduces shame and increases tolerance for the process.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10. 66-Day Automaticity -->
+    <div class="feature-card">
+      <div class="feature-header">
+        <div class="feature-icon icon-sage">📅</div>
+        <div>
+          <div class="feature-title">66-Day Streak</div>
+          <div class="feature-tag">Habit Formation Science</div>
+        </div>
+      </div>
+      <div class="feature-sections">
+        <div class="feature-body">
+          <p class="feature-section-title">What it does</p>
+          <p>The garden and habit tracker frame the 66-day arc explicitly. Day count is shown. The goal is automaticity - the point where the habit no longer requires willpower. Missing one day is explicitly noted as having no impact on the outcome.</p>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">The research</p>
+          <p>Lally et al. (2010) at UCL studied 96 people forming new habits and found <strong>the average time to automaticity is 66 days</strong> (range 18-254). Critically: missing one day had no measurable effect on long-term habit formation. The popular "21 days" figure has no empirical basis.</p>
+          <span class="research-pill">Lally et al., 2010 - University College London</span>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">Why it helps post-breakup</p>
+          <p>People expect grief to resolve faster than it does, and quit interventions when they don't feel better quickly. Anchoring to 66 days sets an accurate expectation and reframes a missed day as irrelevant, not a failure.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 11. Milestone Markers -->
+    <div class="feature-card">
+      <div class="feature-header">
+        <div class="feature-icon icon-clay">🌸</div>
+        <div>
+          <div class="feature-title">Milestone Cards</div>
+          <div class="feature-tag">Reinforcement Scheduling</div>
+        </div>
+      </div>
+      <div class="feature-sections">
+        <div class="feature-body">
+          <p class="feature-section-title">What it does</p>
+          <p>At days 21, 30, 60, and 90, the app surfaces a milestone card in the Inspire feed. Each acknowledges the neurological significance of that threshold and marks what growth has happened. The garden becomes more radiant at each stage.</p>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">The research</p>
+          <p>Skinner's reinforcement schedules demonstrated that <strong>intermittent, predictable-but-not-constant rewards sustain motivation more effectively than constant reward</strong>. Variable-ratio reinforcement at meaningful thresholds creates the "almost there" effect that keeps engagement through hard stretches.</p>
+          <span class="research-pill">Skinner + behavioral reinforcement theory</span>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">Why it helps post-breakup</p>
+          <p>Healing is invisible in the short term. Milestones create explicit "look how far you've come" moments that grief's short-term focus prevents the person from seeing naturally.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 12. Calendar / Journey View -->
+    <div class="feature-card">
+      <div class="feature-header">
+        <div class="feature-icon icon-bark">🗓</div>
+        <div>
+          <div class="feature-title">Journey Calendar</div>
+          <div class="feature-tag">Self-Monitoring</div>
+        </div>
+      </div>
+      <div class="feature-sections">
+        <div class="feature-body">
+          <p class="feature-section-title">What it does</p>
+          <p>A calendar that marks each day the user engages with the app. Days accumulate into a visible heat map. The breakup date is anchored as the start point. The calendar is evidence that time is passing and effort is being made.</p>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">The research</p>
+          <p>Kanfer (1970) established self-monitoring as a core mechanism of behavior change: <strong>the act of tracking behavior increases the likelihood of that behavior continuing</strong>. Visual representations of progress activate the reward system and provide concrete counter-evidence to the grief narrative that "nothing is changing."</p>
+          <span class="research-pill">Kanfer, 1970 - self-monitoring + behavior change</span>
+        </div>
+        <div class="feature-body">
+          <p class="feature-section-title">Why it helps post-breakup</p>
+          <p>Grief distorts time perception - it feels like things have always been this way and will never change. The calendar is visual proof that days are passing and the person has shown up for themselves each one.</p>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /features-grid -->
+
+  <div class="divider"></div>
+
+  <!-- Therapeutic Model -->
+  <section class="model-section">
+    <p class="eyebrow">The Underlying Model</p>
+    <h2>Multi-modal by design.</h2>
+    <p>
+      No single therapeutic modality is sufficient for the full complexity of post-breakup grief. Efflorescence draws from five evidence-based frameworks, each targeting a different system that grief disrupts.
+    </p>
+    <div class="model-pillars">
+      <div class="model-pillar">
+        <div class="model-pillar-name">CBT-Informed</div>
+        <div class="model-pillar-desc">Cognitive restructuring (Beck) and reappraisal (Gross) target the thought patterns that maintain the grief loop. The Rewrite Room and Full Picture implement this directly.</div>
+      </div>
+      <div class="model-pillar">
+        <div class="model-pillar-name">Behavioral Activation</div>
+        <div class="model-pillar-desc">Action precedes mood, not the other way around. The Garden implements Jacobson's finding that scheduled, small activities break the withdrawal cycle more effectively than waiting to feel better first.</div>
+      </div>
+      <div class="model-pillar">
+        <div class="model-pillar-name">Somatic / Polyvagal</div>
+        <div class="model-pillar-desc">The body must be regulated before cognitive work is effective. 4-7-8 breathing and the Ground menu address the physiological component of grief that mindset work alone cannot reach.</div>
+      </div>
+      <div class="model-pillar">
+        <div class="model-pillar-name">Narrative Therapy</div>
+        <div class="model-pillar-desc">White and Epston's insight: the story we tell is not fixed. The Diary, Rewrite Room, and The Why all work on the narrative layer - who the person is, what the relationship was, where they are going.</div>
+      </div>
+      <div class="model-pillar">
+        <div class="model-pillar-name">Positive Psychology</div>
+        <div class="model-pillar-desc">Post-traumatic growth (Tedeschi & Calhoun) shows that the most resilient people do not just "get through" difficult experiences - they extract meaning and identity from them. The Inspire feed and milestone system are anchored here.</div>
+      </div>
+    </div>
+    <p style="margin-top: 32px; font-size: 13px; color: rgba(237,230,216,0.5);">
+      Research grounding does not mean clinical treatment. Efflorescence is a supportive tool, not a substitute for therapy. If you are experiencing crisis-level distress, please seek professional support.
+    </p>
+  </section>
+
+</body>
+</html>

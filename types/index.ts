@@ -3,7 +3,7 @@ export type Spiral =
   | "the_replay"
   | "the_mirror"
   | "the_what_if"
-  | "the_but_he"
+  | "the_should_be"
   | "actually_okay"
   | "i_dont_know";
 
@@ -143,7 +143,7 @@ export const SPIRAL_LABELS: Record<Spiral, string> = {
   the_replay: "The Replay",
   the_mirror: "The Mirror",
   the_what_if: "The What If",
-  the_but_he: "The Old Story",
+  the_should_be: "The Should Be",
   actually_okay: "Actually okay",
   i_dont_know: "I don't know",
 };
@@ -154,7 +154,8 @@ export const SPIRAL_DESCRIPTIONS: Record<Spiral, string> = {
     "Going over what was said — what you said, what you should have said.",
   the_mirror: "Wondering what's wrong with you. Why you weren't enough.",
   the_what_if: "If you'd done things differently. If it had gone another way.",
-  the_but_he: "The good parts were real. You miss them. That's allowed.",
+  the_should_be:
+    "Feeling like you should be further along. More healed. More okay by now.",
   actually_okay: "You're doing okay today. Maybe even better than okay.",
   i_dont_know: "You can't name it. Something is just off.",
 };

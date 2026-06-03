@@ -18,7 +18,7 @@ const SPIRAL_DOT_COLORS: Record<Spiral, string> = {
   the_replay: "bg-orange-400",
   the_mirror: "bg-purple-300",
   the_what_if: "bg-blue-300",
-  the_but_he: "bg-rose-300",
+  the_should_be: "bg-rose-300",
   actually_okay: "bg-green-400",
   i_dont_know: "bg-gray-300",
 };

@@ -5,7 +5,6 @@ import Parse from "parse";
 import { initParse } from "@/lib/parse";
 import type { Spiral } from "@/types";
 import { SPIRAL_LABELS, SPIRAL_DESCRIPTIONS } from "@/types";
-import SpiralChip from "./SpiralChip";
 
 const SPIRAL_OPTIONS: Spiral[] = [
   "actually_okay",
@@ -14,7 +13,7 @@ const SPIRAL_OPTIONS: Spiral[] = [
   "i_dont_know",
   "the_what_if",
   "the_mirror",
-  "the_but_he",
+  "the_should_be",
 ];
 
 const NAV_OPTIONS = [
@@ -62,7 +61,6 @@ export default function DailyCheckIn({
   onClose,
 }: DailyCheckInProps) {
   const [step, setStep] = useState<"spiral" | "intent">("spiral");
-  const [hovered, setHovered] = useState<Spiral | null>(null);
   const [selected, setSelected] = useState<Spiral | null>(null);
 
   async function handleSpiralSelect(spiral: Spiral) {
@@ -114,15 +112,13 @@ export default function DailyCheckIn({
     }
   }
 
-  const previewSpiral = hovered ?? selected;
-
   return (
     <div
       className="fixed inset-0 bg-black/40 z-50 flex items-end justify-center"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-app bg-cream rounded-t-2xl px-5 pt-6 pb-10 animate-slide-up"
+        className="w-full max-w-app bg-cream rounded-t-2xl px-5 pt-6 pb-10 animate-slide-up max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="w-8 h-0.5 rounded-full bg-bark/15 mx-auto mb-5" />
@@ -146,24 +142,33 @@ export default function DailyCheckIn({
               How are you today?
             </p>
 
-            <div className="flex flex-wrap gap-1.5 mb-3">
+            <div className="flex flex-col gap-2">
               {SPIRAL_OPTIONS.map((spiral) => (
-                <SpiralChip
+                <button
                   key={spiral}
-                  spiral={spiral}
-                  selected={selected === spiral}
-                  onSelect={handleSpiralSelect}
-                  onHover={setHovered}
-                />
+                  onClick={() => void handleSpiralSelect(spiral)}
+                  className={`w-full text-left px-4 py-3.5 rounded-xl border transition-all active:scale-[0.99] ${
+                    selected === spiral
+                      ? "bg-bark text-cream border-bark"
+                      : "bg-white border-border hover:border-clay/40"
+                  }`}
+                >
+                  <p
+                    className={`font-display italic text-[15px] leading-snug mb-0.5 ${
+                      selected === spiral ? "text-cream" : "text-bark"
+                    }`}
+                  >
+                    {SPIRAL_LABELS[spiral]}
+                  </p>
+                  <p
+                    className={`font-mono text-[9px] leading-relaxed ${
+                      selected === spiral ? "text-cream/70" : "text-bark/50"
+                    }`}
+                  >
+                    {SPIRAL_DESCRIPTIONS[spiral]}
+                  </p>
+                </button>
               ))}
-            </div>
-
-            <div className="min-h-[28px]">
-              {previewSpiral && (
-                <p className="font-mono text-[9px] text-soil opacity-60 leading-relaxed">
-                  {SPIRAL_DESCRIPTIONS[previewSpiral]}
-                </p>
-              )}
             </div>
           </>
         )}

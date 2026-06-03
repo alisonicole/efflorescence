@@ -4,24 +4,23 @@ import { useEffect, useRef, useState } from "react";
 import Parse from "parse";
 import { initParse } from "@/lib/parse";
 import { computeStreak } from "@/lib/garden";
-import { HABIT_METADATA } from "@/lib/default-habits";
 import SuggestedSeeds from "./SuggestedSeeds";
 import type { Habit, HabitCategory } from "@/types";
 import FlowerHabit from "./FlowerHabit";
 
-type BedId = "detox" | "feed" | "heal";
-
-const CATEGORY_GROUP = Object.fromEntries(
-  HABIT_METADATA.map((m) => [m.category, m.group]),
-) as Record<HabitCategory, BedId>;
-
-const STANDARD_BEDS: { id: BedId; label: string; tagline: string }[] = [
-  { id: "detox", label: "Detox", tagline: "protect your peace" },
-  { id: "feed", label: "Feed", tagline: "tend to your body" },
-  { id: "heal", label: "Heal", tagline: "soften & grow" },
+// Auto-assigned icons cycle through this list for custom habits
+const CUSTOM_ICONS = [
+  "🌱",
+  "🌿",
+  "🌺",
+  "💮",
+  "🌙",
+  "🦋",
+  "🍃",
+  "✨",
+  "💫",
+  "🌼",
 ];
-
-const GROW_ICONS = ["🌱", "🌿", "🌻", "🌺", "💮", "🌙", "🦋", "🍃", "✨", "💫"];
 
 const MILESTONES = [7, 21, 30] as const;
 const MILESTONE_COPY: Record<number, string> = {
@@ -41,10 +40,8 @@ export default function HabitGrid() {
     days: number;
   } | null>(null);
 
-  // GROW creation sheet state
   const [plantOpen, setPlantOpen] = useState(false);
   const [newName, setNewName] = useState("");
-  const [newIcon, setNewIcon] = useState("🌱");
   const [planting, setPlanting] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -131,7 +128,6 @@ export default function HabitGrid() {
       setStreaks(streakMap);
       setHasCompleted(hasCompletedSet);
 
-      // Check for uncelebrated milestones (show one at a time, highest priority first)
       let found = false;
       for (const habit of habitList) {
         if (found) break;
@@ -161,18 +157,21 @@ export default function HabitGrid() {
     }
 
     try {
+      // Auto-assign icon based on how many custom habits already exist
+      const customCount = habits.filter((h) => h.habitGroup === "grow").length;
+      const autoIcon = CUSTOM_ICONS[customCount % CUSTOM_ICONS.length];
+
       const ParseHabit = Parse.Object.extend("Habit");
       const habit = new ParseHabit();
       habit.set("user", user);
       habit.set("name", newName.trim());
       habit.set("category", "custom");
-      habit.set("icon", newIcon);
+      habit.set("icon", autoIcon);
       habit.set("isActive", true);
       habit.set("habitGroup", "grow");
       habit.setACL(new Parse.ACL(user));
       await habit.save();
       setNewName("");
-      setNewIcon("🌱");
       setPlantOpen(false);
       void loadHabits();
     } catch {
@@ -194,7 +193,6 @@ export default function HabitGrid() {
     if (!milestone) return;
     const { habit, days } = milestone;
     setMilestone(null);
-    // Persist so it won't show again
     initParse();
     const user = Parse.User.current();
     if (!user) return;
@@ -214,33 +212,32 @@ export default function HabitGrid() {
     }
   }
 
-  const growHabits = habits.filter((h) => h.habitGroup === "grow");
+  if (habits.length === 0)
+    return <SuggestedSeeds onAdded={() => void loadHabits()} />;
 
-  function renderBed(
-    label: string,
-    tagline: string,
-    bedHabits: Habit[],
-    key: string,
-    extra?: React.ReactNode,
-  ) {
-    if (bedHabits.length === 0 && !extra) return null;
-    return (
-      <div key={key} className="bg-white rounded-card shadow-sm">
-        <div className="px-3.5 pt-3 pb-0 flex items-baseline justify-between">
-          <div className="flex items-baseline gap-2">
-            <span className="font-mono text-[8px] uppercase tracking-[2.5px] text-bark/60">
-              {label}
-            </span>
-            <span className="font-mono text-[8px] text-bark/30 italic">
-              {tagline}
-            </span>
+  return (
+    <>
+      {/* Unified garden */}
+      <div className="mx-2.5">
+        <div className="bg-white rounded-card shadow-sm">
+          {/* Header */}
+          <div className="px-3.5 pt-3 pb-0 flex items-baseline justify-between">
+            <div className="flex items-baseline gap-2">
+              <span className="font-mono text-[8px] uppercase tracking-[2.5px] text-bark/60">
+                Your garden
+              </span>
+            </div>
+            <button
+              onClick={() => setPlantOpen(true)}
+              className="font-mono text-[8px] uppercase tracking-[2px] text-bark/40 hover:text-bark/70 transition-colors"
+            >
+              + plant
+            </button>
           </div>
-          {extra}
-        </div>
 
-        {bedHabits.length > 0 && (
+          {/* All habits in one grid */}
           <div className="px-2 pt-4 grid grid-cols-3 justify-items-center gap-y-1">
-            {bedHabits.map((habit) => {
+            {habits.map((habit) => {
               const streak = streaks[habit.objectId] ?? 0;
               const doneToday = completedToday.has(habit.objectId);
               const isWilting =
@@ -258,50 +255,9 @@ export default function HabitGrid() {
               );
             })}
           </div>
-        )}
 
-        <div className="mt-1 mx-3.5 mb-3 h-1.5 rounded-full bg-[#C4A882] opacity-30" />
-      </div>
-    );
-  }
-
-  if (habits.length === 0)
-    return <SuggestedSeeds onAdded={() => void loadHabits()} />;
-
-  return (
-    <>
-      <div className="flex flex-col gap-2.5 mx-2.5">
-        {STANDARD_BEDS.map((bed) => {
-          const bedHabits = habits.filter(
-            (h) =>
-              CATEGORY_GROUP[h.category] === bed.id && h.habitGroup !== "grow",
-          );
-          return renderBed(bed.label, bed.tagline, bedHabits, bed.id);
-        })}
-
-        {/* GROW bed — always visible */}
-        {renderBed(
-          "Grow",
-          "plant your own",
-          growHabits,
-          "grow",
-          // Header action: small "+ seed" when there are already habits
-          growHabits.length > 0 ? (
-            <button
-              onClick={() => setPlantOpen(true)}
-              className="font-mono text-[8px] uppercase tracking-[2px] text-bark/40 hover:text-bark/70 transition-colors"
-            >
-              + seed
-            </button>
-          ) : undefined,
-        )}
-
-        {/* Empty GROW invite */}
-        {growHabits.length === 0 && (
-          <div className="mx-0 -mt-2">
-            {/* re-render just the empty state inside the existing card */}
-          </div>
-        )}
+          <div className="mt-1 mx-3.5 mb-3 h-1.5 rounded-full bg-[#C4A882] opacity-30" />
+        </div>
       </div>
 
       {/* Plant a seed bottom sheet */}
@@ -321,24 +277,6 @@ export default function HabitGrid() {
                 Something you want to tend to
               </p>
 
-              {/* Icon picker */}
-              <div className="flex gap-2 flex-wrap mb-4">
-                {GROW_ICONS.map((icon) => (
-                  <button
-                    key={icon}
-                    onClick={() => setNewIcon(icon)}
-                    className={`w-9 h-9 rounded-full flex items-center justify-center text-lg transition-all ${
-                      newIcon === icon
-                        ? "bg-bark/10 ring-2 ring-bark/30"
-                        : "bg-bark/[0.04] hover:bg-bark/8"
-                    }`}
-                  >
-                    {icon}
-                  </button>
-                ))}
-              </div>
-
-              {/* Name input */}
               <input
                 ref={inputRef}
                 type="text"
@@ -360,21 +298,6 @@ export default function HabitGrid() {
             </div>
           </div>
         </>
-      )}
-
-      {/* Floating "plant a seed" pill when GROW is empty */}
-      {growHabits.length === 0 && (
-        <div className="mx-2.5 -mt-1">
-          <button
-            onClick={() => setPlantOpen(true)}
-            className="w-full flex items-center justify-center gap-2 py-3 border border-dashed border-bark/20 rounded-card text-bark/40 hover:border-bark/40 hover:text-bark/60 transition-colors"
-          >
-            <span className="text-base">🌱</span>
-            <span className="font-mono text-[9px] uppercase tracking-[2px]">
-              plant a seed
-            </span>
-          </button>
-        </div>
       )}
 
       {/* Milestone overlay */}

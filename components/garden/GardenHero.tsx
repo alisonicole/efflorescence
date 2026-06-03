@@ -19,7 +19,7 @@ const SPIRAL_TINT: Partial<Record<import("@/types").Spiral, string>> = {
   the_replay: "bg-blue-100/20",
   the_mirror: "bg-purple-100/20",
   the_what_if: "bg-blue-200/20",
-  the_but_he: "bg-rose-100/20",
+  the_should_be: "bg-rose-100/20",
   actually_okay: "bg-yellow-50/10",
   i_dont_know: "bg-gray-100/20",
 };

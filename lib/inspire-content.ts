@@ -41,7 +41,7 @@ That's the 66-day threshold. You're building toward it right now.`,
   {
     id: "SCI-004",
     type: "science",
-    spirals: ["the_what_if", "the_but_he"],
+    spirals: ["the_what_if", "the_should_be"],
     dayRange: [1, 30],
     title: "The neuroscience of the urge to reconnect",
     body: `Romantic rejection activates the same neural regions as cocaine withdrawal. This is not a metaphor — it's an fMRI finding (Fisher et al., 2010). The brain in early grief looks, on a scan, like a brain in withdrawal.
@@ -123,7 +123,7 @@ This is harder news in the short term and significantly better news in the long 
   {
     id: "SCI-011",
     type: "science",
-    spirals: ["the_but_he"],
+    spirals: ["the_should_be"],
     dayRange: [1, 60],
     title: "Why you remember the good parts",
     body: `Selective memory in grief is not denial and it's not weakness — it's a feature, not a bug. The brain prioritizes emotionally significant positive memories because they were attached to reward. The good times were neurologically reinforcing. The painful times, unless they were traumatic, were not stored with the same intensity.
@@ -135,7 +135,7 @@ Your Commitments exist for this exact reason.`,
   {
     id: "SCI-012",
     type: "science",
-    spirals: ["the_but_he"],
+    spirals: ["the_should_be"],
     dayRange: [14, 90],
     title: "How love and harm can coexist",
     body: `Attachment and pain can exist simultaneously in the same relationship without one canceling the other out. This is one of the most disorienting findings in relationship psychology — people can be genuinely, deeply loved by someone who also consistently hurt them.
@@ -339,43 +339,43 @@ These are averages, not schedules. But the arc is consistent enough to be useful
   {
     id: "NOTE-026",
     type: "note",
-    spirals: ["the_but_he"],
+    spirals: ["the_should_be"],
     body: "They were good to you when you were sick. They were also the rest of it. Both of those things are true and neither one cancels the other out.",
   },
   {
     id: "NOTE-027",
     type: "note",
-    spirals: ["the_but_he"],
+    spirals: ["the_should_be"],
     body: "Loving someone who wasn't right for you is not evidence that your judgment is broken. It is evidence that you are capable of loving someone. That's not a small thing.",
   },
   {
     id: "NOTE-028",
     type: "note",
-    spirals: ["the_but_he"],
+    spirals: ["the_should_be"],
     body: "The good parts were real. They were not the whole truth. You wrote down the whole truth when you were clear-headed. It's still there.",
   },
   {
     id: "NOTE-029",
     type: "note",
-    spirals: ["the_but_he"],
+    spirals: ["the_should_be"],
     body: "You are not confused because you loved someone complicated. You are human because you loved someone complicated.",
   },
   {
     id: "NOTE-030",
     type: "note",
-    spirals: ["the_but_he"],
+    spirals: ["the_should_be"],
     body: "Read your Why. Not to feel worse. To remember what you already know.",
   },
   {
     id: "NOTE-031",
     type: "note",
-    spirals: ["the_but_he"],
+    spirals: ["the_should_be"],
     body: "You can hold space for the good things and still know that leaving was right. Those two things are allowed to coexist.",
   },
   {
     id: "NOTE-032",
     type: "note",
-    spirals: ["the_but_he"],
+    spirals: ["the_should_be"],
     body: "The version of them you're defending right now — do they know you're defending them? Are they doing the same for you?",
   },
   {

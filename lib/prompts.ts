@@ -21,10 +21,10 @@ export const PROMPTS: Record<Spiral, string[]> = {
     "Write one true thing about the situation that wasn't okay.",
     "What does your life have room for now that it didn't before?",
   ],
-  the_but_he: [
-    "Write one sentence about what it cost you to love someone who hurt you.",
-    "Describe a moment where you felt small. Just describe it. No analysis.",
-    "What would 'being loved well' actually look like? Be specific.",
+  the_should_be: [
+    "What would it mean to be exactly where you are, and have that be enough?",
+    "Who told you there was a timeline for this? Where did that belief come from?",
+    "Write one true thing about how far you've actually come.",
   ],
   actually_okay: [
     "What made today feel okay, even slightly?",

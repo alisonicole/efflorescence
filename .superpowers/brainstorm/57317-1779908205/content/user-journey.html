@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Efflorescence — User Journey Map</title>
+<style>
+  :root {
+    --cream: #F5EFE4;
+    --cream-warm: #EDE6D8;
+    --bark: #3D2B1F;
+    --soil: #6B4E3D;
+    --clay: #C97A6E;
+    --blush: #DBA898;
+    --gold: #B8935A;
+    --gold-light: #D4B47A;
+    --sage: #7A9E6E;
+    --stem: #4A6741;
+    --muted: #8C7B72;
+    --border: #E8DDD6;
+
+    --autumn: #6B5A4E;
+    --winter: #5C7A8A;
+    --e-spring: #7A9E6E;
+    --f-spring: #C97A6E;
+    --summer: #B8935A;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream-warm);
+    font-family: Georgia, 'Times New Roman', serif;
+    color: var(--bark);
+    padding: 48px 40px 100px;
+  }
+
+  h1 {
+    font-size: 11px;
+    font-family: 'Courier New', monospace;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .doc-title {
+    font-size: 36px;
+    font-style: italic;
+    font-weight: 400;
+    text-align: center;
+    color: var(--bark);
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+  }
+
+  .doc-subtitle {
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-align: center;
+    opacity: 0.7;
+    margin-bottom: 64px;
+  }
+
+  .section-label {
+    font-family: 'Courier New', monospace;
+    font-size: 8px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.6;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-size: 22px;
+    font-style: italic;
+    color: var(--bark);
+    margin-bottom: 6px;
+  }
+
+  .section-intro {
+    font-size: 13px;
+    color: var(--soil);
+    line-height: 1.7;
+    max-width: 620px;
+    margin-bottom: 32px;
+    opacity: 0.8;
+  }
+
+  /* ===== SECTION WRAPPERS ===== */
+  .section {
+    margin-bottom: 72px;
+  }
+
+  .section-header {
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 0.5px solid rgba(61,43,31,0.12);
+  }
+
+  /* ===== STAGES ARC ===== */
+  .stages-arc {
+    display: flex;
+    gap: 0;
+    align-items: stretch;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(61,43,31,0.10);
+  }
+
+  .stage-card {
+    flex: 1;
+    padding: 28px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+  }
+
+  .stage-card::after {
+    content: '→';
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    color: rgba(255,255,255,0.35);
+    z-index: 2;
+  }
+
+  .stage-card:last-child::after { display: none; }
+
+  .stage-autumn { background: #4A3E35; color: #D4C8BC; }
+  .stage-winter { background: #3D5A68; color: #C4D8E2; }
+  .stage-espring { background: #3D5E35; color: #C4DCBC; }
+  .stage-fspring { background: #7A3A34; color: #EAC8C4; }
+  .stage-summer { background: #7A5A30; color: #EAD8BC; }
+
+  .stage-season {
+    font-family: 'Courier New', monospace;
+    font-size: 8px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .stage-days {
+    font-family: 'Courier New', monospace;
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: -0.5px;
+    line-height: 1;
+    opacity: 0.9;
+  }
+
+  .stage-emotion {
+    font-size: 13px;
+    font-style: italic;
+    line-height: 1.45;
+    opacity: 0.85;
+  }
+
+  .stage-divider {
+    height: 0.5px;
+    background: currentColor;
+    opacity: 0.2;
+  }
+
+  .stage-brain {
+    font-family: 'Courier New', monospace;
+    font-size: 8px;
+    line-height: 1.6;
+    opacity: 0.6;
+    letter-spacing: 0.2px;
+  }
+
+  .stage-spirals-label {
+    font-family: 'Courier New', monospace;
+    font-size: 7px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-bottom: 4px;
+  }
+
+  .spiral-tag {
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 100px;
+    border: 0.5px solid currentColor;
+    font-family: 'Courier New', monospace;
+    font-size: 7px;
+    letter-spacing: 0.5px;
+    margin: 2px 2px 0 0;
+    opacity: 0.7;
+  }
+
+  .stage-features-label {
+    font-family: 'Courier New', monospace;
+    font-size: 7px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.5;
+    margin-bottom: 4px;
+    margin-top: 4px;
+  }
+
+  .feature-pill {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 100px;
+    background: rgba(255,255,255,0.12);
+    font-family: 'Courier New', monospace;
+    font-size: 7px;
+    letter-spacing: 0.5px;
+    margin: 2px 2px 0 0;
+    opacity: 0.85;
+  }
+
+  .stage-growth {
+    font-size: 11px;
+    font-style: italic;
+    opacity: 0.7;
+    line-height: 1.5;
+    border-top: 0.5px solid rgba(255,255,255,0.15);
+    padding-top: 10px;
+    margin-top: 4px;
+  }
+
+  /* ===== DAILY LOOP ===== */
+  .daily-loop {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  .loop-description {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(61,43,31,0.07);
+  }
+
+  .loop-title {
+    font-family: 'Courier New', monospace;
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.6;
+    margin-bottom: 12px;
+  }
+
+  .loop-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .loop-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+
+  .loop-time {
+    font-family: 'Courier New', monospace;
+    font-size: 7px;
+    letter-spacing: 1px;
+    color: var(--clay);
+    opacity: 0.7;
+    flex-shrink: 0;
+    width: 52px;
+    padding-top: 2px;
+    text-transform: uppercase;
+  }
+
+  .loop-action {
+    font-size: 12px;
+    color: var(--bark);
+    line-height: 1.5;
+  }
+
+  .loop-sub {
+    font-family: 'Courier New', monospace;
+    font-size: 8px;
+    color: var(--muted);
+    opacity: 0.6;
+    margin-top: 2px;
+  }
+
+  /* Flow diagram */
+  .flow-diagram {
+    background: white;
+    border-radius: 16px;
+    padding: 28px 32px;
+    box-shadow: 0 2px 12px rgba(61,43,31,0.07);
+  }
+
+  .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .flow-node {
+    background: var(--cream-warm);
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: 'Courier New', monospace;
+    font-size: 8.5px;
+    color: var(--bark);
+    letter-spacing: 0.3px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .flow-node.highlight {
+    background: var(--clay);
+    color: white;
+    border-color: var(--clay);
+    opacity: 0.9;
+  }
+
+  .flow-node.gold {
+    background: var(--gold);
+    color: white;
+    border-color: var(--gold);
+  }
+
+  .flow-node.sage {
+    background: var(--sage);
+    color: white;
+    border-color: var(--sage);
+    font-size: 8px;
+  }
+
+  .flow-arrow {
+    font-size: 12px;
+    color: var(--muted);
+    opacity: 0.4;
+    flex-shrink: 0;
+  }
+
+  .flow-branch {
+    margin-left: 28px;
+    padding-left: 16px;
+    border-left: 1.5px solid var(--border);
+    margin-bottom: 8px;
+  }
+
+  .flow-branch-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .flow-branch-icon {
+    font-size: 13px;
+    width: 20px;
+    text-align: center;
+  }
+
+  .flow-branch-label {
+    font-family: 'Courier New', monospace;
+    font-size: 8px;
+    color: var(--bark);
+    letter-spacing: 0.3px;
+  }
+
+  .flow-branch-sub {
+    font-size: 10px;
+    color: var(--muted);
+    opacity: 0.65;
+    font-style: italic;
+  }
+
+  /* ===== DISCOVERY TIMELINE ===== */
+  .discovery-timeline {
+    position: relative;
+    padding-top: 40px;
+  }
+
+  .timeline-track {
+    position: absolute;
+    top: 14px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(to right, var(--autumn), var(--winter), var(--e-spring), var(--f-spring), var(--summer));
+    opacity: 0.4;
+  }
+
+  .timeline-items {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    position: relative;
+  }
+
+  .timeline-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .timeline-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+  }
+
+  .timeline-day {
+    font-family: 'Courier New', monospace;
+    font-size: 8px;
+    letter-spacing: 1px;
+    color: var(--muted);
+    text-align: center;
+    font-weight: 700;
+  }
+
+  .timeline-card {
+    background: white;
+    border-radius: 10px;
+    padding: 10px 10px;
+    box-shadow: 0 1px 6px rgba(61,43,31,0.07);
+    width: 100%;
+  }
+
+  .timeline-feature {
+    font-family: 'Courier New', monospace;
+    font-size: 7.5px;
+    letter-spacing: 0.5px;
+    color: var(--bark);
+    margin-bottom: 3px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .timeline-desc {
+    font-size: 10px;
+    color: var(--soil);
+    line-height: 1.5;
+    opacity: 0.75;
+  }
+
+  /* ===== SPIRAL MATRIX ===== */
+  .matrix-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(61,43,31,0.07);
+  }
+
+  .matrix-table th {
+    background: var(--bark);
+    color: var(--cream);
+    font-family: 'Courier New', monospace;
+    font-size: 8px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 400;
+  }
+
+  .matrix-table td {
+    padding: 12px 16px;
+    border-bottom: 0.5px solid var(--border);
+    vertical-align: top;
+  }
+
+  .matrix-table tr:last-child td { border-bottom: none; }
+
+  .matrix-table tr:nth-child(even) td { background: rgba(245,239,228,0.5); }
+
+  .spiral-name {
+    font-size: 12px;
+    font-style: italic;
+    color: var(--bark);
+    font-weight: 400;
+    margin-bottom: 2px;
+  }
+
+  .spiral-desc {
+    font-family: 'Courier New', monospace;
+    font-size: 7px;
+    color: var(--muted);
+    opacity: 0.7;
+    letter-spacing: 0.3px;
+  }
+
+  .matrix-tag {
+    display: inline-block;
+    padding: 2px 7px;
+    border-radius: 100px;
+    font-family: 'Courier New', monospace;
+    font-size: 7.5px;
+    margin: 2px 2px 0 0;
+    letter-spacing: 0.3px;
+  }
+
+  .tag-journal { background: #EEE8F5; color: #7B6EA0; }
+  .tag-inspire { background: #FFF0EB; color: #C97A6E; }
+  .tag-ground  { background: #EEF5EE; color: #4A6741; }
+  .tag-garden  { background: #F5F0E8; color: #B8935A; }
+
+  .divider-line {
+    height: 0.5px;
+    background: linear-gradient(to right, transparent, rgba(61,43,31,0.15), transparent);
+    margin: 64px 0;
+  }
+
+  .note {
+    font-family: 'Courier New', monospace;
+    font-size: 8px;
+    color: var(--muted);
+    opacity: 0.5;
+    text-align: center;
+    margin-top: 64px;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Efflorescence</h1>
+<div class="doc-title">The User Journey</div>
+<div class="doc-subtitle">From breakup to bloom — how the app moves with you</div>
+
+
+<!-- ===== SECTION 1: EMOTIONAL ARC ===== -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-label">01 — The Healing Arc</div>
+    <div class="section-title">Five seasons. One direction.</div>
+    <div class="section-intro">Healing from a significant relationship loss follows a measurable arc. The app is designed around this arc — not to rush it, but to meet you exactly where you are at each stage.</div>
+  </div>
+
+  <div class="stages-arc">
+
+    <!-- LATE AUTUMN -->
+    <div class="stage-card stage-autumn">
+      <div class="stage-season">Late Autumn</div>
+      <div class="stage-days">Days<br>1–14</div>
+      <div class="stage-emotion">Shock. Acute grief. Numbness and rawness alternating.</div>
+      <div class="stage-divider"></div>
+      <div class="stage-brain">The nervous system is in crisis mode. Dopamine withdrawal is physiologically identical to withdrawal from cocaine.</div>
+      <div>
+        <div class="stage-spirals-label">Common spirals</div>
+        <span class="spiral-tag">The Replay</span>
+        <span class="spiral-tag">The But He</span>
+        <span class="spiral-tag">I Don't Know</span>
+      </div>
+      <div>
+        <div class="stage-features-label">Active features</div>
+        <span class="feature-pill">Daily check-in</span>
+        <span class="feature-pill">No-contact habits</span>
+        <span class="feature-pill">Diary</span>
+        <span class="feature-pill">The Why</span>
+        <span class="feature-pill">Ground</span>
+      </div>
+      <div class="stage-growth">Seeds in the soil. Nothing visible yet. The work is happening underground.</div>
+    </div>
+
+    <!-- WINTER -->
+    <div class="stage-card stage-winter">
+      <div class="stage-season">Winter</div>
+      <div class="stage-days">Days<br>15–30</div>
+      <div class="stage-emotion">The replay begins. Comparison, longing, questioning self-worth.</div>
+      <div class="stage-divider"></div>
+      <div class="stage-brain">Acute distress begins to modulate. Memory is being edited and reconstructed with every replay.</div>
+      <div>
+        <div class="stage-spirals-label">Common spirals</div>
+        <span class="spiral-tag">The Clock</span>
+        <span class="spiral-tag">The Mirror</span>
+        <span class="spiral-tag">The What If</span>
+      </div>
+      <div>
+        <div class="stage-features-label">Active features</div>
+        <span class="feature-pill">Rewrite Room</span>
+        <span class="feature-pill">Full Picture</span>
+        <span class="feature-pill">Inspire (sci)</span>
+        <span class="feature-pill">Habit streaks</span>
+      </div>
+      <div class="stage-growth">Sprouts breaking ground. Effort is still required. The pattern is forming.</div>
+    </div>
+
+    <!-- EARLY SPRING -->
+    <div class="stage-card stage-espring">
+      <div class="stage-season">Early Spring</div>
+      <div class="stage-days">Days<br>31–60</div>
+      <div class="stage-emotion">Beginning to surface. More okay days. Still fragile.</div>
+      <div class="stage-divider"></div>
+      <div class="stage-brain">Approaching the 66-day automaticity threshold. Habits begin requiring effort to skip rather than effort to do.</div>
+      <div>
+        <div class="stage-spirals-label">Common spirals</div>
+        <span class="spiral-tag">The Mirror</span>
+        <span class="spiral-tag">Actually Okay</span>
+        <span class="spiral-tag">The Clock</span>
+      </div>
+      <div>
+        <div class="stage-features-label">Active features</div>
+        <span class="feature-pill">Full Picture</span>
+        <span class="feature-pill">Blossoms</span>
+        <span class="feature-pill">Inspire (notes)</span>
+        <span class="feature-pill">Milestones</span>
+      </div>
+      <div class="stage-growth">Stems rising. Buds forming. The garden is visibly growing.</div>
+    </div>
+
+    <!-- FULL SPRING -->
+    <div class="stage-card stage-fspring">
+      <div class="stage-season">Full Spring</div>
+      <div class="stage-days">Days<br>61–90</div>
+      <div class="stage-emotion">Consistency has arrived. Glimpses of joy. Identity beginning to re-emerge.</div>
+      <div class="stage-divider"></div>
+      <div class="stage-brain">Automaticity threshold crossed. Emotional charge on memories measurably decreasing. Less emergency, more past tense.</div>
+      <div>
+        <div class="stage-spirals-label">Common spirals</div>
+        <span class="spiral-tag">Actually Okay</span>
+        <span class="spiral-tag">The What If</span>
+      </div>
+      <div>
+        <div class="stage-features-label">Active features</div>
+        <span class="feature-pill">Grove view</span>
+        <span class="feature-pill">Calendar</span>
+        <span class="feature-pill">Custom habits</span>
+        <span class="feature-pill">Inspire (milestones)</span>
+      </div>
+      <div class="stage-growth">Flowers open. Petals multiplying. The garden is blooming.</div>
+    </div>
+
+    <!-- SUMMER -->
+    <div class="stage-card stage-summer">
+      <div class="stage-season">Summer</div>
+      <div class="stage-days">Days<br>91+</div>
+      <div class="stage-emotion">Rediscovery. The relationship is real history, not active emergency. Identity is your own again.</div>
+      <div class="stage-divider"></div>
+      <div class="stage-brain">New behavioral pathways are established. The loss occupies a different register — meaningful, not consuming.</div>
+      <div>
+        <div class="stage-spirals-label">Common spirals</div>
+        <span class="spiral-tag">Actually Okay</span>
+        <span class="spiral-tag">All</span>
+      </div>
+      <div>
+        <div class="stage-features-label">Active features</div>
+        <span class="feature-pill">Full garden</span>
+        <span class="feature-pill">Grow habits</span>
+        <span class="feature-pill">Journey view</span>
+        <span class="feature-pill">Day 90 milestone</span>
+      </div>
+      <div class="stage-growth">Full bloom. Radiant. This was always coming.</div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ===== SECTION 2: DAILY LOOP ===== -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-label">02 — The Daily Loop</div>
+    <div class="section-title">What a day in the app looks like.</div>
+    <div class="section-intro">The app is designed around two touchpoints per day — morning intention and evening reflection — with crisis support available any time in between.</div>
+  </div>
+
+  <div class="daily-loop">
+
+    <div class="loop-description">
+      <div class="loop-title">When it happens</div>
+
+      <div class="loop-item">
+        <div class="loop-time">Morning</div>
+        <div>
+          <div class="loop-action">Check in — name the spiral, set intent</div>
+          <div class="loop-sub">30 seconds. No journal required.</div>
+        </div>
+      </div>
+
+      <div class="loop-item">
+        <div class="loop-time">Morning</div>
+        <div>
+          <div class="loop-action">Tend the garden — water one or more habits</div>
+          <div class="loop-sub">Each tap grows the flower. Streak accumulates.</div>
+        </div>
+      </div>
+
+      <div class="loop-item">
+        <div class="loop-time">Anytime</div>
+        <div>
+          <div class="loop-action">Journal — diary, full picture, rewrite, the why</div>
+          <div class="loop-sub">Write when you need to. Nothing is required.</div>
+        </div>
+      </div>
+
+      <div class="loop-item">
+        <div class="loop-time">Anytime</div>
+        <div>
+          <div class="loop-action">Inspire — science card matched to your spiral</div>
+          <div class="loop-sub">Context for what your body is doing right now.</div>
+        </div>
+      </div>
+
+      <div class="loop-item">
+        <div class="loop-time">Crisis</div>
+        <div>
+          <div class="loop-action">Ground — 4-7-8 breathing, or read The Why</div>
+          <div class="loop-sub">Before you text him. Before the spiral takes over.</div>
+        </div>
+      </div>
+
+      <div class="loop-item">
+        <div class="loop-time">Evening</div>
+        <div>
+          <div class="loop-action">Optional second check-in</div>
+          <div class="loop-sub">How did the day actually feel?</div>
+        </div>
+      </div>
+
+      <div class="loop-item">
+        <div class="loop-time">Over time</div>
+        <div>
+          <div class="loop-action">Blossom earned → Grove grows</div>
+          <div class="loop-sub">Every 7-day streak creates a permanent flower.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flow-diagram">
+      <div class="loop-title">The flow</div>
+
+      <div class="flow-row">
+        <div class="flow-node highlight">Open app</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node highlight">Daily check-in<br><span style="font-size:7px;opacity:0.7;">How are you today?</span></div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node">Choose intent</div>
+      </div>
+
+      <div class="flow-branch">
+        <div class="flow-branch-row">
+          <div class="flow-branch-icon">🏡</div>
+          <div>
+            <div class="flow-branch-label">Tend my garden</div>
+            <div class="flow-branch-sub">Tap habits to water them → flowers grow → streak builds</div>
+          </div>
+        </div>
+        <div class="flow-branch-row">
+          <div class="flow-branch-icon">✏️</div>
+          <div>
+            <div class="flow-branch-label">Write in my journal</div>
+            <div class="flow-branch-sub">Diary → Full Picture → Rewrite Room → The Why</div>
+          </div>
+        </div>
+        <div class="flow-branch-row">
+          <div class="flow-branch-icon">🌸</div>
+          <div>
+            <div class="flow-branch-label">Find inspiration</div>
+            <div class="flow-branch-sub">Science + notes matched to today's spiral</div>
+          </div>
+        </div>
+        <div class="flow-branch-row">
+          <div class="flow-branch-icon">🌿</div>
+          <div>
+            <div class="flow-branch-label">Ground myself</div>
+            <div class="flow-branch-sub">4-7-8 breathing (10 min) or read The Why</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-row" style="margin-top:12px;">
+        <div class="flow-node">Calendar dot added</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node sage">7-day streak?</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-node gold">Blossom earned<br><span style="font-size:7px;opacity:0.8;">Grove grows</span></div>
+      </div>
+
+      <div style="margin-top:20px; padding:12px 14px; background:#F5EFE4; border-radius:10px; border-left:2px solid #C97A6E;">
+        <div style="font-family:'Courier New',monospace; font-size:7px; letter-spacing:1.5px; text-transform:uppercase; color:#C97A6E; opacity:0.8; margin-bottom:5px;">At any time — if the urge hits</div>
+        <div style="font-size:11px; color:#3D2B1F; line-height:1.6; opacity:0.85;">🌿 Ground button → Check in → Tend garden → Read The Why → Breathe<br><span style="font-size:10px; opacity:0.6; font-style:italic;">Give it ten minutes before you respond to the urge.</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="divider-line"></div>
+
+
+<!-- ===== SECTION 3: FEATURE DISCOVERY ===== -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-label">03 — Feature Discovery</div>
+    <div class="section-title">When each feature becomes meaningful.</div>
+    <div class="section-intro">Not every feature is equally relevant on day 1. This is the natural discovery timeline as the user moves through healing stages.</div>
+  </div>
+
+  <div class="discovery-timeline">
+    <div class="timeline-track"></div>
+    <div class="timeline-items">
+
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#4A3E35;"></div>
+        <div class="timeline-day">Day 1</div>
+        <div class="timeline-card">
+          <div class="timeline-feature">Foundation</div>
+          <div class="timeline-desc">Healing start date. Default habit seeds. The Why written. First check-in.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#5C5050;"></div>
+        <div class="timeline-day">Days 1–7</div>
+        <div class="timeline-card">
+          <div class="timeline-feature">Daily rhythm</div>
+          <div class="timeline-desc">Check-in habit forms. Flowers go from seeds to sprouts. First streaks begin.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#4A6060;"></div>
+        <div class="timeline-day">Day 7</div>
+        <div class="timeline-card">
+          <div class="timeline-feature">First blossom</div>
+          <div class="timeline-desc">First 7-day streak possible. Blossom earned. Grove begins. Inspire feed unlocks.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#3D5A68;"></div>
+        <div class="timeline-day">Days 14–21</div>
+        <div class="timeline-card">
+          <div class="timeline-feature">Full Picture</div>
+          <div class="timeline-desc">Enough distance from the relationship to see it clearly. Full Picture + Rewrite Room most active.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#4A6048;"></div>
+        <div class="timeline-day">Day 21</div>
+        <div class="timeline-card">
+          <div class="timeline-feature">Milestone 1</div>
+          <div class="timeline-desc">First milestone card. Pattern exists. Neural pathway has begun forming.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#5A6A48;"></div>
+        <div class="timeline-day">Day 30</div>
+        <div class="timeline-card">
+          <div class="timeline-feature">Milestone 2</div>
+          <div class="timeline-desc">Acute distress begins modulating. Journey calendar shows a month of evidence.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#7A6A48;"></div>
+        <div class="timeline-day">Day 60</div>
+        <div class="timeline-card">
+          <div class="timeline-feature">Automaticity</div>
+          <div class="timeline-desc">Milestone 3. Approaching 66-day threshold. Behaviors require effort to skip.</div>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:#B8935A;"></div>
+        <div class="timeline-day">Day 90</div>
+        <div class="timeline-card">
+          <div class="timeline-feature">Radiant</div>
+          <div class="timeline-desc">Milestone 4. Garden is radiant. Emotional charge measurably decreased. Full bloom.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="divider-line"></div>
+
+
+<!-- ===== SECTION 4: SPIRAL MATRIX ===== -->
+<div class="section">
+  <div class="section-header">
+    <div class="section-label">04 — Spiral × Feature Matrix</div>
+    <div class="section-title">The right feature for each emotional state.</div>
+    <div class="section-intro">Each spiral maps to specific features, inspire content, and grounding actions. The check-in at the start of each day routes the user toward what will actually help them right now.</div>
+  </div>
+
+  <table class="matrix-table">
+    <thead>
+      <tr>
+        <th style="width:22%">Spiral</th>
+        <th style="width:22%">Journal</th>
+        <th style="width:30%">Inspire content</th>
+        <th style="width:26%">Ground action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <div class="spiral-name">The Clock</div>
+          <div class="spiral-desc">Counting days. Worried about time.</div>
+        </td>
+        <td><span class="matrix-tag tag-journal">Diary</span></td>
+        <td>
+          <span class="matrix-tag tag-inspire">Fertility myth debunked</span>
+          <span class="matrix-tag tag-inspire">Relationship timing data</span>
+          <span class="matrix-tag tag-inspire">Notes on urgency</span>
+        </td>
+        <td><span class="matrix-tag tag-ground">4-7-8 Breathing</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="spiral-name">The Replay</div>
+          <div class="spiral-desc">Obsessing over what was said.</div>
+        </td>
+        <td>
+          <span class="matrix-tag tag-journal">Rewrite Room</span>
+          <span class="matrix-tag tag-journal">Diary</span>
+        </td>
+        <td>
+          <span class="matrix-tag tag-inspire">How memory works</span>
+          <span class="matrix-tag tag-inspire">The function of guilt</span>
+        </td>
+        <td><span class="matrix-tag tag-ground">Read The Why</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="spiral-name">The Mirror</div>
+          <div class="spiral-desc">Questioning self-worth.</div>
+        </td>
+        <td><span class="matrix-tag tag-journal">Full Picture</span></td>
+        <td>
+          <span class="matrix-tag tag-inspire">The comparison trap</span>
+          <span class="matrix-tag tag-inspire">What "not enough" means</span>
+        </td>
+        <td>
+          <span class="matrix-tag tag-garden">Tend Garden</span>
+          <span class="matrix-tag tag-ground">Read The Why</span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class="spiral-name">The What If</div>
+          <div class="spiral-desc">Fantasizing about alternatives.</div>
+        </td>
+        <td><span class="matrix-tag tag-journal">Diary</span></td>
+        <td>
+          <span class="matrix-tag tag-inspire">Neuroscience of reconnection</span>
+          <span class="matrix-tag tag-inspire">11pm vs 10am notes</span>
+        </td>
+        <td><span class="matrix-tag tag-ground">4-7-8 Breathing</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="spiral-name">The But He</div>
+          <div class="spiral-desc">Remembering only the good parts.</div>
+        </td>
+        <td>
+          <span class="matrix-tag tag-journal">Full Picture</span>
+          <span class="matrix-tag tag-journal">The Why</span>
+        </td>
+        <td>
+          <span class="matrix-tag tag-inspire">Why you remember the good parts</span>
+          <span class="matrix-tag tag-inspire">How love and harm coexist</span>
+        </td>
+        <td><span class="matrix-tag tag-ground">Read The Why</span></td>
+      </tr>
+      <tr>
+        <td>
+          <div class="spiral-name">I Don't Know</div>
+          <div class="spiral-desc">Numbness. Can't name it.</div>
+        </td>
+        <td><span class="matrix-tag tag-journal">Diary</span></td>
+        <td>
+          <span class="matrix-tag tag-inspire">Why numbness comes after grief</span>
+          <span class="matrix-tag tag-inspire">No-spiral notes</span>
+        </td>
+        <td>
+          <span class="matrix-tag tag-garden">Just tend</span>
+          <span class="matrix-tag tag-ground">Breathe</span>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class="spiral-name">Actually Okay</div>
+          <div class="spiral-desc">A good day. Better than okay.</div>
+        </td>
+        <td><span class="matrix-tag tag-journal">Any tab</span></td>
+        <td>
+          <span class="matrix-tag tag-inspire">What progress looks like in the brain</span>
+          <span class="matrix-tag tag-inspire">Okay day notes</span>
+          <span class="matrix-tag tag-inspire">Milestone cards</span>
+        </td>
+        <td>
+          <span class="matrix-tag tag-garden">Celebrate</span>
+          <span class="matrix-tag tag-garden">Grow something new</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="note">Efflorescence — User Journey Map · efflorescence™ 2026 · Alison Nicole Lee</div>
+
+</body>
+</html>

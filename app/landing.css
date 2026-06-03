@@ -352,6 +352,38 @@
   transform: rotate(180deg);
 }
 
+.scroll-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  animation: l-bounce 2s ease-in-out 2.5s infinite;
+}
+
+.scroll-arrow span {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-right: 1.5px solid rgba(245, 239, 228, 0.35);
+  border-bottom: 1.5px solid rgba(245, 239, 228, 0.35);
+  transform: rotate(45deg);
+}
+
+.scroll-arrow span:nth-child(2) {
+  opacity: 0.55;
+  margin-top: -4px;
+}
+
+@keyframes l-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(5px);
+  }
+}
+
 .hero-botanical {
   position: absolute;
   right: 60px;

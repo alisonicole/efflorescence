@@ -15,7 +15,7 @@ const SPIRAL_OPTIONS: Spiral[] = [
   "i_dont_know",
   "the_what_if",
   "the_mirror",
-  "the_but_he",
+  "the_should_be",
 ];
 
 interface CheckInCardProps {

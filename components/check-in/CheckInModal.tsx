@@ -5,8 +5,7 @@ import { useRouter } from "next/navigation";
 import Parse from "parse";
 import { initParse } from "@/lib/parse";
 import type { Spiral } from "@/types";
-import { SPIRAL_DESCRIPTIONS } from "@/types";
-import SpiralChip from "./SpiralChip";
+import { SPIRAL_LABELS, SPIRAL_DESCRIPTIONS } from "@/types";
 
 const SPIRAL_OPTIONS: Spiral[] = [
   "actually_okay",
@@ -15,7 +14,7 @@ const SPIRAL_OPTIONS: Spiral[] = [
   "i_dont_know",
   "the_what_if",
   "the_mirror",
-  "the_but_he",
+  "the_should_be",
 ];
 
 interface CheckInModalProps {
@@ -32,7 +31,6 @@ export default function CheckInModal({
   initialSpiral,
 }: CheckInModalProps) {
   const router = useRouter();
-  const [hovered, setHovered] = useState<Spiral | null>(null);
   const [saving, setSaving] = useState(false);
 
   if (!isOpen) return null;
@@ -82,40 +80,51 @@ export default function CheckInModal({
     }
   }
 
-  const previewSpiral = hovered ?? initialSpiral;
-
   return (
     <div
       className="fixed inset-0 bg-black/40 z-50 flex items-end justify-center"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-app bg-cream rounded-t-2xl p-6 animate-slide-up"
+        className="w-full max-w-app bg-cream rounded-t-2xl px-5 pt-6 pb-10 animate-slide-up max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <p className="font-mono text-[9px] uppercase tracking-[3px] text-soil opacity-60 mb-1">
-          Morning check-in
+        <div className="w-8 h-0.5 rounded-full bg-bark/15 mx-auto mb-5" />
+        <p className="font-mono text-[8px] uppercase tracking-[3px] text-soil opacity-50 mb-1">
+          Check in
         </p>
-        <p className="font-display text-lg italic font-light text-bark mb-4">
-          "How are you today?"
+        <p className="font-display font-light italic text-[22px] text-bark tracking-tight mb-5">
+          How are you today?
         </p>
-        <div className="flex flex-wrap gap-1.5 mb-3">
+
+        <div className="flex flex-col gap-2">
           {SPIRAL_OPTIONS.map((spiral) => (
-            <SpiralChip
+            <button
               key={spiral}
-              spiral={spiral}
-              selected={initialSpiral === spiral}
-              onSelect={handleSelect}
-              onHover={setHovered}
-            />
+              onClick={() => handleSelect(spiral)}
+              disabled={saving}
+              className={`w-full text-left px-4 py-3.5 rounded-xl border transition-all active:scale-[0.99] ${
+                initialSpiral === spiral
+                  ? "bg-bark text-cream border-bark"
+                  : "bg-white border-border hover:border-clay/40"
+              }`}
+            >
+              <p
+                className={`font-display italic text-[15px] leading-snug mb-0.5 ${
+                  initialSpiral === spiral ? "text-cream" : "text-bark"
+                }`}
+              >
+                {SPIRAL_LABELS[spiral]}
+              </p>
+              <p
+                className={`font-mono text-[9px] leading-relaxed ${
+                  initialSpiral === spiral ? "text-cream/70" : "text-bark/50"
+                }`}
+              >
+                {SPIRAL_DESCRIPTIONS[spiral]}
+              </p>
+            </button>
           ))}
-        </div>
-        <div className="min-h-[28px]">
-          {previewSpiral && (
-            <p className="font-mono text-[9px] text-soil opacity-70 leading-relaxed">
-              {SPIRAL_DESCRIPTIONS[previewSpiral]}
-            </p>
-          )}
         </div>
       </div>
     </div>
