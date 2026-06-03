@@ -1,10 +1,199 @@
 "use client";
 
 import Link from "next/link";
-import { BLOSSOM_SPECIES } from "@/lib/garden";
-import type { Habit } from "@/types";
+import type { Habit, HabitCategory } from "@/types";
 
 const STAGGER = [0, 8, 3, 12, 1, 9, 4, 14, 2, 7, 5, 11, 0, 6, 10];
+
+const CATEGORY_COLOR: Record<HabitCategory, string> = {
+  no_contact: "#6B8F6E",
+  no_stalking: "#D4823A",
+  no_old_photos: "#9B8DB5",
+  eat_water: "#D4B483",
+  move_body: "#E8C547",
+  fresh_air: "#8FB5A0",
+  talk: "#C97A8A",
+  sleep: "#5C6B8A",
+  get_dressed: "#C4B447",
+  journal: "#7B6EA0",
+  just_for_you: "#D48A9B",
+  therapy: "#7A9BB5",
+  custom: "#B8A89A",
+};
+
+const PETAL_ANGLES: Record<number, number[]> = {
+  4: [0, 180],
+  5: [0, 90, 180, 270],
+  6: [0, 60, 120, 180, 240, 300],
+  7: [0, 45, 90, 135, 180, 225, 270, 315],
+};
+
+function MiniFlower({
+  stage,
+  color,
+  opacity,
+}: {
+  stage: number;
+  color: string;
+  opacity: number;
+}) {
+  return (
+    <svg
+      width="40"
+      height="54"
+      viewBox="0 0 56 76"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      style={{ opacity }}
+    >
+      {stage === 0 ? (
+        <>
+          <ellipse
+            cx="28"
+            cy="69"
+            rx="13"
+            ry="3.5"
+            fill="#C4A882"
+            opacity="0.55"
+          />
+          <ellipse
+            cx="28"
+            cy="66"
+            rx="3.5"
+            ry="2.5"
+            fill={color}
+            opacity="0.65"
+          />
+        </>
+      ) : stage === 1 ? (
+        <>
+          <line
+            x1="28"
+            y1="56"
+            x2="28"
+            y2="72"
+            stroke="#4A6741"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+          <ellipse
+            cx="21"
+            cy="54"
+            rx="7"
+            ry="3.2"
+            fill="#7A9E6E"
+            opacity="0.8"
+            transform="rotate(-30 21 54)"
+          />
+          <ellipse
+            cx="35"
+            cy="54"
+            rx="7"
+            ry="3.2"
+            fill="#7A9E6E"
+            opacity="0.8"
+            transform="rotate(30 35 54)"
+          />
+        </>
+      ) : stage === 2 ? (
+        <>
+          <line
+            x1="28"
+            y1="48"
+            x2="28"
+            y2="72"
+            stroke="#4A6741"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+          <ellipse
+            cx="21"
+            cy="63"
+            rx="6"
+            ry="3"
+            fill="#7A9E6E"
+            opacity="0.65"
+            transform="rotate(-35 21 63)"
+          />
+          <ellipse cx="28" cy="42" rx="4" ry="7" fill={color} opacity="0.5" />
+          <ellipse
+            cx="28"
+            cy="43"
+            rx="2.5"
+            ry="5"
+            fill={color}
+            opacity="0.72"
+          />
+        </>
+      ) : stage === 3 ? (
+        <>
+          <line
+            x1="28"
+            y1="38"
+            x2="28"
+            y2="72"
+            stroke="#4A6741"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+          <ellipse
+            cx="21"
+            cy="58"
+            rx="7"
+            ry="3.5"
+            fill="#7A9E6E"
+            opacity="0.65"
+            transform="rotate(-35 21 58)"
+          />
+          <ellipse cx="28" cy="26" rx="6" ry="11" fill={color} opacity="0.45" />
+          <ellipse cx="28" cy="27" rx="4" ry="8" fill={color} opacity="0.7" />
+        </>
+      ) : (
+        <>
+          <line
+            x1="28"
+            y1="38"
+            x2="28"
+            y2="72"
+            stroke="#4A6741"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+          />
+          <ellipse
+            cx="21"
+            cy="58"
+            rx="7"
+            ry="3.5"
+            fill="#7A9E6E"
+            opacity="0.65"
+            transform="rotate(-35 21 58)"
+          />
+          {(PETAL_ANGLES[stage] ?? PETAL_ANGLES[7]).map((angle) => (
+            <ellipse
+              key={angle}
+              cx="28"
+              cy="17"
+              rx="4.5"
+              ry="8"
+              fill={color}
+              opacity="0.82"
+              transform={`rotate(${angle} 28 28)`}
+            />
+          ))}
+          <circle cx="28" cy="28" r={stage === 7 ? 7 : 5} fill="#F5EFE4" />
+          <circle
+            cx="28"
+            cy="28"
+            r={stage === 7 ? 5 : 3.5}
+            fill={color}
+            opacity="0.55"
+          />
+          <circle cx="28" cy="28" r="2.5" fill={color} opacity="0.9" />
+        </>
+      )}
+    </svg>
+  );
+}
 
 export default function GardenScene({
   habits,
@@ -38,24 +227,22 @@ export default function GardenScene({
           {habits.map((h, i) => {
             const streak = streaks[h.objectId] ?? 0;
             const stage = Math.min(streak, 7);
-            const species = BLOSSOM_SPECIES[h.category];
-            const emoji = species?.emoji ?? "🌱";
-            // Scale emoji with stage: seed is tiny, full bloom is large
-            const size = stage === 0 ? 14 : 16 + stage * 2.5;
+            const color = CATEGORY_COLOR[h.category] ?? "#7A9E6E";
             const mb = STAGGER[i % STAGGER.length];
+            const opacity = stage === 0 ? 0.35 : 0.9;
 
             return (
               <div
                 key={h.objectId}
                 className="flex flex-col items-center"
-                style={{ marginBottom: mb, opacity: stage === 0 ? 0.35 : 0.9 }}
+                style={{ marginBottom: mb }}
               >
-                <span style={{ fontSize: size, lineHeight: 1 }}>{emoji}</span>
+                <MiniFlower stage={stage} color={color} opacity={opacity} />
                 <p
-                  className="font-mono uppercase text-bark/40 text-center mt-0.5 leading-none"
-                  style={{ fontSize: 5.5, maxWidth: 28 }}
+                  className="font-mono uppercase text-bark/40 text-center leading-none"
+                  style={{ fontSize: 5.5, maxWidth: 40 }}
                 >
-                  {h.name.length > 6 ? h.name.slice(0, 6) : h.name}
+                  {h.name.length > 7 ? h.name.slice(0, 7) : h.name}
                 </p>
               </div>
             );

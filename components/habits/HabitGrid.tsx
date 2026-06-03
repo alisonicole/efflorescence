@@ -41,6 +41,8 @@ export default function HabitGrid() {
   } | null>(null);
 
   const [plantOpen, setPlantOpen] = useState(false);
+  const [weedOpen, setWeedOpen] = useState(false);
+  const [weeding, setWeeding] = useState<string | null>(null);
   const [newName, setNewName] = useState("");
   const [planting, setPlanting] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -181,6 +183,30 @@ export default function HabitGrid() {
     }
   }
 
+  async function handleWeed(habitId: string) {
+    if (weeding) return;
+    setWeeding(habitId);
+    initParse();
+    const user = Parse.User.current();
+    if (!user) {
+      setWeeding(null);
+      return;
+    }
+    try {
+      const ParseHabit = Parse.Object.extend("Habit");
+      const query = new Parse.Query(ParseHabit);
+      const habit = await query.get(habitId);
+      habit.set("isActive", false);
+      await habit.save();
+      setWeedOpen(false);
+      void loadHabits();
+    } catch {
+      // silent
+    } finally {
+      setWeeding(null);
+    }
+  }
+
   function handleToggle(habitId: string, completed: boolean) {
     setCompletedToday((prev) => {
       const next = new Set(prev);
@@ -227,12 +253,20 @@ export default function HabitGrid() {
                 Your garden
               </span>
             </div>
-            <button
-              onClick={() => setPlantOpen(true)}
-              className="font-mono text-[8px] uppercase tracking-[2px] text-bark/40 hover:text-bark/70 transition-colors"
-            >
-              + plant
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setWeedOpen(true)}
+                className="font-mono text-[8px] uppercase tracking-[2px] text-bark/40 hover:text-bark/70 transition-colors"
+              >
+                + weed
+              </button>
+              <button
+                onClick={() => setPlantOpen(true)}
+                className="font-mono text-[8px] uppercase tracking-[2px] text-bark/40 hover:text-bark/70 transition-colors"
+              >
+                + plant
+              </button>
+            </div>
           </div>
 
           {/* All habits in one grid */}
@@ -295,6 +329,51 @@ export default function HabitGrid() {
               >
                 {planting ? "Planting..." : "Plant it"}
               </button>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Weed bottom sheet */}
+      {weedOpen && (
+        <>
+          <div
+            className="fixed inset-0 bg-bark/30 z-40 backdrop-blur-[2px]"
+            onClick={() => setWeedOpen(false)}
+          />
+          <div className="fixed bottom-0 left-0 right-0 z-50 animate-slide-up">
+            <div className="bg-cream rounded-t-2xl px-5 pt-6 pb-10 max-w-app mx-auto">
+              <div className="w-8 h-0.5 rounded-full bg-bark/15 mx-auto mb-5" />
+              <p className="font-display font-light italic text-[20px] text-bark tracking-tight mb-1">
+                Pull a weed
+              </p>
+              <p className="font-mono text-[9px] text-soil opacity-50 mb-5">
+                Remove a habit from your garden
+              </p>
+              <div className="space-y-2 max-h-72 overflow-y-auto">
+                {habits.map((habit) => (
+                  <button
+                    key={habit.objectId}
+                    onClick={() => void handleWeed(habit.objectId)}
+                    disabled={!!weeding}
+                    className="w-full flex items-center gap-3 bg-white border border-border rounded-card px-4 py-3 text-left disabled:opacity-40 active:scale-[0.98] transition-transform"
+                  >
+                    <span className="text-xl">{habit.icon}</span>
+                    <span className="text-sm text-bark flex-1">
+                      {habit.name}
+                    </span>
+                    {weeding === habit.objectId ? (
+                      <span className="font-mono text-[9px] text-muted">
+                        removing...
+                      </span>
+                    ) : (
+                      <span className="font-mono text-[9px] text-bark/30">
+                        remove
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
         </>

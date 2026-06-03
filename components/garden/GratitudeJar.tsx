@@ -123,6 +123,7 @@ export default function GratitudeJar() {
   const [showAdd, setShowAdd] = useState(false);
   const [showPull, setShowPull] = useState(false);
   const [pulledEntry, setPulledEntry] = useState<GratitudeEntry | null>(null);
+  const [removing, setRemoving] = useState(false);
   const [text, setText] = useState("");
   const [saving, setSaving] = useState(false);
 
@@ -188,6 +189,29 @@ export default function GratitudeJar() {
     const idx = Math.floor(Math.random() * entries.length);
     setPulledEntry(entries[idx]);
     setShowPull(true);
+  }
+
+  async function removePebble() {
+    if (!pulledEntry || removing) return;
+    setRemoving(true);
+    initParse();
+    const user = Parse.User.current();
+    if (!user) {
+      setRemoving(false);
+      return;
+    }
+    try {
+      const query = new Parse.Query("GratitudeEntry");
+      const obj = await query.get(pulledEntry.objectId);
+      await obj.destroy();
+      setShowPull(false);
+      setPulledEntry(null);
+      await load();
+    } catch {
+      // silent
+    } finally {
+      setRemoving(false);
+    }
   }
 
   return (
@@ -299,9 +323,16 @@ export default function GratitudeJar() {
             </div>
             <button
               onClick={() => setShowPull(false)}
-              className="w-full bg-bark text-cream rounded-card py-3 text-sm font-medium"
+              className="w-full bg-bark text-cream rounded-card py-3 text-sm font-medium mb-2"
             >
               Put it back
+            </button>
+            <button
+              onClick={() => void removePebble()}
+              disabled={removing}
+              className="w-full text-[10px] font-mono uppercase tracking-widest text-muted/60 py-2 disabled:opacity-40"
+            >
+              {removing ? "Removing..." : "Remove from jar"}
             </button>
           </div>
         </div>

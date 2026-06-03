@@ -7,7 +7,6 @@ import { initParse } from "@/lib/parse";
 import { computeStreak, computeDayCount } from "@/lib/garden";
 import { getPrompt } from "@/lib/prompts";
 import { useAuth } from "@/context/AuthContext";
-import { useGround } from "@/context/GroundContext";
 import type { Habit, HabitCategory, Spiral } from "@/types";
 import GardenScene from "@/components/garden/GardenScene";
 import TopBar from "@/components/layout/TopBar";
@@ -44,7 +43,6 @@ function getWeekKey(): string {
 export default function HomePage() {
   const router = useRouter();
   const { user } = useAuth();
-  const { openGround } = useGround();
 
   const [bannerItems, setBannerItems] = useState<string[]>([]);
   const [bannerIdx, setBannerIdx] = useState(0);
@@ -378,42 +376,6 @@ export default function HomePage() {
             </div>
           </div>
         )}
-
-        {/* Action buttons */}
-        <div className="mx-2.5">
-          <p className="font-mono text-[9px] uppercase tracking-widest text-muted mb-2">
-            Tend to yourself
-          </p>
-          <div className="flex gap-2">
-            <button
-              onClick={openGround}
-              className="flex-1 flex flex-col items-center gap-2 bg-white rounded-card py-4 border border-border shadow-sm active:scale-95 transition-transform"
-            >
-              <span className="text-2xl">🌿</span>
-              <span className="font-mono text-[8px] uppercase tracking-wider text-bark">
-                ground
-              </span>
-            </button>
-            <button
-              onClick={() => router.push("/garden")}
-              className="flex-1 flex flex-col items-center gap-2 bg-white rounded-card py-4 border border-border shadow-sm active:scale-95 transition-transform"
-            >
-              <span className="text-2xl">🌻</span>
-              <span className="font-mono text-[8px] uppercase tracking-wider text-bark">
-                garden
-              </span>
-            </button>
-            <button
-              onClick={() => router.push("/journal")}
-              className="flex-1 flex flex-col items-center gap-2 bg-white rounded-card py-4 border border-border shadow-sm active:scale-95 transition-transform"
-            >
-              <span className="text-2xl">✏️</span>
-              <span className="font-mono text-[8px] uppercase tracking-wider text-bark">
-                journal
-              </span>
-            </button>
-          </div>
-        </div>
       </div>
 
       {/* Hard moment bottom sheet */}

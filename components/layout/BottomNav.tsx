@@ -26,7 +26,10 @@ export default function BottomNav({ onGround }: BottomNavProps) {
   };
 
   return (
-    <nav className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-app bg-white border-t border-border flex items-center justify-around px-4 py-2 pb-3 z-10">
+    <nav
+      className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-app bg-white border-t border-border flex items-center justify-around px-4 pt-2 z-30"
+      style={{ paddingBottom: "max(0.75rem, env(safe-area-inset-bottom))" }}
+    >
       {tab("/home", "🏠", "home")}
       {tab("/garden", "🌻", "garden")}
 

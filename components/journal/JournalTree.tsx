@@ -3,33 +3,42 @@
 import { useState } from "react";
 import type { JournalEntry } from "@/types";
 
-// Fixed leaf positions distributed across the canopy
+// Leaf positions along and at the tips of branches
 const LEAF_POSITIONS = [
-  { x: 145, y: 95, rx: 14, ry: 8, rot: -25 },
-  { x: 178, y: 75, rx: 14, ry: 8, rot: 5 },
-  { x: 212, y: 92, rx: 14, ry: 8, rot: 22 },
-  { x: 120, y: 120, rx: 13, ry: 7, rot: -40 },
-  { x: 155, y: 112, rx: 13, ry: 7, rot: -15 },
-  { x: 192, y: 105, rx: 13, ry: 7, rot: 10 },
-  { x: 228, y: 115, rx: 13, ry: 7, rot: 30 },
-  { x: 256, y: 132, rx: 12, ry: 7, rot: 48 },
-  { x: 104, y: 148, rx: 12, ry: 6, rot: -52 },
-  { x: 136, y: 140, rx: 13, ry: 7, rot: -20 },
-  { x: 168, y: 135, rx: 13, ry: 7, rot: 0 },
-  { x: 201, y: 138, rx: 13, ry: 7, rot: 18 },
-  { x: 236, y: 148, rx: 12, ry: 6, rot: 38 },
-  { x: 262, y: 163, rx: 11, ry: 6, rot: 52 },
-  { x: 113, y: 170, rx: 12, ry: 6, rot: -35 },
-  { x: 148, y: 164, rx: 13, ry: 7, rot: -10 },
-  { x: 181, y: 162, rx: 13, ry: 7, rot: 5 },
-  { x: 212, y: 168, rx: 12, ry: 6, rot: 25 },
-  { x: 246, y: 175, rx: 11, ry: 6, rot: 42 },
-  { x: 128, y: 192, rx: 12, ry: 6, rot: -25 },
-  { x: 162, y: 188, rx: 12, ry: 6, rot: 0 },
-  { x: 196, y: 190, rx: 12, ry: 6, rot: 20 },
-  { x: 230, y: 196, rx: 11, ry: 6, rot: 38 },
-  { x: 148, y: 216, rx: 11, ry: 5, rot: -15 },
-  { x: 186, y: 218, rx: 11, ry: 5, rot: 10 },
+  // Right sub-branch tips
+  { x: 268, y: 142, rx: 13, ry: 7, rot: 45 },
+  { x: 255, y: 136, rx: 13, ry: 7, rot: 35 },
+  { x: 278, y: 156, rx: 12, ry: 6, rot: 55 },
+  // Right branch tips
+  { x: 238, y: 162, rx: 13, ry: 7, rot: 30 },
+  { x: 250, y: 150, rx: 12, ry: 6, rot: 42 },
+  { x: 226, y: 170, rx: 13, ry: 7, rot: 20 },
+  // Center branch tips
+  { x: 180, y: 138, rx: 13, ry: 7, rot: 0 },
+  { x: 168, y: 136, rx: 12, ry: 6, rot: -15 },
+  { x: 193, y: 140, rx: 12, ry: 6, rot: 15 },
+  // Center-left branch tips
+  { x: 163, y: 154, rx: 13, ry: 7, rot: -20 },
+  { x: 150, y: 150, rx: 12, ry: 6, rot: -35 },
+  { x: 174, y: 162, rx: 12, ry: 6, rot: -8 },
+  // Left branch tips
+  { x: 94, y: 146, rx: 13, ry: 7, rot: -50 },
+  { x: 108, y: 138, rx: 12, ry: 6, rot: -45 },
+  { x: 82, y: 157, rx: 11, ry: 6, rot: -58 },
+  // Left main branch
+  { x: 122, y: 168, rx: 13, ry: 7, rot: -38 },
+  { x: 112, y: 176, rx: 12, ry: 6, rot: -45 },
+  // Mid right
+  { x: 212, y: 186, rx: 12, ry: 6, rot: 25 },
+  { x: 236, y: 186, rx: 11, ry: 6, rot: 38 },
+  // Mid left
+  { x: 138, y: 188, rx: 12, ry: 6, rot: -28 },
+  { x: 152, y: 194, rx: 12, ry: 6, rot: -15 },
+  // Lower center
+  { x: 185, y: 202, rx: 11, ry: 6, rot: 5 },
+  { x: 170, y: 207, rx: 11, ry: 5, rot: -10 },
+  { x: 200, y: 210, rx: 10, ry: 5, rot: 18 },
+  { x: 160, y: 220, rx: 10, ry: 5, rot: -20 },
 ];
 
 function formatDate(d: Date) {
@@ -51,9 +60,14 @@ export default function JournalTree({
 }: JournalTreeProps) {
   const [selected, setSelected] = useState<JournalEntry | null>(null);
 
-  // First 25 entries get visible leaves; rest go to archive
   const leafEntries = entries.slice(0, LEAF_POSITIONS.length);
   const archiveCount = entries.length - leafEntries.length;
+
+  function pullLeaf() {
+    if (entries.length === 0) return;
+    const idx = Math.floor(Math.random() * entries.length);
+    setSelected(entries[idx]);
+  }
 
   return (
     <>
@@ -71,106 +85,67 @@ export default function JournalTree({
         </div>
 
         <svg
-          viewBox="0 0 360 460"
+          viewBox="0 0 360 440"
           xmlns="http://www.w3.org/2000/svg"
           className="w-full"
-          style={{ maxHeight: 420 }}
+          style={{ maxHeight: 400 }}
         >
-          {/* Sky gradient */}
           <defs>
             <radialGradient id="skyGrad" cx="50%" cy="30%" r="70%">
               <stop offset="0%" stopColor="#f9f4ec" />
               <stop offset="100%" stopColor="#f0e8d8" />
             </radialGradient>
           </defs>
-          <rect width="360" height="460" fill="url(#skyGrad)" />
+          <rect width="360" height="440" fill="url(#skyGrad)" />
 
-          {/* Ground */}
+          {/* Ground shadow */}
           <ellipse
             cx="180"
-            cy="438"
-            rx="130"
-            ry="18"
-            fill="#C8A96A"
-            opacity="0.25"
-          />
-          <ellipse
-            cx="180"
-            cy="434"
-            rx="110"
+            cy="424"
+            rx="100"
             ry="12"
-            fill="#A07C48"
-            opacity="0.15"
+            fill="#C8A96A"
+            opacity="0.2"
           />
 
-          {/* Ground flowers (decorative) */}
-          {[60, 95, 130, 240, 275, 305].map((fx, i) => (
-            <g key={i} transform={`translate(${fx}, 428)`}>
-              <line
-                x1="0"
-                y1="0"
-                x2="0"
-                y2="-14"
-                stroke="#6B8F5E"
-                strokeWidth="1"
-              />
-              <circle
-                cx="0"
-                cy="-17"
-                r="4"
-                fill={
-                  [
-                    "#E8C4A0",
-                    "#D4A8C0",
-                    "#E8D4A0",
-                    "#C8D4A8",
-                    "#E0B8B0",
-                    "#C8C4E0",
-                  ][i]
-                }
-                opacity="0.7"
-              />
-            </g>
-          ))}
-
-          {/* Trunk */}
+          {/* Trunk - wider so hole fits */}
           <path
-            d="M172 435 C170 400 168 360 170 320 C171 295 173 268 174 248"
+            d="M172 428 C170 395 168 355 170 315 C171 292 173 265 174 245"
             stroke="#7A5030"
-            strokeWidth="26"
+            strokeWidth="44"
             fill="none"
             strokeLinecap="round"
           />
           {/* Trunk highlight */}
           <path
-            d="M175 435 C173 400 171 360 173 320 C174 295 176 268 177 248"
+            d="M177 428 C175 395 173 355 175 315 C176 292 178 265 179 245"
             stroke="#9A6840"
-            strokeWidth="8"
+            strokeWidth="12"
             fill="none"
             strokeLinecap="round"
-            opacity="0.5"
+            opacity="0.4"
           />
 
           {/* Trunk hole (archive) */}
           <ellipse
             cx="178"
-            cy="370"
-            rx="18"
-            ry="10"
+            cy="362"
+            rx="22"
+            ry="12"
             fill="#3A1C08"
-            opacity="0.7"
+            opacity="0.75"
           />
           <ellipse
             cx="178"
-            cy="370"
-            rx="14"
-            ry="7"
+            cy="362"
+            rx="16"
+            ry="8"
             fill="#1A0C04"
-            opacity="0.8"
+            opacity="0.85"
           />
           <text
             x="178"
-            y="387"
+            y="382"
             textAnchor="middle"
             fontSize="7"
             fontFamily="monospace"
@@ -180,21 +155,20 @@ export default function JournalTree({
           >
             {archiveCount > 0 ? `+${archiveCount}` : "archive"}
           </text>
-          {/* Invisible hit area for hole */}
           <ellipse
             cx="178"
-            cy="375"
-            rx="30"
-            ry="20"
+            cy="368"
+            rx="32"
+            ry="24"
             fill="transparent"
             className="cursor-pointer"
             onClick={onShowArchive}
           />
 
-          {/* Main branches */}
+          {/* Main branches - clearly visible */}
           {/* Left branch */}
           <path
-            d="M174 248 C165 228 148 205 130 178"
+            d="M172 245 C163 225 145 202 128 176"
             stroke="#7A5030"
             strokeWidth="14"
             fill="none"
@@ -202,15 +176,23 @@ export default function JournalTree({
           />
           {/* Left sub-branch */}
           <path
-            d="M148 205 C135 190 118 175 100 158"
+            d="M145 202 C130 187 114 172 96 155"
             stroke="#7A5030"
             strokeWidth="8"
             fill="none"
             strokeLinecap="round"
           />
+          {/* Left twig */}
+          <path
+            d="M120 177 C112 168 103 158 92 148"
+            stroke="#7A5030"
+            strokeWidth="5"
+            fill="none"
+            strokeLinecap="round"
+          />
           {/* Center-left branch */}
           <path
-            d="M174 248 C172 225 170 200 168 172"
+            d="M173 245 C170 222 167 198 164 170"
             stroke="#7A5030"
             strokeWidth="11"
             fill="none"
@@ -218,7 +200,7 @@ export default function JournalTree({
           />
           {/* Center branch */}
           <path
-            d="M174 248 C177 218 179 188 180 155"
+            d="M175 245 C177 215 179 185 180 152"
             stroke="#7A5030"
             strokeWidth="9"
             fill="none"
@@ -226,7 +208,7 @@ export default function JournalTree({
           />
           {/* Right branch */}
           <path
-            d="M174 248 C188 225 208 198 228 175"
+            d="M176 245 C190 222 210 196 230 172"
             stroke="#7A5030"
             strokeWidth="13"
             fill="none"
@@ -234,79 +216,38 @@ export default function JournalTree({
           />
           {/* Right sub-branch */}
           <path
-            d="M208 198 C225 183 245 168 264 152"
+            d="M210 196 C228 180 246 165 266 150"
             stroke="#7A5030"
             strokeWidth="8"
             fill="none"
             strokeLinecap="round"
           />
+          {/* Right twig */}
+          <path
+            d="M232 172 C244 160 255 148 265 140"
+            stroke="#7A5030"
+            strokeWidth="5"
+            fill="none"
+            strokeLinecap="round"
+          />
 
-          {/* Canopy clusters (decorative background foliage) */}
-          {[
-            { cx: 180, cy: 162, r: 108, fill: "#4A7A3E", op: 0.82 },
-            { cx: 148, cy: 142, r: 76, fill: "#5E8A50", op: 0.78 },
-            { cx: 215, cy: 147, r: 72, fill: "#3E6B32", op: 0.72 },
-            { cx: 108, cy: 162, r: 56, fill: "#4A7A3E", op: 0.68 },
-            { cx: 255, cy: 162, r: 54, fill: "#3E6B32", op: 0.68 },
-            { cx: 180, cy: 118, r: 62, fill: "#6A9A5C", op: 0.78 },
-            { cx: 148, cy: 105, r: 48, fill: "#5E8A50", op: 0.72 },
-            { cx: 210, cy: 108, r: 48, fill: "#4A8040", op: 0.7 },
-            { cx: 175, cy: 215, r: 50, fill: "#456E38", op: 0.65 },
-          ].map((c, i) => (
-            <circle
-              key={i}
-              cx={c.cx}
-              cy={c.cy}
-              r={c.r}
-              fill={c.fill}
-              opacity={c.op}
-            />
-          ))}
-
-          {/* Lighter leaf texture dots */}
-          {[
-            [120, 130],
-            [155, 98],
-            [190, 88],
-            [225, 105],
-            [260, 138],
-            [100, 158],
-            [140, 152],
-            [200, 150],
-            [244, 155],
-            [170, 108],
-            [210, 192],
-            [140, 198],
-            [115, 175],
-            [250, 178],
-          ].map(([lx, ly], i) => (
-            <circle
-              key={i}
-              cx={lx}
-              cy={ly}
-              r="5"
-              fill="#8AC47A"
-              opacity="0.35"
-            />
-          ))}
-
-          {/* Empty state: soft message when no entries */}
+          {/* Empty state */}
           {entries.length === 0 && (
             <text
               x="180"
-              y="158"
+              y="120"
               textAnchor="middle"
               fontSize="9"
               fontFamily="Georgia, serif"
               fontStyle="italic"
-              fill="#F5EFE4"
-              opacity="0.6"
+              fill="#9A6840"
+              opacity="0.5"
             >
               Your first entry will be a leaf.
             </text>
           )}
 
-          {/* Interactive leaves — one per entry */}
+          {/* Leaves - one per entry, positioned along branches */}
           {leafEntries.map((entry, i) => {
             const pos = LEAF_POSITIONS[i];
             return (
@@ -314,7 +255,7 @@ export default function JournalTree({
                 key={entry.objectId}
                 onClick={() => setSelected(entry)}
                 className="cursor-pointer"
-                style={{ filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.15))" }}
+                style={{ filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.12))" }}
               >
                 <ellipse
                   cx={pos.x}
@@ -322,10 +263,9 @@ export default function JournalTree({
                   rx={pos.rx}
                   ry={pos.ry}
                   fill="#A8D890"
-                  opacity="0.9"
+                  opacity="0.92"
                   transform={`rotate(${pos.rot} ${pos.x} ${pos.y})`}
                 />
-                {/* Leaf vein */}
                 <line
                   x1={
                     pos.x - (pos.rx - 2) * Math.cos((pos.rot * Math.PI) / 180)
@@ -346,26 +286,20 @@ export default function JournalTree({
               </g>
             );
           })}
-
-          {/* Hint text */}
-          {entries.length > 0 && (
-            <text
-              x="180"
-              y="452"
-              textAnchor="middle"
-              fontSize="6.5"
-              fontFamily="monospace"
-              fill="#9A6840"
-              opacity="0.45"
-              letterSpacing="1.5"
-            >
-              TAP A LEAF TO READ
-            </text>
-          )}
         </svg>
 
-        {/* Decorative ground strip */}
-        <div className="h-1 mx-3.5 mb-3 rounded-full bg-[#C4A882] opacity-30" />
+        {/* Pull a leaf button */}
+        <div className="px-3.5 pb-4 flex gap-2">
+          <button
+            onClick={pullLeaf}
+            disabled={entries.length === 0}
+            className="flex-1 bg-bark/8 border border-bark/15 text-bark rounded-card py-2.5 font-mono text-[8px] uppercase tracking-[2px] disabled:opacity-30 active:scale-[0.98] transition-transform"
+          >
+            Pull a leaf
+          </button>
+        </div>
+
+        <div className="mx-3.5 mb-3 h-1 rounded-full bg-[#C4A882] opacity-25" />
       </div>
 
       {/* Entry detail bottom sheet */}

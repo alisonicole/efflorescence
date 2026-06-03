@@ -26,15 +26,15 @@ export default function JournalPage() {
     <>
       <TopBar title="journal" subtitle="Your entries" />
       <div className="px-2.5 pt-2 pb-3">
-        <div className="flex overflow-x-auto border border-border rounded-card">
+        <div className="flex border border-border rounded-card overflow-hidden">
           {TABS.map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex-shrink-0 px-4 py-2.5 text-[8.5px] font-medium transition-colors whitespace-nowrap first:rounded-l-card last:rounded-r-card ${
+              className={`flex-1 py-2.5 font-mono text-[7.5px] uppercase tracking-[1.5px] transition-colors whitespace-nowrap ${
                 activeTab === tab.id
                   ? "bg-bark text-cream"
-                  : "bg-white text-bark"
+                  : "bg-white text-bark/60"
               }`}
             >
               {tab.label}
