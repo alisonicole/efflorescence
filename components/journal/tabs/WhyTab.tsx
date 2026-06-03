@@ -59,7 +59,10 @@ export default function WhyTab() {
       const entry = new ParseEntry();
       entry.set("user", user);
       entry.set("content", text.trim());
-      entry.set("prompt", "Why it ended. In your words.");
+      entry.set(
+        "prompt",
+        "What are you committed to? Write it as a declaration.",
+      );
       entry.set("entryType", "the_why");
       entry.setACL(new Parse.ACL(user));
       await entry.save();
@@ -76,15 +79,15 @@ export default function WhyTab() {
     <div className="pb-4">
       <div className="mx-2.5 mb-4 bg-bark text-cream rounded-card p-4">
         <p className="font-mono text-[9px] uppercase tracking-[3px] opacity-50 mb-1">
-          Why it ended
+          Commitments
         </p>
         <p className="font-display text-base italic font-light mb-3">
-          &quot;Write it down. You&apos;ll want this record.&quot;
+          &quot;What are you committed to? Write it as a declaration.&quot;
         </p>
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="In your own words..."
+          placeholder="I am committed to..."
           rows={5}
           className="w-full bg-white/10 rounded-card p-3 text-sm text-cream placeholder:text-cream/40 focus:outline-none resize-none leading-relaxed"
         />
@@ -93,7 +96,7 @@ export default function WhyTab() {
           disabled={!text.trim() || saving}
           className="mt-2 w-full bg-cream text-bark rounded-card py-2.5 text-sm font-medium disabled:opacity-40"
         >
-          {saving ? "Saving..." : "Save"}
+          {saving ? "Saving..." : "Plant this commitment"}
         </button>
       </div>
 

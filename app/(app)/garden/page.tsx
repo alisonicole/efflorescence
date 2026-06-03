@@ -12,6 +12,7 @@ import GardenTour from "@/components/garden/GardenTour";
 import HabitGrid from "@/components/habits/HabitGrid";
 import OnboardingModal from "@/components/onboarding/OnboardingModal";
 import BlossomGrove from "@/components/garden/BlossomGrove";
+import GratitudeJar from "@/components/garden/GratitudeJar";
 
 const TOUR_KEY = "gardenTourSeen";
 
@@ -76,6 +77,7 @@ export default function GardenPage() {
         <div className="px-2.5">
           <BlossomGrove />
         </div>
+        <GratitudeJar />
       </div>
     </>
   );

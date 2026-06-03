@@ -72,7 +72,7 @@ export interface JournalEntry {
   content: string;
   prompt: string;
   spiralContext?: Spiral;
-  entryType?: "standard" | "rewrite" | "the_why" | "receipts";
+  entryType?: "standard" | "rewrite" | "the_why" | "receipts" | "affirmation";
   pass1Content?: string;
   createdAt: Date;
 }
@@ -100,6 +100,12 @@ export interface FullPictureItem {
 export interface BlossomSpecies {
   emoji: string;
   name: string;
+}
+
+export interface GratitudeEntry {
+  objectId: string;
+  content: string;
+  createdAt: Date;
 }
 
 export interface BlossomEntry {
