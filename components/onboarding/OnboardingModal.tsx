@@ -12,21 +12,27 @@ interface StarterPack {
   habits: { category: HabitCategory; name: string; icon: string }[];
 }
 
+const INVESTING_IN_ME = [
+  { category: "journal" as HabitCategory, name: "journal", icon: "🪷" },
+  { category: "move_body" as HabitCategory, name: "move", icon: "🌻" },
+  { category: "sleep" as HabitCategory, name: "sleep", icon: "🌙" },
+  { category: "eat_water" as HabitCategory, name: "drink water", icon: "🍵" },
+  { category: "fresh_air" as HabitCategory, name: "fresh air", icon: "🌸" },
+  { category: "get_dressed" as HabitCategory, name: "get ready", icon: "🌱" },
+  { category: "talk" as HabitCategory, name: "talk to someone", icon: "🌺" },
+  {
+    category: "just_for_you" as HabitCategory,
+    name: "something for you",
+    icon: "💮",
+  },
+];
+
 const STARTER_PACKS: StarterPack[] = [
   {
-    id: "recommended",
-    name: "Recommended",
-    tagline: "A gentle start",
-    habits: [
-      { category: "journal", name: "journal", icon: "🪷" },
-      { category: "move_body", name: "move", icon: "🌻" },
-      { category: "sleep", name: "sleep", icon: "🌙" },
-      { category: "eat_water", name: "drink water", icon: "🍵" },
-      { category: "fresh_air", name: "fresh air", icon: "🌸" },
-      { category: "get_dressed", name: "get ready", icon: "🌱" },
-      { category: "talk", name: "talk to someone", icon: "🌺" },
-      { category: "just_for_you", name: "something for you", icon: "💮" },
-    ],
+    id: "investing",
+    name: "Investing in Me",
+    tagline: "A complete foundation",
+    habits: INVESTING_IN_ME,
   },
   {
     id: "letting_go",
@@ -36,6 +42,7 @@ const STARTER_PACKS: StarterPack[] = [
       { category: "no_contact", name: "no contact", icon: "🌿" },
       { category: "no_stalking", name: "didn't look", icon: "🌼" },
       { category: "no_old_photos", name: "let the past be", icon: "🪻" },
+      ...INVESTING_IN_ME,
     ],
   },
   {
@@ -43,25 +50,12 @@ const STARTER_PACKS: StarterPack[] = [
     name: "Quieting Anxiety",
     tagline: "For the racing mind",
     habits: [
+      { category: "custom", name: "meditate", icon: "🧘" },
       { category: "fresh_air", name: "fresh air", icon: "🌸" },
       { category: "move_body", name: "move", icon: "🌻" },
       { category: "sleep", name: "sleep", icon: "🌙" },
       { category: "eat_water", name: "drink water", icon: "🍵" },
-      { category: "journal", name: "journal", icon: "🪷" },
       { category: "talk", name: "talk to someone", icon: "🌺" },
-    ],
-  },
-  {
-    id: "depression",
-    name: "Coming Back",
-    tagline: "For heavy days",
-    habits: [
-      { category: "get_dressed", name: "get dressed", icon: "🌱" },
-      { category: "fresh_air", name: "fresh air", icon: "🌸" },
-      { category: "move_body", name: "move", icon: "🌻" },
-      { category: "talk", name: "talk to someone", icon: "🌺" },
-      { category: "just_for_you", name: "something for you", icon: "💮" },
-      { category: "journal", name: "journal", icon: "🪷" },
     ],
   },
 ];
@@ -73,10 +67,8 @@ interface OnboardingModalProps {
 type Step = 1 | 2 | 3;
 
 export default function OnboardingModal({ onComplete }: OnboardingModalProps) {
-  const today = new Date().toISOString().split("T")[0];
   const [step, setStep] = useState<Step>(1);
-  const [startDate, setStartDate] = useState(today);
-  const [selectedPack, setSelectedPack] = useState<string>("recommended");
+  const [selectedPack, setSelectedPack] = useState<string>("investing");
   const [receiptsText, setReceiptsText] = useState("");
   const [saving, setSaving] = useState(false);
 
@@ -91,7 +83,7 @@ export default function OnboardingModal({ onComplete }: OnboardingModalProps) {
       return;
     }
     try {
-      user.set("healingStartDate", new Date(`${startDate}T00:00:00`));
+      user.set("healingStartDate", new Date());
       await user.save();
       setStep(2);
     } finally {
@@ -165,37 +157,42 @@ export default function OnboardingModal({ onComplete }: OnboardingModalProps) {
         </div>
 
         <div className="p-7">
-          {/* Step counter */}
-          <p className="font-mono text-[7px] uppercase tracking-[2.5px] text-muted mb-6 text-center">
+          <p className="font-mono text-[7px] uppercase tracking-[2.5px] text-muted mb-5 text-center">
             Step {step} of 3
           </p>
 
-          {/* ── Step 1: Healing start date ── */}
+          {/* ── Step 1: Welcome ── */}
           {step === 1 && (
             <div className="text-center">
-              <div className="text-4xl mb-4">🌱</div>
-              <h2 className="font-display italic text-[22px] text-bark mb-2">
-                You made it here.
+              <div className="text-4xl mb-5">🌸</div>
+              <p className="font-mono text-[7px] uppercase tracking-[2.5px] text-muted mb-2">
+                Welcome to your period of
+              </p>
+              <h2 className="font-display italic text-[26px] text-bark mb-5 leading-tight">
+                efflorescence
               </h2>
-              <p className="font-mono text-[9px] uppercase tracking-widest text-muted mb-6 leading-relaxed">
-                That&apos;s enough.
-              </p>
-              <p className="font-mono text-[8px] uppercase tracking-[2px] text-muted mb-2 text-left">
-                When did this chapter begin?
-              </p>
-              <input
-                type="date"
-                value={startDate}
-                max={today}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="w-full border border-border rounded-xl px-4 py-3 text-sm text-bark bg-white mb-6 text-center focus:outline-none focus:border-clay/40"
-              />
+
+              {/* Definition card */}
+              <div className="bg-white border border-border rounded-xl px-5 py-4 text-left mb-6">
+                <p className="font-mono text-[7px] uppercase tracking-[2px] text-muted mb-2">
+                  ef·flo·res·cence &nbsp;/noun/
+                </p>
+                <p className="font-display italic text-[13px] text-bark leading-relaxed mb-2">
+                  The process of becoming. The moment potential opens into form.
+                </p>
+                <p className="font-mono text-[8px] text-muted leading-relaxed">
+                  In chemistry: when a crystalline substance transforms and
+                  blooms at its surface. Here: what happens when you stop
+                  waiting to feel better and start tending to yourself.
+                </p>
+              </div>
+
               <button
                 onClick={() => void handleStep1()}
                 disabled={saving}
                 className="w-full bg-bark text-cream rounded-xl py-3 text-sm font-medium disabled:opacity-50 transition-opacity"
               >
-                {saving ? "Planting..." : "Plant my first seed →"}
+                {saving ? "Opening..." : "Begin →"}
               </button>
             </div>
           )}
@@ -230,9 +227,9 @@ export default function OnboardingModal({ onComplete }: OnboardingModalProps) {
                       </p>
                     </div>
                     <div className="flex flex-wrap gap-1.5">
-                      {pack.habits.map((h) => (
+                      {pack.habits.map((h, i) => (
                         <span
-                          key={h.category}
+                          key={`${h.category}-${i}`}
                           className="text-[11px] bg-cream border border-border rounded-full px-2.5 py-0.5 text-bark/70"
                         >
                           {h.icon} {h.name}
