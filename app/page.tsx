@@ -5,7 +5,7 @@ import LandingScreens from "@/components/landing/LandingScreens";
 export const metadata = {
   title: "Efflorescence — You were always the garden.",
   description:
-    "A healing companion for women navigating the aftermath of a breakup.",
+    "A living vision board for the woman coming back to herself. Tend your habits, know yourself, become who you always were.",
 };
 
 export default function LandingPage() {
@@ -232,7 +232,7 @@ export default function LandingPage() {
 
         {/* Hero content */}
         <div className="hero-content">
-          <div className="hero-eyebrow">A healing companion</div>
+          <div className="hero-eyebrow">A living vision board</div>
           <div className="hero-wordmark">
             <span
               className="hero-wordmark-line1"
@@ -387,11 +387,11 @@ export default function LandingPage() {
               </div>
             </div>
             <div className="meaning-intro">
-              Efflorescence is a mobile healing companion for women navigating
-              the aftermath of a breakup. Not a journaling app. Not a habit
-              tracker. Not therapy.{" "}
-              <strong>The thing that exists between all of those</strong> — and
-              meets you exactly where you are, at the exact moment you need it.
+              Efflorescence is a living vision board for the woman who has
+              decided to come back to herself. Not a journaling app. Not a habit
+              tracker. Not a mood tracker.{" "}
+              <strong>The space between all of those</strong> — where real
+              commitment to yourself actually lives.
             </div>
           </div>
 
@@ -410,10 +410,10 @@ export default function LandingPage() {
               <div className="pillar-num">02 — Journal</div>
               <div className="pillar-word">Write it.</div>
               <div className="pillar-body">
-                Four ways to process what happened: a daily diary, the full
-                picture of what was real, a rewrite of the story you keep
-                telling yourself, and the honest reason it ended. Words make the
-                invisible visible.
+                Four ways to know yourself: a daily diary, the full picture of
+                who you&rsquo;ve been, a rewrite of the story you keep telling
+                yourself, and the honest reason you&rsquo;re here. Words make
+                the invisible visible.
               </div>
             </div>
             <div className="pillar">
@@ -443,12 +443,10 @@ export default function LandingPage() {
               <em>earns its place.</em>
             </h2>
             <p className="science-intro">
-              Grief is not a mindset problem. It is a{" "}
-              <strong>neurological event</strong> that disrupts memory
-              consolidation, reward circuitry, and the prefrontal cortex&rsquo;s
-              ability to regulate emotion. Every feature in Efflorescence is
-              built around what the evidence says actually moves people through
-              it.
+              Identity doesn&rsquo;t shift through intention alone. It shifts
+              through repeated, research-backed action. Every feature in
+              Efflorescence is built around what the evidence says actually
+              changes a person — not <strong>motivation, but mechanism.</strong>
             </p>
           </div>
 
@@ -556,10 +554,10 @@ export default function LandingPage() {
             </div>
             <p className="science-model-body">
               No single modality is sufficient for the full complexity of
-              post-breakup grief. Efflorescence draws from CBT, behavioral
+              identity change. Efflorescence draws from CBT, behavioral
               activation, somatic/polyvagal, narrative therapy, and positive
-              psychology — each targeting a different system that grief
-              disrupts. Combined, they are more effective than any single
+              psychology — each targeting a different system involved in who you
+              are becoming. Combined, they are more effective than any single
               approach.
             </p>
           </div>
