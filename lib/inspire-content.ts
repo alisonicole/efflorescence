@@ -279,8 +279,8 @@ These are averages, not schedules. But the arc is consistent enough to be useful
   {
     id: "NOTE-016",
     type: "note",
-    spirals: ["the_mirror"],
-    body: "She is not the reason. You know this too, somewhere.",
+    spirals: ["the_replay", "the_mirror"],
+    body: "The urge to explain yourself to someone who stopped listening is one of the most exhausting things there is. You don't owe that explanation to anyone.",
   },
   {
     id: "NOTE-017",
@@ -291,8 +291,8 @@ These are averages, not schedules. But the arc is consistent enough to be useful
   {
     id: "NOTE-018",
     type: "note",
-    spirals: ["the_mirror"],
-    body: "The things about yourself you're currently auditing were there at the start too. This is worth sitting with.",
+    spirals: ["the_what_if", "the_replay"],
+    body: "The romanticization is not weakness. The brain literally edits out pain to protect you. That's a design feature, not a character flaw.",
   },
   {
     id: "NOTE-019",
@@ -345,8 +345,8 @@ These are averages, not schedules. But the arc is consistent enough to be useful
   {
     id: "NOTE-027",
     type: "note",
-    spirals: ["the_should_be"],
-    body: "Loving someone who wasn't right for you is not evidence that your judgment is broken. It is evidence that you are capable of loving someone. That's not a small thing.",
+    spirals: ["the_what_if"],
+    body: "Missing them and knowing it was right can both be true at the same time. That's not confusion. That's grief.",
   },
   {
     id: "NOTE-028",
@@ -357,8 +357,8 @@ These are averages, not schedules. But the arc is consistent enough to be useful
   {
     id: "NOTE-029",
     type: "note",
-    spirals: ["the_should_be"],
-    body: "You are not confused because you loved someone complicated. You are human because you loved someone complicated.",
+    spirals: ["the_what_if"],
+    body: "The version of the relationship you miss might not be the one that actually existed.",
   },
   {
     id: "NOTE-030",
@@ -369,8 +369,8 @@ These are averages, not schedules. But the arc is consistent enough to be useful
   {
     id: "NOTE-031",
     type: "note",
-    spirals: ["the_should_be"],
-    body: "You can hold space for the good things and still know that leaving was right. Those two things are allowed to coexist.",
+    spirals: ["the_what_if"],
+    body: "Wanting them back and wanting the person you were when you were with them are two different things. Worth figuring out which one this is.",
   },
   {
     id: "NOTE-032",
@@ -381,8 +381,8 @@ These are averages, not schedules. But the arc is consistent enough to be useful
   {
     id: "NOTE-033",
     type: "note",
-    spirals: ["i_dont_know"],
-    body: "Not knowing how you feel is a complete answer. You don't have to resolve it today.",
+    spirals: ["the_mirror", "the_replay"],
+    body: "There is a difference between the relationship ending and you failing. One of those is true. The other is a story.",
   },
   {
     id: "NOTE-034",
@@ -393,20 +393,20 @@ These are averages, not schedules. But the arc is consistent enough to be useful
   {
     id: "NOTE-035",
     type: "note",
-    spirals: ["i_dont_know"],
-    body: "Some days don't have a spiral. Some days are just grey and quiet and that's all they are. That counts as a day.",
+    spirals: ["the_replay"],
+    body: "The thought that keeps coming back at 3am is not a message. It's a habit. The brain repeats what it hasn't resolved yet.",
   },
   {
     id: "NOTE-036",
     type: "note",
-    spirals: ["i_dont_know"],
-    body: "You don't have to name it to tend to it. Drink some water. Go outside if you can. That's enough.",
+    spirals: ["the_should_be", "i_dont_know"],
+    body: "The part where you're functioning but hollow is not a sign that something is wrong with your healing. It's the middle of it.",
   },
   {
     id: "NOTE-037",
     type: "note",
-    spirals: ["i_dont_know"],
-    body: "The fog is not permanent. You don't have to find your way through it today. Just stay in it without making any large decisions.",
+    spirals: ["the_clock", "the_should_be"],
+    body: "You will not feel this specific way forever. Not because it magically gets better but because you are not the same person you were three months ago, and you won't be the same person three months from now.",
   },
   {
     id: "NOTE-038",
@@ -417,8 +417,8 @@ These are averages, not schedules. But the arc is consistent enough to be useful
   {
     id: "NOTE-039",
     type: "note",
-    spirals: ["actually_okay"],
-    body: "An okay day is not a betrayal of how hard this has been. It's evidence of where you're going.",
+    spirals: ["the_mirror"],
+    body: "The comparison is cruel and also completely understandable. You are measuring yourself against someone who had the advantage of not being you in this moment.",
   },
   {
     id: "NOTE-040",
@@ -447,26 +447,26 @@ These are averages, not schedules. But the arc is consistent enough to be useful
   {
     id: "NOTE-044",
     type: "note",
-    spirals: ["all"],
-    body: "Your love life is one area of your life. There are others that have been waiting for your attention.",
+    spirals: ["the_what_if", "the_replay"],
+    body: "It is possible to love someone and also know that being with them was making you smaller. Both things being true doesn't cancel either one out.",
   },
   {
     id: "NOTE-045",
     type: "note",
-    spirals: ["all"],
-    body: "The end of a relationship is the beginning of a new one. With yourself. You are, possibly, an interesting person to get to know.",
+    spirals: ["the_what_if"],
+    body: "The part of you that wants to reach out is not weak. It's just working with old information. It doesn't know yet what you know now.",
   },
   {
     id: "NOTE-046",
     type: "note",
-    spirals: ["all"],
-    body: "Healing isn't linear. It's also not random. There's a direction. You're moving in it.",
+    spirals: ["i_dont_know", "the_replay"],
+    body: "You are allowed to be angry. Anger is not the opposite of healing. In a lot of cases it's the beginning of it.",
   },
   {
     id: "NOTE-047",
     type: "note",
-    spirals: ["all"],
-    body: "You were always the garden. You just stopped tending it for a while. That's fixable.",
+    spirals: ["the_should_be", "the_clock"],
+    body: "The question isn't why you're not over it yet. The question is what 'over it' actually means and whether that's even the goal.",
   },
   {
     id: "NOTE-048",
@@ -483,8 +483,8 @@ These are averages, not schedules. But the arc is consistent enough to be useful
   {
     id: "NOTE-050",
     type: "note",
-    spirals: ["all"],
-    body: "You are not behind. You are exactly where the work needs to happen.",
+    spirals: ["the_clock", "the_should_be"],
+    body: "You are not behind. There is no schedule for this. Whoever told you there was a timeline was either trying to help or had never actually been through it.",
   },
 
   // === MILESTONES ===

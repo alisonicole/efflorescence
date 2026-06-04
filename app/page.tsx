@@ -245,6 +245,11 @@ export default function LandingPage() {
             <div className="hero-tagline-rule" />
             <div className="hero-tagline">You were always the garden.</div>
           </div>
+          <p className="hero-sub">
+            For the part of healing nobody talks about. Not the crisis - the
+            aftermath. When you&rsquo;re functioning, but you don&rsquo;t quite
+            recognize yourself yet.
+          </p>
           <Link className="hero-cta" href="/signin">
             Begin tending
           </Link>
@@ -436,6 +441,49 @@ export default function LandingPage() {
 
       <LandingScreens />
 
+      {/* SPIRALS */}
+      <section className="spirals-section">
+        <div className="spirals-inner">
+          <p className="spirals-eyebrow">The spiral framework</p>
+          <h2 className="spirals-heading">
+            What&rsquo;s happening in your head has a name.
+          </h2>
+          <p className="spirals-sub">
+            Five specific thought patterns. Named, because naming them changes
+            them.
+          </p>
+          <div className="spirals-grid">
+            {[
+              {
+                label: "The Clock",
+                desc: "You're counting the days. You're doing the math on how old you'll be. The window feels like it's closing.",
+              },
+              {
+                label: "The Replay",
+                desc: "You keep running the same conversation. What you said, what you should have said, what would have changed everything.",
+              },
+              {
+                label: "The Mirror",
+                desc: "There's something wrong with you. That's the only explanation that keeps coming back.",
+              },
+              {
+                label: "The What If",
+                desc: "You almost had it. If one thing had gone differently, everything would be different.",
+              },
+              {
+                label: "The Should Be",
+                desc: "You should be over this by now. You're not. Something must be wrong with how you're healing.",
+              },
+            ].map((spiral) => (
+              <div key={spiral.label} className="spiral-card">
+                <p className="spiral-card-label">{spiral.label}</p>
+                <p className="spiral-card-desc">{spiral.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* THE SCIENCE */}
       <section className="science-section" id="science">
         <div className="science-inner">
@@ -573,12 +621,13 @@ export default function LandingPage() {
         <div className="cta-orb" />
         <div className="cta-eyebrow">Ready to begin</div>
         <div className="cta-heading">
-          Your garden
+          She&rsquo;s already
           <br />
-          is <span>waiting.</span>
+          <span>in there.</span>
         </div>
         <div className="cta-sub">
-          Efflorescence is here. Start tending today.
+          The version of you that knows who she is and what she wants. The
+          garden is how you find your way back to her.
         </div>
         <Link className="hero-cta" href="/signin">
           Enter the app

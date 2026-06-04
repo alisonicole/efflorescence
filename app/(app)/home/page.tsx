@@ -46,6 +46,8 @@ export default function HomePage() {
 
   const [bannerItems, setBannerItems] = useState<string[]>([]);
   const [bannerIdx, setBannerIdx] = useState(0);
+  const [showBannerPrompt, setShowBannerPrompt] = useState(false);
+  const [bannerInput, setBannerInput] = useState("");
   const [habits, setHabits] = useState<Habit[]>([]);
   const [streaks, setStreaks] = useState<Record<string, number>>({});
   const [completedToday, setCompletedToday] = useState<Set<string>>(new Set());
@@ -60,6 +62,10 @@ export default function HomePage() {
   const [hardMomentGroundingIdx] = useState(() =>
     Math.floor(Math.random() * GROUNDING_PROMPTS.length),
   );
+  const [hardMomentPath, setHardMomentPath] = useState<
+    "select" | "reach_out" | "spiral" | null
+  >(null);
+  const [receiptsEntry, setReceiptsEntry] = useState<string | null>(null);
 
   // Weekly ritual
   const dow = new Date().getDay(); // 0=Sun, 1=Mon
@@ -93,6 +99,8 @@ export default function HomePage() {
         .map((e) => e.get("content") as string)
         .filter(Boolean);
       setBannerItems(texts);
+      const seen = localStorage.getItem("bannerPromptSeen");
+      if (!seen && texts.length === 0) setShowBannerPrompt(true);
       setCommitments(
         entries
           .filter((e) => e.get("entryType") === "the_why")
@@ -202,6 +210,44 @@ export default function HomePage() {
     }
   }
 
+  async function loadReceipts() {
+    initParse();
+    const u = Parse.User.current();
+    if (!u) return;
+    try {
+      const query = new Parse.Query("JournalEntry");
+      query.equalTo("user", u);
+      query.equalTo("entryType", "receipts");
+      query.descending("createdAt");
+      const result = await query.first();
+      if (result) setReceiptsEntry(result.get("content") as string);
+    } catch {
+      /* silent */
+    }
+  }
+
+  async function saveBannerCommitment() {
+    if (!bannerInput.trim()) return;
+    initParse();
+    const u = Parse.User.current();
+    if (!u) return;
+    try {
+      const Entry = Parse.Object.extend("JournalEntry");
+      const e = new Entry();
+      e.set("user", u);
+      e.set("content", bannerInput.trim());
+      e.set("entryType", "the_why");
+      e.setACL(new Parse.ACL(u));
+      await e.save();
+      localStorage.setItem("bannerPromptSeen", "1");
+      setBannerInput("");
+      setShowBannerPrompt(false);
+      void load();
+    } catch {
+      /* silent */
+    }
+  }
+
   async function saveWeeklyRitual() {
     if (!weeklyText.trim() || savingWeekly) return;
     setSavingWeekly(true);
@@ -250,16 +296,43 @@ export default function HomePage() {
       <div className="space-y-2.5 pb-24">
         {/* Rotating commitments + affirmations banner */}
         <div
-          className="mx-2.5 bg-bark rounded-card p-5 min-h-[88px] flex items-center justify-center cursor-pointer active:scale-[0.98] transition-transform"
+          className="mx-2.5 bg-bark rounded-card p-5 min-h-[124px] flex items-center justify-center cursor-pointer active:scale-[0.98] transition-transform"
           onClick={() =>
             bannerItems.length > 0 &&
             setBannerIdx((i) => (i + 1) % bannerItems.length)
           }
         >
           {bannerItems.length === 0 ? (
-            <p className="font-display italic text-cream/40 text-sm text-center leading-relaxed">
-              Add a commitment or affirmation to begin.
-            </p>
+            showBannerPrompt ? (
+              <div className="text-center w-full px-2">
+                <p className="font-mono text-[8px] uppercase tracking-widest text-cream/40 mb-3">
+                  What do you want to remember on your hardest days?
+                </p>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={bannerInput}
+                    onChange={(e) => setBannerInput(e.target.value)}
+                    onKeyDown={(e) =>
+                      e.key === "Enter" && void saveBannerCommitment()
+                    }
+                    placeholder="I am committed to..."
+                    className="flex-1 bg-cream/10 rounded-card px-3 py-2 text-xs text-cream placeholder:text-cream/30 focus:outline-none border border-cream/20"
+                  />
+                  <button
+                    onClick={() => void saveBannerCommitment()}
+                    disabled={!bannerInput.trim()}
+                    className="bg-cream text-bark rounded-card px-3 py-2 text-xs font-medium disabled:opacity-40"
+                  >
+                    Plant it
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <p className="font-display italic text-cream/40 text-sm text-center leading-relaxed">
+                Add a commitment or affirmation to begin.
+              </p>
+            )
           ) : (
             <p className="font-display italic text-cream text-base leading-relaxed text-center">
               {bannerItems[bannerIdx]}
@@ -303,7 +376,10 @@ export default function HomePage() {
 
         {/* Hard moment shortcut */}
         <button
-          onClick={() => setShowHardMoment(true)}
+          onClick={() => {
+            setShowHardMoment(true);
+            setHardMomentPath("select");
+          }}
           className="mx-2.5 w-[calc(100%-1.25rem)] bg-white rounded-card border border-border p-4 shadow-sm flex items-center justify-between active:scale-[0.98] transition-transform"
         >
           <div className="text-left">
@@ -382,7 +458,11 @@ export default function HomePage() {
       {showHardMoment && (
         <div
           className="fixed inset-0 bg-black/40 z-50 flex items-end justify-center"
-          onClick={() => setShowHardMoment(false)}
+          onClick={() => {
+            setShowHardMoment(false);
+            setHardMomentPath(null);
+            setReceiptsEntry(null);
+          }}
         >
           <div
             className="w-full max-w-app bg-cream rounded-t-2xl p-6 animate-slide-up"
@@ -390,45 +470,146 @@ export default function HomePage() {
           >
             <div className="w-8 h-0.5 rounded-full bg-bark/15 mx-auto mb-5" />
 
-            {/* A commitment to hold onto */}
-            {randomCommitment && (
-              <div className="bg-bark rounded-card p-4 mb-4">
-                <p className="font-mono text-[7px] uppercase tracking-widest text-cream/50 mb-1">
-                  You wrote this when you were clear
+            {hardMomentPath === "select" && (
+              <>
+                <p className="font-display italic text-bark text-[18px] mb-5 leading-snug">
+                  What&apos;s happening right now?
                 </p>
-                <p className="font-display italic text-cream text-sm leading-relaxed">
-                  {randomCommitment}
-                </p>
-              </div>
+                <div className="space-y-2">
+                  {[
+                    {
+                      label: "I want to reach out to them",
+                      path: "reach_out",
+                    },
+                    {
+                      label: "I'm looking at their photos or profile",
+                      path: "reach_out",
+                    },
+                    { label: "I'm stuck in a thought loop", path: "spiral" },
+                    {
+                      label: "I just feel bad and don't know why",
+                      path: "spiral",
+                    },
+                  ].map((opt) => (
+                    <button
+                      key={opt.label}
+                      onClick={() => {
+                        setHardMomentPath(opt.path as "reach_out" | "spiral");
+                        if (opt.path === "reach_out") void loadReceipts();
+                      }}
+                      className="w-full text-left bg-white border border-border rounded-card px-4 py-3 text-sm text-bark active:scale-[0.98] transition-transform"
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+                <button
+                  onClick={() => {
+                    setShowHardMoment(false);
+                    setHardMomentPath(null);
+                    setReceiptsEntry(null);
+                  }}
+                  className="mt-4 w-full text-xs text-muted py-2"
+                >
+                  Close
+                </button>
+              </>
             )}
 
-            {/* Grounding prompt */}
-            <p className="font-display italic text-bark text-sm mb-4 leading-relaxed">
-              {GROUNDING_PROMPTS[hardMomentGroundingIdx]}
-            </p>
+            {hardMomentPath === "reach_out" && (
+              <>
+                {receiptsEntry ? (
+                  <div className="bg-bark rounded-card p-4 mb-4">
+                    <p className="font-mono text-[7px] uppercase tracking-widest text-cream/50 mb-1">
+                      You wrote this when you were clear
+                    </p>
+                    <p className="font-display italic text-cream text-sm leading-relaxed">
+                      {receiptsEntry}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="bg-bark/8 rounded-card p-4 mb-4">
+                    <p className="text-sm text-bark/60 leading-relaxed">
+                      You haven&apos;t written your receipts yet. Head to
+                      Journal &gt; Commitments when you&apos;re ready.
+                    </p>
+                  </div>
+                )}
+                <p className="text-sm text-bark/70 leading-relaxed mb-4">
+                  The urge to reach out is the brain seeking the dopamine hit
+                  it&apos;s come to expect. It will pass in about 20 minutes.
+                  You don&apos;t have to act on it.
+                </p>
+                <textarea
+                  value={hardMomentText}
+                  onChange={(e) => setHardMomentText(e.target.value)}
+                  placeholder="What are you really missing right now?"
+                  rows={3}
+                  autoFocus
+                  className="w-full bg-white rounded-card p-4 text-sm text-bark placeholder:text-muted/50 border border-border focus:outline-none focus:border-clay/40 resize-none leading-relaxed mb-3"
+                />
+                <button
+                  onClick={() => void saveHardMoment()}
+                  disabled={!hardMomentText.trim() || savingHardMoment}
+                  className="w-full bg-bark text-cream rounded-card py-3 text-sm font-medium disabled:opacity-40 mb-2"
+                >
+                  {savingHardMoment ? "Writing..." : "Write through it"}
+                </button>
+                <button
+                  onClick={() => {
+                    setShowHardMoment(false);
+                    setHardMomentPath(null);
+                    setReceiptsEntry(null);
+                  }}
+                  className="w-full text-xs text-muted py-2"
+                >
+                  Close
+                </button>
+              </>
+            )}
 
-            {/* Quick journal */}
-            <textarea
-              value={hardMomentText}
-              onChange={(e) => setHardMomentText(e.target.value)}
-              placeholder="What's happening right now?"
-              rows={4}
-              autoFocus
-              className="w-full bg-white rounded-card p-4 text-sm text-bark placeholder:text-muted/50 border border-border focus:outline-none focus:border-clay/40 resize-none leading-relaxed mb-3"
-            />
-            <button
-              onClick={() => void saveHardMoment()}
-              disabled={!hardMomentText.trim() || savingHardMoment}
-              className="w-full bg-bark text-cream rounded-card py-3 text-sm font-medium disabled:opacity-40 mb-2"
-            >
-              {savingHardMoment ? "Writing..." : "Write through it"}
-            </button>
-            <button
-              onClick={() => setShowHardMoment(false)}
-              className="w-full text-xs text-muted py-2"
-            >
-              Close
-            </button>
+            {hardMomentPath === "spiral" && (
+              <>
+                {randomCommitment && (
+                  <div className="bg-bark rounded-card p-4 mb-4">
+                    <p className="font-mono text-[7px] uppercase tracking-widest text-cream/50 mb-1">
+                      You wrote this when you were clear
+                    </p>
+                    <p className="font-display italic text-cream text-sm leading-relaxed">
+                      {randomCommitment}
+                    </p>
+                  </div>
+                )}
+                <p className="font-display italic text-bark text-sm mb-4 leading-relaxed">
+                  {GROUNDING_PROMPTS[hardMomentGroundingIdx]}
+                </p>
+                <textarea
+                  value={hardMomentText}
+                  onChange={(e) => setHardMomentText(e.target.value)}
+                  placeholder="What's happening right now?"
+                  rows={4}
+                  autoFocus
+                  className="w-full bg-white rounded-card p-4 text-sm text-bark placeholder:text-muted/50 border border-border focus:outline-none focus:border-clay/40 resize-none leading-relaxed mb-3"
+                />
+                <button
+                  onClick={() => void saveHardMoment()}
+                  disabled={!hardMomentText.trim() || savingHardMoment}
+                  className="w-full bg-bark text-cream rounded-card py-3 text-sm font-medium disabled:opacity-40 mb-2"
+                >
+                  {savingHardMoment ? "Writing..." : "Write through it"}
+                </button>
+                <button
+                  onClick={() => {
+                    setShowHardMoment(false);
+                    setHardMomentPath(null);
+                    setReceiptsEntry(null);
+                  }}
+                  className="w-full text-xs text-muted py-2"
+                >
+                  Close
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}

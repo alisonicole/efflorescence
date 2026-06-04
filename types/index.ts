@@ -149,13 +149,16 @@ export const SPIRAL_LABELS: Record<Spiral, string> = {
 };
 
 export const SPIRAL_DESCRIPTIONS: Record<Spiral, string> = {
-  the_clock: "Counting how many days it's been. Wondering when it gets easier.",
+  the_clock:
+    "You're counting the days. You're doing the math on how old you'll be. The window feels like it's closing.",
   the_replay:
-    "Going over what was said — what you said, what you should have said.",
-  the_mirror: "Wondering what's wrong with you. Why you weren't enough.",
-  the_what_if: "If you'd done things differently. If it had gone another way.",
+    "You keep running the same conversation. What you said, what you should have said, what would have changed everything.",
+  the_mirror:
+    "There's something wrong with you. That's the only explanation that keeps coming back.",
+  the_what_if:
+    "You almost had it. If one thing had gone differently, everything would be different.",
   the_should_be:
-    "Feeling like you should be further along. More healed. More okay by now.",
-  actually_okay: "You're doing okay today. Maybe even better than okay.",
-  i_dont_know: "You can't name it. Something is just off.",
+    "You should be over this by now. You're not. Something must be wrong with how you're healing.",
+  actually_okay: "Today feels lighter. You're not going to overthink it.",
+  i_dont_know: "Nothing specific. Just a weight you can't name.",
 };

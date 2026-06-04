@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Parse from "parse";
 import { initParse } from "@/lib/parse";
-import type { HabitCategory } from "@/types";
+import type { HabitCategory, Spiral } from "@/types";
+import { SPIRAL_LABELS, SPIRAL_DESCRIPTIONS } from "@/types";
 
 interface StarterPack {
   id: string;
@@ -64,15 +65,18 @@ interface OnboardingModalProps {
   onComplete: () => void;
 }
 
-type Step = 1 | 2 | 3;
+type Step = 1 | 2 | 3 | 4;
 
 export default function OnboardingModal({ onComplete }: OnboardingModalProps) {
   const [step, setStep] = useState<Step>(1);
   const [selectedPack, setSelectedPack] = useState<string>("investing");
   const [receiptsText, setReceiptsText] = useState("");
   const [saving, setSaving] = useState(false);
+  const [orientationSpiral, setOrientationSpiral] = useState<string | null>(
+    null,
+  );
 
-  const progressPct = step === 1 ? 33 : step === 2 ? 66 : 100;
+  const progressPct = (step / 4) * 100;
 
   async function handleStep1() {
     setSaving(true);
@@ -91,7 +95,7 @@ export default function OnboardingModal({ onComplete }: OnboardingModalProps) {
     }
   }
 
-  async function handleStep2() {
+  async function handleStep3() {
     setSaving(true);
     initParse();
     const user = Parse.User.current();
@@ -117,7 +121,7 @@ export default function OnboardingModal({ onComplete }: OnboardingModalProps) {
         user.set("habitsSeeded", true);
         await user.save();
       }
-      setStep(3);
+      setStep(4);
     } finally {
       setSaving(false);
     }
@@ -158,7 +162,7 @@ export default function OnboardingModal({ onComplete }: OnboardingModalProps) {
 
         <div className="p-7">
           <p className="font-mono text-[7px] uppercase tracking-[2.5px] text-muted mb-5 text-center">
-            Step {step} of 3
+            Step {step} of 4
           </p>
 
           {/* ── Step 1: Welcome ── */}
@@ -171,6 +175,17 @@ export default function OnboardingModal({ onComplete }: OnboardingModalProps) {
               <h2 className="font-display italic text-[26px] text-bark mb-5 leading-tight">
                 efflorescence
               </h2>
+
+              <div className="mb-5 text-left">
+                <p className="font-display italic text-bark text-[22px] leading-snug tracking-tight mb-3">
+                  You're in the part nobody talks about.
+                </p>
+                <p className="text-sm text-bark/70 leading-relaxed">
+                  Not the crisis. The aftermath. You're functioning, but you
+                  don't quite recognize yourself yet. That's exactly where this
+                  begins.
+                </p>
+              </div>
 
               {/* Definition card */}
               <div className="bg-white border border-border rounded-xl px-5 py-4 text-left mb-6">
@@ -197,8 +212,58 @@ export default function OnboardingModal({ onComplete }: OnboardingModalProps) {
             </div>
           )}
 
-          {/* ── Step 2: Starter pack ── */}
+          {/* ── Step 2: Spiral orientation ── */}
           {step === 2 && (
+            <div>
+              <p className="font-mono text-[9px] uppercase tracking-[3px] text-bark/50 mb-2">
+                Before we begin
+              </p>
+              <p className="font-display italic text-bark text-[20px] leading-snug tracking-tight mb-1">
+                Which of these sounds like your head right now?
+              </p>
+              <p className="text-xs text-bark/50 mb-5">
+                Tap one. You can change it later.
+              </p>
+              <div className="space-y-2 max-h-[52vh] overflow-y-auto pb-2">
+                {(Object.entries(SPIRAL_LABELS) as [Spiral, string][]).map(
+                  ([key, label]) => (
+                    <button
+                      key={key}
+                      onClick={() => setOrientationSpiral(key)}
+                      className={`w-full text-left rounded-card border px-4 py-3 transition-colors ${
+                        orientationSpiral === key
+                          ? "bg-bark text-cream border-bark"
+                          : "bg-white border-border text-bark"
+                      }`}
+                    >
+                      <p className="font-mono text-[8px] uppercase tracking-widest mb-0.5 opacity-60">
+                        {label}
+                      </p>
+                      <p className="text-xs leading-relaxed opacity-80">
+                        {SPIRAL_DESCRIPTIONS[key as Spiral]}
+                      </p>
+                    </button>
+                  ),
+                )}
+              </div>
+              <button
+                onClick={() => {
+                  if (orientationSpiral)
+                    localStorage.setItem(
+                      "orientationSpiral",
+                      orientationSpiral,
+                    );
+                  setStep(3);
+                }}
+                className="mt-4 w-full bg-bark text-cream rounded-card py-3 text-sm font-medium"
+              >
+                {orientationSpiral ? "Continue" : "Not sure, move on"}
+              </button>
+            </div>
+          )}
+
+          {/* ── Step 3: Starter pack ── */}
+          {step === 3 && (
             <div>
               <h2 className="font-display italic text-[22px] text-bark mb-1">
                 Choose your garden.
@@ -241,14 +306,14 @@ export default function OnboardingModal({ onComplete }: OnboardingModalProps) {
               </div>
 
               <button
-                onClick={() => void handleStep2()}
+                onClick={() => void handleStep3()}
                 disabled={saving}
                 className="w-full bg-bark text-cream rounded-xl py-3 text-sm font-medium disabled:opacity-50 mb-2 transition-opacity"
               >
                 {saving ? "Planting..." : "Grow this garden →"}
               </button>
               <button
-                onClick={() => setStep(3)}
+                onClick={() => setStep(4)}
                 className="w-full text-[10px] text-muted py-1.5"
               >
                 Start with none, I&apos;ll add my own
@@ -256,22 +321,23 @@ export default function OnboardingModal({ onComplete }: OnboardingModalProps) {
             </div>
           )}
 
-          {/* ── Step 3: What happened ── */}
-          {step === 3 && (
+          {/* ── Step 4: What happened ── */}
+          {step === 4 && (
             <div>
               <p className="font-mono text-[8px] uppercase tracking-widest text-muted mb-1">
-                Just for you
+                Before we begin
               </p>
               <h2 className="font-display italic text-[22px] text-bark mb-1">
-                Before we begin...
+                Before we begin
               </h2>
               <p className="font-mono text-[9px] text-muted leading-relaxed mb-4">
-                What brought you here? No one will see this.
+                What brought you here? Write the version you haven't said out
+                loud yet. No one will see this but you.
               </p>
               <textarea
                 value={receiptsText}
                 onChange={(e) => setReceiptsText(e.target.value)}
-                placeholder="Write whatever feels true right now."
+                placeholder="The full version..."
                 rows={5}
                 className="w-full border border-border rounded-xl px-4 py-3 text-sm text-bark bg-white mb-3 resize-none leading-relaxed focus:outline-none focus:border-clay/40"
               />
