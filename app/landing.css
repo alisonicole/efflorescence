@@ -288,6 +288,19 @@
   letter-spacing: 0.2px;
 }
 
+.hero-sub {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(16px, 1.8vw, 20px);
+  color: rgba(245, 239, 228, 0.52);
+  max-width: 500px;
+  line-height: 1.75;
+  margin-top: 28px;
+  letter-spacing: 0.1px;
+  opacity: 0;
+  animation: l-fadeUp 0.8s ease 1.45s both;
+}
+
 .hero-cta {
   display: inline-block;
   margin-top: 48px;
@@ -1899,6 +1912,38 @@
 
   .footer-wordmark {
     font-size: 60px;
+  }
+}
+
+.hero-scroll-arrow {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-top: 32px;
+  opacity: 0;
+  animation:
+    l-fadeIn 1s ease 2s both,
+    l-bounce 2s ease-in-out 2.5s infinite;
+}
+
+.hero-scroll-arrow span {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-right: 1.5px solid rgba(245, 239, 228, 0.3);
+  border-bottom: 1.5px solid rgba(245, 239, 228, 0.3);
+  transform: rotate(45deg);
+}
+
+.hero-scroll-arrow span:nth-child(2) {
+  opacity: 0.45;
+  margin-top: -5px;
+}
+
+@media (max-width: 768px) {
+  .hero-scroll-arrow {
+    display: flex;
   }
 }
 

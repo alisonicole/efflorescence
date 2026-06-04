@@ -46,6 +46,11 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <GroundContext.Provider value={{ openGround: () => setGroundOpen(true) }}>
       <div className="app-shell pb-16">
+        <div className="sticky top-0 z-30 bg-bark px-5 py-2.5 flex items-center justify-center">
+          <span className="font-display italic text-cream/70 text-[19px] tracking-tight">
+            efflorescence
+          </span>
+        </div>
         {children}
         <BottomNav onGround={() => setGroundOpen(true)} />
 

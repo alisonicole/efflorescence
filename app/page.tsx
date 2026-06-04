@@ -253,6 +253,10 @@ export default function LandingPage() {
           <Link className="hero-cta" href="/signin">
             Begin tending
           </Link>
+          <div className="hero-scroll-arrow" aria-hidden="true">
+            <span />
+            <span />
+          </div>
         </div>
 
         <div className="hero-scroll">
@@ -274,13 +278,6 @@ export default function LandingPage() {
             </div>
             <div className="def-phonetic">/ˌef.ləˈres.əns/</div>
             <div className="def-pos">noun</div>
-            <div className="def-rule" />
-            <div className="def-origin-label">Origin</div>
-            <div className="def-origin-text">
-              From Latin <em>efflorescere</em> — <em>ex-</em> (out) +{" "}
-              <em>florescere</em> (to begin to blossom), from <em>flos</em>{" "}
-              (flower). First recorded in English use, 1620s.
-            </div>
           </div>
 
           <div className="def-meanings">

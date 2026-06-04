@@ -198,9 +198,11 @@ function MiniFlower({
 export default function GardenScene({
   habits,
   streaks,
+  showLabels = true,
 }: {
   habits: Habit[];
   streaks: Record<string, number>;
+  showLabels?: boolean;
 }) {
   if (habits.length === 0) {
     return (
@@ -238,12 +240,14 @@ export default function GardenScene({
                 style={{ marginBottom: mb }}
               >
                 <MiniFlower stage={stage} color={color} opacity={opacity} />
-                <p
-                  className="font-mono uppercase text-bark/40 text-center leading-none"
-                  style={{ fontSize: 5.5, maxWidth: 40 }}
-                >
-                  {h.name.length > 7 ? h.name.slice(0, 7) : h.name}
-                </p>
+                {showLabels && (
+                  <p
+                    className="font-mono uppercase text-bark/40 text-center leading-none"
+                    style={{ fontSize: 5.5, maxWidth: 40 }}
+                  >
+                    {h.name.length > 7 ? h.name.slice(0, 7) : h.name}
+                  </p>
+                )}
               </div>
             );
           })}

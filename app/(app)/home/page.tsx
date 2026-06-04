@@ -8,8 +8,8 @@ import { computeStreak, computeDayCount } from "@/lib/garden";
 import { getPrompt } from "@/lib/prompts";
 import { useAuth } from "@/context/AuthContext";
 import type { Habit, HabitCategory, Spiral } from "@/types";
+import { SPIRAL_LABELS } from "@/types";
 import GardenScene from "@/components/garden/GardenScene";
-import TopBar from "@/components/layout/TopBar";
 
 const GROUNDING_PROMPTS = [
   "Name three things you can see right now.",
@@ -23,12 +23,6 @@ function getGreeting(hour: number): string {
   if (hour < 12) return "Good morning";
   if (hour < 17) return "Good afternoon";
   return "Good evening";
-}
-
-function getGreetingEmoji(hour: number): string {
-  if (hour < 12) return "🌱";
-  if (hour < 17) return "🌸";
-  return "🌙";
 }
 
 function getWeekKey(): string {
@@ -53,6 +47,7 @@ export default function HomePage() {
   const [completedToday, setCompletedToday] = useState<Set<string>>(new Set());
   const [dayCount, setDayCount] = useState(0);
   const [todayPrompt, setTodayPrompt] = useState<string>("");
+  const [todaySpiralLabel, setTodaySpiralLabel] = useState<string>("");
   const [commitments, setCommitments] = useState<string[]>([]);
 
   // Hard moment sheet
@@ -68,7 +63,7 @@ export default function HomePage() {
   const [receiptsEntry, setReceiptsEntry] = useState<string | null>(null);
 
   // Weekly ritual
-  const dow = new Date().getDay(); // 0=Sun, 1=Mon
+  const dow = new Date().getDay();
   const isWeeklyRitualDay = dow === 0 || dow === 1;
   const weeklyDone =
     typeof window !== "undefined" && !!localStorage.getItem(getWeekKey());
@@ -88,7 +83,6 @@ export default function HomePage() {
     if (!u) return;
 
     try {
-      // Commitments + affirmations for banner
       const entryQuery = new Parse.Query("JournalEntry");
       entryQuery.equalTo("user", u);
       entryQuery.containedIn("entryType", ["the_why", "affirmation"]);
@@ -108,7 +102,6 @@ export default function HomePage() {
           .filter(Boolean),
       );
 
-      // Today's spiral for prompt
       const today0 = new Date();
       today0.setHours(0, 0, 0, 0);
       const tomorrow0 = new Date(today0);
@@ -118,11 +111,10 @@ export default function HomePage() {
         .greaterThanOrEqualTo("date", today0)
         .lessThan("date", tomorrow0)
         .first();
-      setTodayPrompt(
-        getPrompt(checkIn ? (checkIn.get("spiral") as Spiral) : undefined),
-      );
+      const spiral = checkIn ? (checkIn.get("spiral") as Spiral) : undefined;
+      setTodayPrompt(getPrompt(spiral));
+      if (spiral) setTodaySpiralLabel(SPIRAL_LABELS[spiral] ?? "");
 
-      // Habits + streaks
       const ParseHabit = Parse.Object.extend("Habit");
       const habitQuery = new Parse.Query(ParseHabit);
       habitQuery.equalTo("user", u);
@@ -173,7 +165,6 @@ export default function HomePage() {
       setCompletedToday(todaySet);
       setStreaks(streakMap);
 
-      // Day count
       await u.fetch();
       const startDate = u.get("healingStartDate") as Date | undefined;
       if (startDate) setDayCount(computeDayCount(new Date(startDate)));
@@ -287,62 +278,91 @@ export default function HomePage() {
   const randomCommitment =
     commitments[Math.floor(Math.random() * commitments.length)] ?? "";
 
+  const whatsGrown =
+    dayCount > 0 || habits.length > 0
+      ? `You've been here ${dayCount} ${dayCount === 1 ? "day" : "days"}. Your garden has ${habits.length} ${habits.length === 1 ? "flower" : "flowers"}.${todaySpiralLabel ? ` The spiral you're in today is ${todaySpiralLabel}.` : ""}`
+      : "Your garden is just beginning. Every day you tend it, something grows.";
+
   return (
     <>
-      <TopBar
-        title="efflorescence"
-        subtitle={`${getGreeting(hour)}, ${firstName}! ${getGreetingEmoji(hour)}`}
-      />
-      <div className="space-y-2.5 pb-24">
-        {/* Rotating commitments + affirmations banner */}
-        <div
-          className="mx-2.5 bg-bark rounded-card p-5 min-h-[124px] flex items-center justify-center cursor-pointer active:scale-[0.98] transition-transform"
-          onClick={() =>
-            bannerItems.length > 0 &&
-            setBannerIdx((i) => (i + 1) % bannerItems.length)
-          }
-        >
-          {bannerItems.length === 0 ? (
-            showBannerPrompt ? (
-              <div className="text-center w-full px-2">
-                <p className="font-mono text-[8px] uppercase tracking-widest text-cream/40 mb-3">
-                  What do you want to remember on your hardest days?
-                </p>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={bannerInput}
-                    onChange={(e) => setBannerInput(e.target.value)}
-                    onKeyDown={(e) =>
-                      e.key === "Enter" && void saveBannerCommitment()
-                    }
-                    placeholder="I am committed to..."
-                    className="flex-1 bg-cream/10 rounded-card px-3 py-2 text-xs text-cream placeholder:text-cream/30 focus:outline-none border border-cream/20"
-                  />
-                  <button
-                    onClick={() => void saveBannerCommitment()}
-                    disabled={!bannerInput.trim()}
-                    className="bg-cream text-bark rounded-card px-3 py-2 text-xs font-medium disabled:opacity-40"
-                  >
-                    Plant it
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <p className="font-display italic text-cream/40 text-sm text-center leading-relaxed">
-                Add a commitment or affirmation to begin.
+      {/* Dark header */}
+      <div className="bg-bark">
+        <div className="px-5 pt-7">
+          <div className="flex items-start justify-between mb-4">
+            <div>
+              <p className="font-mono text-[9px] uppercase tracking-[3px] text-cream/45 mb-1">
+                {getGreeting(hour)}
               </p>
-            )
-          ) : (
-            <p className="font-display italic text-cream text-base leading-relaxed text-center">
-              {bannerItems[bannerIdx]}
-            </p>
-          )}
-        </div>
+              <p className="font-display italic text-cream text-[26px] leading-tight">
+                {firstName ? `${firstName}.` : "welcome."}
+              </p>
+            </div>
+            {dayCount > 0 && (
+              <span className="font-mono text-[7px] uppercase tracking-[2px] text-cream/30 bg-white/[0.07] border border-white/10 rounded-full px-3 py-1.5 mt-1 whitespace-nowrap">
+                Day {dayCount}
+              </span>
+            )}
+          </div>
 
+          {/* Commitment band */}
+          <div
+            className="border-t border-cream/10 py-4 cursor-pointer"
+            onClick={() =>
+              bannerItems.length > 0 &&
+              setBannerIdx((i) => (i + 1) % bannerItems.length)
+            }
+          >
+            {bannerItems.length === 0 ? (
+              showBannerPrompt ? (
+                <div onClick={(e) => e.stopPropagation()}>
+                  <p className="font-mono text-[8px] uppercase tracking-widest text-cream/40 mb-3">
+                    What do you want to remember on your hardest days?
+                  </p>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={bannerInput}
+                      onChange={(e) => setBannerInput(e.target.value)}
+                      onKeyDown={(e) =>
+                        e.key === "Enter" && void saveBannerCommitment()
+                      }
+                      placeholder="I am committed to..."
+                      className="flex-1 bg-cream/10 rounded-card px-3 py-2 text-xs text-cream placeholder:text-cream/30 focus:outline-none border border-cream/20"
+                    />
+                    <button
+                      onClick={() => void saveBannerCommitment()}
+                      disabled={!bannerInput.trim()}
+                      className="bg-cream text-bark rounded-card px-3 py-2 text-xs font-medium disabled:opacity-40"
+                    >
+                      Plant it
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <p className="font-display italic text-cream/30 text-sm">
+                  Add a commitment to begin.
+                </p>
+              )
+            ) : (
+              <>
+                <p className="font-display italic text-cream/70 text-[15px] leading-relaxed">
+                  &ldquo;{bannerItems[bannerIdx]}&rdquo;
+                </p>
+                {bannerItems.length > 1 && (
+                  <p className="font-mono text-[6.5px] uppercase tracking-[1.5px] text-cream/20 mt-2">
+                    Tap to cycle &middot; {bannerItems.length} commitments
+                  </p>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="space-y-2.5 pb-24">
         {/* Weekly ritual card */}
         {showWeeklyRitual && (
-          <div className="mx-2.5 bg-white rounded-card border border-border p-4 shadow-sm">
+          <div className="mx-2.5 bg-white rounded-card border border-border p-4 shadow-sm mt-2.5">
             <div className="flex items-center justify-between mb-2">
               <p className="font-mono text-[8px] uppercase tracking-widest text-muted">
                 {weeklyLabel}
@@ -374,29 +394,28 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* Hard moment shortcut */}
-        <button
-          onClick={() => {
-            setShowHardMoment(true);
-            setHardMomentPath("select");
-          }}
-          className="mx-2.5 w-[calc(100%-1.25rem)] bg-white rounded-card border border-border p-4 shadow-sm flex items-center justify-between active:scale-[0.98] transition-transform"
-        >
-          <div className="text-left">
-            <p className="font-mono text-[8px] uppercase tracking-widest text-muted mb-0.5">
-              Right now feels hard
-            </p>
-            <p className="font-display italic text-bark text-sm">
-              I need a moment
-            </p>
-          </div>
-          <span className="text-bark/30 text-lg">→</span>
-        </button>
+        {/* Garden */}
+        <div className="pt-3">
+          <GardenScene habits={habits} streaks={streaks} showLabels={false} />
+        </div>
+
+        {/* What's grown */}
+        <div className="mx-2.5 bg-white rounded-card border border-border p-4 shadow-sm">
+          <p className="font-mono text-[7.5px] uppercase tracking-[2.5px] text-muted mb-2">
+            What&apos;s grown
+          </p>
+          <p className="font-display italic text-bark text-sm leading-relaxed">
+            {whatsGrown}
+          </p>
+        </div>
 
         {/* Today's prompt */}
         {todayPrompt && (
-          <div className="mx-2.5 bg-white rounded-card border border-border p-4 shadow-sm">
-            <p className="font-mono text-[8px] uppercase tracking-widest text-muted mb-2">
+          <div
+            className="mx-2.5 rounded-card p-4"
+            style={{ background: "linear-gradient(135deg, #f5ede0, #dcebd0)" }}
+          >
+            <p className="font-mono text-[7.5px] uppercase tracking-[2.5px] text-bark/50 mb-2">
               Today&apos;s prompt
             </p>
             <p className="font-display italic text-bark text-sm leading-relaxed mb-3">
@@ -408,50 +427,26 @@ export default function HomePage() {
                   `/journal?prompt=${encodeURIComponent(todayPrompt)}`,
                 )
               }
-              className="font-mono text-[8px] uppercase tracking-widest text-bark/50 hover:text-bark transition-colors"
+              className="font-mono text-[7.5px] uppercase tracking-[2px] text-bark/50"
             >
               Write →
             </button>
           </div>
         )}
 
-        {/* Garden scene */}
-        <div>
-          <p className="font-mono text-[9px] uppercase tracking-widest text-muted px-2.5 mb-2 pt-1">
-            Your garden
-          </p>
-          <GardenScene habits={habits} streaks={streaks} />
-        </div>
-
-        {/* Stats row */}
-        {dayCount > 0 && (
-          <div className="mx-2.5 flex gap-2 text-center">
-            <div className="flex-1 bg-white rounded-card border border-border py-3 px-2 shadow-sm">
-              <p className="font-display italic text-bark text-xl">
-                {dayCount}
-              </p>
-              <p className="font-mono text-[7px] uppercase tracking-wider text-muted mt-0.5">
-                days
-              </p>
-            </div>
-            <div className="flex-1 bg-white rounded-card border border-border py-3 px-2 shadow-sm">
-              <p className="font-display italic text-bark text-xl">
-                {habits.length}
-              </p>
-              <p className="font-mono text-[7px] uppercase tracking-wider text-muted mt-0.5">
-                habits
-              </p>
-            </div>
-            <div className="flex-1 bg-white rounded-card border border-border py-3 px-2 shadow-sm">
-              <p className="font-display italic text-bark text-xl">
-                {Array.from(completedToday).length}
-              </p>
-              <p className="font-mono text-[7px] uppercase tracking-wider text-muted mt-0.5">
-                today
-              </p>
-            </div>
-          </div>
-        )}
+        {/* Right now feels hard */}
+        <button
+          onClick={() => {
+            setShowHardMoment(true);
+            setHardMomentPath("select");
+          }}
+          className="mx-2.5 w-[calc(100%-1.25rem)] bg-bark/[0.04] border border-dashed border-bark/15 rounded-card px-4 py-[15px] flex items-center justify-between active:scale-[0.98] transition-transform"
+        >
+          <span className="font-display italic text-bark/60 text-sm">
+            Right now feels hard
+          </span>
+          <span className="text-bark/20 text-lg">→</span>
+        </button>
       </div>
 
       {/* Hard moment bottom sheet */}
