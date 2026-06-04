@@ -54,20 +54,14 @@ export default function InspireFeed({ spiral, dayCount }: InspireFeedProps) {
   const [milestone, setMilestone] = useState<InspireItem | undefined>();
 
   useEffect(() => {
-    if (!spiral) return;
+    const activeSpiral: Spiral = spiral ?? "i_dont_know";
     const seenIds = getSeenIds();
-    const feed = getInspireItems(spiral, dayCount, seenIds);
+    const feed = getInspireItems(activeSpiral, dayCount, seenIds);
     const mile = getMilestoneItem(dayCount);
     setItems(feed);
     setMilestone(mile);
     markSeen(feed.map((i) => i.id));
   }, [spiral, dayCount]);
-
-  if (!spiral) {
-    return (
-      <p className="text-sm text-muted">Check in today to see your feed.</p>
-    );
-  }
 
   return (
     <div className="space-y-3">

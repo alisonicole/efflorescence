@@ -75,7 +75,7 @@ export default function JournalTree({
         {/* Header */}
         <div className="px-3.5 pt-3 pb-0 flex items-baseline justify-between">
           <span className="font-mono text-[8px] uppercase tracking-[2.5px] text-bark/60">
-            Your journal
+            Journal Tree
           </span>
           {entries.length > 0 && (
             <span className="font-mono text-[8px] text-bark/30">
@@ -145,12 +145,13 @@ export default function JournalTree({
           />
           <text
             x="178"
-            y="382"
+            y="362"
             textAnchor="middle"
+            dominantBaseline="middle"
             fontSize="7"
             fontFamily="monospace"
-            fill="#9A6840"
-            opacity="0.7"
+            fill="#F5EFE4"
+            opacity="0.9"
             letterSpacing="1"
           >
             {archiveCount > 0 ? `+${archiveCount}` : "archive"}
