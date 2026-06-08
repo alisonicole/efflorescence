@@ -67,12 +67,12 @@ export default function GardenPage() {
         <OnboardingModal onComplete={handleOnboardingComplete} />
       )}
       {showTour && !needsOnboarding && <GardenTour onClose={handleTourClose} />}
-      <TopBar title="efflorescence" subtitle={`Day ${dayCount} of healing`} />
+      <TopBar title="Garden" subtitle={`Day ${dayCount} of healing`} />
       <div className="space-y-2.5 pb-4">
         <PushPermission />
         <div className="px-0">
           <p className="text-[10px] uppercase tracking-widest text-muted px-2.5 mb-2 pt-2">
-            Tending today
+            Habit Flowers
           </p>
           <HabitGrid />
         </div>

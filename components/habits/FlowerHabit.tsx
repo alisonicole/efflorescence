@@ -42,6 +42,7 @@ interface FlowerHabitProps {
   isWilting: boolean;
   restToday?: boolean;
   onToggle: (habitId: string, completed: boolean) => void;
+  onStreakSeven?: (habitName: string) => void;
 }
 
 export default function FlowerHabit({
@@ -51,6 +52,7 @@ export default function FlowerHabit({
   isWilting,
   restToday: restTodayProp = false,
   onToggle,
+  onStreakSeven,
 }: FlowerHabitProps) {
   const [saving, setSaving] = useState(false);
   const [watering, setWatering] = useState(false);
@@ -176,6 +178,10 @@ export default function FlowerHabit({
           const newStreak = computeStreak(dates);
           setLocalStreak(newStreak);
           const prevStreak = Math.max(0, newStreak - 1);
+
+          if (newStreak === 7) {
+            onStreakSeven?.(habit.name);
+          }
 
           if (detectBlossomEarned(newStreak, prevStreak)) {
             const ParseBlossom = Parse.Object.extend("BlossomEntry");

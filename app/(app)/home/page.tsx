@@ -9,7 +9,6 @@ import { getPrompt } from "@/lib/prompts";
 import { useAuth } from "@/context/AuthContext";
 import type { Habit, HabitCategory, Spiral } from "@/types";
 import { SPIRAL_LABELS } from "@/types";
-import GardenScene from "@/components/garden/GardenScene";
 
 const GROUNDING_PROMPTS = [
   "Name three things you can see right now.",
@@ -394,9 +393,710 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* Garden */}
-        <div className="pt-3">
-          <GardenScene habits={habits} streaks={streaks} showLabels={false} />
+        {/* Elevation greenhouse hero illustration */}
+        <div className="relative overflow-hidden" style={{ height: 420 }}>
+          <svg
+            style={{
+              position: "absolute",
+              inset: 0,
+              width: "100%",
+              height: "100%",
+            }}
+            viewBox="0 0 390 420"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <defs>
+              <linearGradient id="sky1" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#a4cae0" />
+                <stop offset="30%" stopColor="#c2dae8" />
+                <stop offset="60%" stopColor="#d8e8cc" />
+                <stop offset="100%" stopColor="#f0e8d4" />
+              </linearGradient>
+              {/* Glass panel shimmer */}
+              <linearGradient id="glass-l" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="white" stopOpacity="0.22" />
+                <stop offset="100%" stopColor="white" stopOpacity="0" />
+              </linearGradient>
+              <linearGradient id="glass-r" x1="1" y1="0" x2="0" y2="0">
+                <stop offset="0%" stopColor="white" stopOpacity="0.22" />
+                <stop offset="100%" stopColor="white" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <rect width="390" height="420" fill="url(#sky1)" />
+
+            {/* Subtle clouds */}
+            <ellipse
+              cx="110"
+              cy="42"
+              rx="52"
+              ry="18"
+              fill="white"
+              opacity="0.28"
+            />
+            <ellipse
+              cx="148"
+              cy="36"
+              rx="36"
+              ry="14"
+              fill="white"
+              opacity="0.22"
+            />
+            <ellipse
+              cx="268"
+              cy="48"
+              rx="44"
+              ry="17"
+              fill="white"
+              opacity="0.26"
+            />
+            <ellipse
+              cx="308"
+              cy="40"
+              rx="30"
+              ry="12"
+              fill="white"
+              opacity="0.2"
+            />
+
+            {/* Glass panel shimmer left and right */}
+            <rect x="0" y="0" width="60" height="420" fill="url(#glass-l)" />
+            <rect x="330" y="0" width="60" height="420" fill="url(#glass-r)" />
+
+            {/* Arch frame - 6 nested ribs */}
+            {/* Arch 1 outermost */}
+            <path
+              d="M 4 420 Q 4 12 195 12 Q 386 12 386 420"
+              stroke="rgba(255,255,255,0.9)"
+              strokeWidth="5"
+              fill="none"
+              strokeLinecap="round"
+            />
+            {/* Arch 2 */}
+            <path
+              d="M 36 420 Q 36 50 195 50 Q 354 50 354 420"
+              stroke="rgba(255,255,255,0.72)"
+              strokeWidth="4"
+              fill="none"
+            />
+            {/* Arch 3 */}
+            <path
+              d="M 68 420 Q 68 88 195 88 Q 322 88 322 420"
+              stroke="rgba(255,255,255,0.55)"
+              strokeWidth="3"
+              fill="none"
+            />
+            {/* Arch 4 */}
+            <path
+              d="M 100 420 Q 100 124 195 124 Q 290 124 290 420"
+              stroke="rgba(255,255,255,0.38)"
+              strokeWidth="2.2"
+              fill="none"
+            />
+            {/* Arch 5 */}
+            <path
+              d="M 128 420 Q 128 154 195 154 Q 262 154 262 420"
+              stroke="rgba(255,255,255,0.25)"
+              strokeWidth="1.6"
+              fill="none"
+            />
+            {/* Arch 6 deep */}
+            <path
+              d="M 152 420 Q 152 178 195 178 Q 238 178 238 420"
+              stroke="rgba(255,255,255,0.15)"
+              strokeWidth="1"
+              fill="none"
+            />
+
+            {/* Ridge beam */}
+            <line
+              x1="195"
+              y1="12"
+              x2="195"
+              y2="420"
+              stroke="rgba(255,255,255,0.55)"
+              strokeWidth="2.8"
+            />
+
+            {/* Horizontal glazing bars (symmetric) */}
+            <path
+              d="M 36 310 Q 195 294 354 310"
+              stroke="rgba(255,255,255,0.28)"
+              strokeWidth="1.2"
+              fill="none"
+            />
+            <path
+              d="M 68 264 Q 195 250 322 264"
+              stroke="rgba(255,255,255,0.22)"
+              strokeWidth="1"
+              fill="none"
+            />
+            <path
+              d="M 14 364 Q 195 346 376 364"
+              stroke="rgba(255,255,255,0.2)"
+              strokeWidth="1"
+              fill="none"
+            />
+
+            {/* Symmetric wall vines - left edge only */}
+            <path
+              d="M 6 420 C 5 365 8 315 4 265 C 2 228 6 190 8 148 C 10 112 6 76 10 44"
+              stroke="rgba(65,105,48,0.7)"
+              strokeWidth="2.5"
+              fill="none"
+              strokeLinecap="round"
+            />
+            <ellipse
+              cx="7"
+              cy="388"
+              rx="14"
+              ry="7"
+              fill="rgba(80,125,55,0.65)"
+              transform="rotate(-28 7 388)"
+            />
+            <ellipse
+              cx="5"
+              cy="345"
+              rx="13"
+              ry="7"
+              fill="rgba(85,132,60,0.6)"
+              transform="rotate(20 5 345)"
+            />
+            <ellipse
+              cx="7"
+              cy="302"
+              rx="14"
+              ry="7"
+              fill="rgba(80,125,55,0.58)"
+              transform="rotate(-25 7 302)"
+            />
+            <ellipse
+              cx="5"
+              cy="258"
+              rx="12"
+              ry="6.5"
+              fill="rgba(85,132,60,0.55)"
+              transform="rotate(18 5 258)"
+            />
+            <ellipse
+              cx="8"
+              cy="215"
+              rx="13"
+              ry="7"
+              fill="rgba(80,125,55,0.52)"
+              transform="rotate(-22 8 215)"
+            />
+            <ellipse
+              cx="6"
+              cy="172"
+              rx="12"
+              ry="6"
+              fill="rgba(85,132,60,0.48)"
+              transform="rotate(25 6 172)"
+            />
+            <ellipse
+              cx="9"
+              cy="128"
+              rx="11"
+              ry="6"
+              fill="rgba(78,120,52,0.44)"
+              transform="rotate(-18 9 128)"
+            />
+            <ellipse
+              cx="7"
+              cy="88"
+              rx="11"
+              ry="5.5"
+              fill="rgba(85,132,60,0.4)"
+              transform="rotate(20 7 88)"
+            />
+
+            {/* Symmetric wall vines - right edge only */}
+            <path
+              d="M 384 420 C 385 365 382 315 386 265 C 388 228 384 190 382 148 C 380 112 384 76 380 44"
+              stroke="rgba(65,105,48,0.7)"
+              strokeWidth="2.5"
+              fill="none"
+              strokeLinecap="round"
+            />
+            <ellipse
+              cx="383"
+              cy="388"
+              rx="14"
+              ry="7"
+              fill="rgba(80,125,55,0.65)"
+              transform="rotate(28 383 388)"
+            />
+            <ellipse
+              cx="385"
+              cy="345"
+              rx="13"
+              ry="7"
+              fill="rgba(85,132,60,0.6)"
+              transform="rotate(-20 385 345)"
+            />
+            <ellipse
+              cx="383"
+              cy="302"
+              rx="14"
+              ry="7"
+              fill="rgba(80,125,55,0.58)"
+              transform="rotate(25 383 302)"
+            />
+            <ellipse
+              cx="385"
+              cy="258"
+              rx="12"
+              ry="6.5"
+              fill="rgba(85,132,60,0.55)"
+              transform="rotate(-18 385 258)"
+            />
+            <ellipse
+              cx="382"
+              cy="215"
+              rx="13"
+              ry="7"
+              fill="rgba(80,125,55,0.52)"
+              transform="rotate(22 382 215)"
+            />
+            <ellipse
+              cx="384"
+              cy="172"
+              rx="12"
+              ry="6"
+              fill="rgba(85,132,60,0.48)"
+              transform="rotate(-25 384 172)"
+            />
+            <ellipse
+              cx="381"
+              cy="128"
+              rx="11"
+              ry="6"
+              fill="rgba(78,120,52,0.44)"
+              transform="rotate(18 381 128)"
+            />
+            <ellipse
+              cx="383"
+              cy="88"
+              rx="11"
+              ry="5.5"
+              fill="rgba(85,132,60,0.4)"
+              transform="rotate(-20 383 88)"
+            />
+
+            {/* Potting bench (centered, receding) */}
+            {/* Bench top */}
+            <path
+              d="M 118 264 L 272 264 L 268 256 L 122 256 Z"
+              fill="rgba(158,108,58,0.68)"
+            />
+            <line
+              x1="125"
+              y1="258"
+              x2="265"
+              y2="258"
+              stroke="rgba(115,75,35,0.2)"
+              strokeWidth="0.8"
+            />
+            <line
+              x1="128"
+              y1="260"
+              x2="262"
+              y2="260"
+              stroke="rgba(115,75,35,0.16)"
+              strokeWidth="0.6"
+            />
+            <rect
+              x="118"
+              y="264"
+              width="154"
+              height="5"
+              fill="rgba(135,88,45,0.6)"
+            />
+            <rect
+              x="124"
+              y="269"
+              width="8"
+              height="38"
+              rx="2"
+              fill="rgba(122,80,40,0.58)"
+            />
+            <rect
+              x="258"
+              y="269"
+              width="8"
+              height="38"
+              rx="2"
+              fill="rgba(122,80,40,0.58)"
+            />
+            <rect
+              x="120"
+              y="302"
+              width="152"
+              height="5"
+              rx="1.5"
+              fill="rgba(140,95,50,0.45)"
+            />
+
+            {/* Seed pot 1: crack only */}
+            <path
+              d="M 136 256 Q 146 270 156 256 L 154 245 L 138 245 Z"
+              fill="rgba(190,146,94,0.82)"
+            />
+            <ellipse
+              cx="146"
+              cy="245"
+              rx="10"
+              ry="3.8"
+              fill="rgba(206,160,106,0.65)"
+            />
+            <ellipse
+              cx="146"
+              cy="243"
+              rx="8"
+              ry="3"
+              fill="rgba(85,58,28,0.7)"
+            />
+            <line
+              x1="146"
+              y1="242"
+              x2="146"
+              y2="239"
+              stroke="rgba(90,148,66,0.5)"
+              strokeWidth="1.2"
+            />
+
+            {/* Seed pot 2: two leaves */}
+            <path
+              d="M 172 256 Q 183 270 194 256 L 192 245 L 174 245 Z"
+              fill="rgba(190,146,94,0.82)"
+            />
+            <ellipse
+              cx="183"
+              cy="245"
+              rx="11"
+              ry="4"
+              fill="rgba(206,160,106,0.65)"
+            />
+            <ellipse
+              cx="183"
+              cy="243"
+              rx="9"
+              ry="3"
+              fill="rgba(82,55,26,0.7)"
+            />
+            <line
+              x1="183"
+              y1="242"
+              x2="183"
+              y2="228"
+              stroke="rgba(86,140,62,0.82)"
+              strokeWidth="1.8"
+            />
+            <ellipse
+              cx="177"
+              cy="232"
+              rx="7"
+              ry="3.8"
+              fill="rgba(108,168,76,0.75)"
+              transform="rotate(-28 177 232)"
+            />
+            <ellipse
+              cx="189"
+              cy="231"
+              rx="7"
+              ry="3.8"
+              fill="rgba(108,168,76,0.7)"
+              transform="rotate(28 189 231)"
+            />
+            <ellipse
+              cx="183"
+              cy="226"
+              rx="3.5"
+              ry="2.2"
+              fill="rgba(120,180,86,0.65)"
+            />
+
+            {/* Seed pot 3: taller sprout */}
+            <path
+              d="M 210 256 Q 222 270 234 256 L 232 245 L 212 245 Z"
+              fill="rgba(190,146,94,0.82)"
+            />
+            <ellipse
+              cx="222"
+              cy="245"
+              rx="12"
+              ry="4"
+              fill="rgba(206,160,106,0.65)"
+            />
+            <ellipse
+              cx="222"
+              cy="243"
+              rx="10"
+              ry="3"
+              fill="rgba(82,55,26,0.7)"
+            />
+            <line
+              x1="222"
+              y1="242"
+              x2="221"
+              y2="221"
+              stroke="rgba(86,140,62,0.82)"
+              strokeWidth="1.8"
+            />
+            <ellipse
+              cx="213"
+              cy="234"
+              rx="8"
+              ry="4.2"
+              fill="rgba(108,168,76,0.72)"
+              transform="rotate(-30 213 234)"
+            />
+            <ellipse
+              cx="231"
+              cy="233"
+              rx="8"
+              ry="4.2"
+              fill="rgba(108,168,76,0.68)"
+              transform="rotate(30 231 233)"
+            />
+            <ellipse
+              cx="214"
+              cy="227"
+              rx="6"
+              ry="3.5"
+              fill="rgba(118,178,84,0.62)"
+              transform="rotate(-18 214 227)"
+            />
+            <ellipse
+              cx="230"
+              cy="226"
+              rx="6"
+              ry="3.5"
+              fill="rgba(118,178,84,0.58)"
+              transform="rotate(18 230 226)"
+            />
+            <ellipse
+              cx="221"
+              cy="220"
+              rx="3"
+              ry="2"
+              fill="rgba(128,188,94,0.58)"
+            />
+
+            {/* Floor plants in terra cotta pots - symmetric, 2 each side */}
+            {/* Far left */}
+            <g transform="translate(52,342)">
+              <circle cx="0" cy="-22" r="10" fill="rgba(201,122,110,0.86)" />
+              <circle cx="-9" cy="-33" r="8.5" fill="rgba(201,122,110,0.78)" />
+              <circle cx="9" cy="-33" r="8.5" fill="rgba(201,122,110,0.78)" />
+              <circle cx="-13" cy="-21" r="8" fill="rgba(201,122,110,0.75)" />
+              <circle cx="13" cy="-21" r="8" fill="rgba(201,122,110,0.75)" />
+              <circle cx="0" cy="-22" r="6" fill="rgba(235,182,172,0.9)" />
+              <circle cx="0" cy="-22" r="2.8" fill="rgba(160,82,72,0.88)" />
+              <line
+                x1="0"
+                y1="-11"
+                x2="0"
+                y2="1"
+                stroke="rgba(78,128,58,0.7)"
+                strokeWidth="2.8"
+              />
+              <ellipse
+                cx="-11"
+                cy="-5"
+                rx="9"
+                ry="5"
+                fill="rgba(92,142,70,0.6)"
+                transform="rotate(-22 -11 -5)"
+              />
+              <path
+                d="M -13 1 L -10 26 L 10 26 L 13 1 Z"
+                fill="rgba(182,112,62,0.85)"
+              />
+              <ellipse
+                cx="0"
+                cy="1"
+                rx="13"
+                ry="5"
+                fill="rgba(208,138,80,0.78)"
+              />
+              <ellipse
+                cx="0"
+                cy="0"
+                rx="11"
+                ry="3.8"
+                fill="rgba(75,50,24,0.7)"
+              />
+              <ellipse
+                cx="0"
+                cy="26"
+                rx="10"
+                ry="3.2"
+                fill="rgba(155,90,48,0.68)"
+              />
+            </g>
+            {/* Near left */}
+            <g transform="translate(138,350)">
+              <circle cx="0" cy="-18" r="9" fill="rgba(122,158,110,0.86)" />
+              <circle cx="0" cy="-28" r="7.5" fill="rgba(122,158,110,0.78)" />
+              <circle cx="10" cy="-23" r="7.5" fill="rgba(122,158,110,0.78)" />
+              <circle cx="10" cy="-13" r="7.5" fill="rgba(122,158,110,0.75)" />
+              <circle cx="-10" cy="-23" r="7.5" fill="rgba(122,158,110,0.75)" />
+              <circle cx="-10" cy="-13" r="7.5" fill="rgba(122,158,110,0.72)" />
+              <circle cx="0" cy="-18" r="5.5" fill="rgba(168,215,148,0.9)" />
+              <circle cx="0" cy="-18" r="2.5" fill="rgba(62,102,50,0.88)" />
+              <line
+                x1="0"
+                y1="-8"
+                x2="0"
+                y2="1"
+                stroke="rgba(78,128,58,0.7)"
+                strokeWidth="2.8"
+              />
+              <path
+                d="M -13 1 L -10 26 L 10 26 L 13 1 Z"
+                fill="rgba(182,112,62,0.85)"
+              />
+              <ellipse
+                cx="0"
+                cy="1"
+                rx="13"
+                ry="5"
+                fill="rgba(208,138,80,0.78)"
+              />
+              <ellipse
+                cx="0"
+                cy="0"
+                rx="11"
+                ry="3.8"
+                fill="rgba(75,50,24,0.7)"
+              />
+              <ellipse
+                cx="0"
+                cy="26"
+                rx="10"
+                ry="3.2"
+                fill="rgba(155,90,48,0.68)"
+              />
+            </g>
+            {/* Near right */}
+            <g transform="translate(252,350)">
+              <circle cx="0" cy="-18" r="9" fill="rgba(185,148,90,0.86)" />
+              <circle cx="0" cy="-28" r="7.5" fill="rgba(185,148,90,0.78)" />
+              <circle cx="10" cy="-23" r="7.5" fill="rgba(185,148,90,0.78)" />
+              <circle cx="10" cy="-13" r="7.5" fill="rgba(185,148,90,0.75)" />
+              <circle cx="-10" cy="-23" r="7.5" fill="rgba(185,148,90,0.75)" />
+              <circle cx="-10" cy="-13" r="7.5" fill="rgba(185,148,90,0.72)" />
+              <circle cx="0" cy="-18" r="5.5" fill="rgba(228,198,138,0.9)" />
+              <circle cx="0" cy="-18" r="2.5" fill="rgba(120,85,38,0.88)" />
+              <line
+                x1="0"
+                y1="-8"
+                x2="0"
+                y2="1"
+                stroke="rgba(78,128,58,0.7)"
+                strokeWidth="2.8"
+              />
+              <path
+                d="M -13 1 L -10 26 L 10 26 L 13 1 Z"
+                fill="rgba(182,112,62,0.85)"
+              />
+              <ellipse
+                cx="0"
+                cy="1"
+                rx="13"
+                ry="5"
+                fill="rgba(208,138,80,0.78)"
+              />
+              <ellipse
+                cx="0"
+                cy="0"
+                rx="11"
+                ry="3.8"
+                fill="rgba(75,50,24,0.7)"
+              />
+              <ellipse
+                cx="0"
+                cy="26"
+                rx="10"
+                ry="3.2"
+                fill="rgba(155,90,48,0.68)"
+              />
+            </g>
+            {/* Far right */}
+            <g transform="translate(338,342)">
+              <circle cx="0" cy="-22" r="10" fill="rgba(160,130,108,0.86)" />
+              <circle cx="-9" cy="-33" r="8.5" fill="rgba(160,130,108,0.78)" />
+              <circle cx="9" cy="-33" r="8.5" fill="rgba(160,130,108,0.78)" />
+              <circle cx="-13" cy="-21" r="8" fill="rgba(160,130,108,0.75)" />
+              <circle cx="13" cy="-21" r="8" fill="rgba(160,130,108,0.75)" />
+              <circle cx="0" cy="-22" r="6" fill="rgba(208,188,158,0.9)" />
+              <circle cx="0" cy="-22" r="2.8" fill="rgba(100,78,55,0.88)" />
+              <line
+                x1="0"
+                y1="-11"
+                x2="0"
+                y2="1"
+                stroke="rgba(78,128,58,0.7)"
+                strokeWidth="2.8"
+              />
+              <ellipse
+                cx="11"
+                cy="-5"
+                rx="9"
+                ry="5"
+                fill="rgba(92,142,70,0.6)"
+                transform="rotate(22 11 -5)"
+              />
+              <path
+                d="M -13 1 L -10 26 L 10 26 L 13 1 Z"
+                fill="rgba(182,112,62,0.85)"
+              />
+              <ellipse
+                cx="0"
+                cy="1"
+                rx="13"
+                ry="5"
+                fill="rgba(208,138,80,0.78)"
+              />
+              <ellipse
+                cx="0"
+                cy="0"
+                rx="11"
+                ry="3.8"
+                fill="rgba(75,50,24,0.7)"
+              />
+              <ellipse
+                cx="0"
+                cy="26"
+                rx="10"
+                ry="3.2"
+                fill="rgba(155,90,48,0.68)"
+              />
+            </g>
+
+            {/* Floor scatter blooms */}
+            <circle cx="16" cy="406" r="6.5" fill="rgba(215,148,152,0.78)" />
+            <circle cx="28" cy="396" r="5" fill="rgba(225,158,158,0.72)" />
+            <circle cx="8" cy="412" r="4.5" fill="rgba(210,138,142,0.7)" />
+            <circle cx="374" cy="406" r="6.5" fill="rgba(215,148,152,0.78)" />
+            <circle cx="362" cy="396" r="5" fill="rgba(225,158,158,0.72)" />
+            <circle cx="382" cy="412" r="4.5" fill="rgba(210,138,142,0.7)" />
+            <ellipse
+              cx="22"
+              cy="418"
+              rx="28"
+              ry="10"
+              fill="rgba(75,120,52,0.38)"
+            />
+            <ellipse
+              cx="368"
+              cy="416"
+              rx="28"
+              ry="10"
+              fill="rgba(75,120,52,0.38)"
+            />
+          </svg>
         </div>
 
         {/* What's grown */}

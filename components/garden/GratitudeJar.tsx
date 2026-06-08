@@ -218,7 +218,7 @@ export default function GratitudeJar() {
     <div className="px-2.5 pb-4">
       <div className="bg-white rounded-card p-4 shadow-sm border border-border">
         <p className="font-mono text-[9px] uppercase tracking-widest text-muted mb-3">
-          Gratitude
+          Gratitude Pebbles
         </p>
 
         {/* Jar + interactions */}

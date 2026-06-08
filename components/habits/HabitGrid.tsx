@@ -7,6 +7,8 @@ import { computeStreak } from "@/lib/garden";
 import SuggestedSeeds from "./SuggestedSeeds";
 import type { Habit, HabitCategory } from "@/types";
 import FlowerHabit from "./FlowerHabit";
+import PlantingSeedOverlay from "@/components/animations/PlantingSeedOverlay";
+import HatchOverlay from "@/components/animations/HatchOverlay";
 
 // Auto-assigned icons cycle through this list for custom habits
 const CUSTOM_ICONS = [
@@ -39,6 +41,9 @@ export default function HabitGrid() {
     habit: Habit;
     days: number;
   } | null>(null);
+
+  const [seedMoment, setSeedMoment] = useState<string | null>(null);
+  const [hatchMoment, setHatchMoment] = useState<string | null>(null);
 
   const [plantOpen, setPlantOpen] = useState(false);
   const [weedOpen, setWeedOpen] = useState(false);
@@ -173,6 +178,7 @@ export default function HabitGrid() {
       habit.set("habitGroup", "grow");
       habit.setACL(new Parse.ACL(user));
       await habit.save();
+      setSeedMoment(newName.trim());
       setNewName("");
       setPlantOpen(false);
       void loadHabits();
@@ -213,6 +219,10 @@ export default function HabitGrid() {
       completed ? next.add(habitId) : next.delete(habitId);
       return next;
     });
+  }
+
+  function handleStreakSeven(habitName: string) {
+    setHatchMoment(habitName);
   }
 
   async function dismissMilestone() {
@@ -285,6 +295,7 @@ export default function HabitGrid() {
                   isWilting={isWilting}
                   restToday={restToday.has(habit.objectId)}
                   onToggle={handleToggle}
+                  onStreakSeven={handleStreakSeven}
                 />
               );
             })}
@@ -377,6 +388,22 @@ export default function HabitGrid() {
             </div>
           </div>
         </>
+      )}
+
+      {/* Planting seed animation */}
+      {seedMoment && (
+        <PlantingSeedOverlay
+          habitName={seedMoment}
+          onClose={() => setSeedMoment(null)}
+        />
+      )}
+
+      {/* Seven-day hatch animation */}
+      {hatchMoment && (
+        <HatchOverlay
+          habitName={hatchMoment}
+          onClose={() => setHatchMoment(null)}
+        />
       )}
 
       {/* Milestone overlay */}
