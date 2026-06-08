@@ -9,6 +9,7 @@ import type { Habit, HabitCategory } from "@/types";
 import FlowerHabit from "./FlowerHabit";
 import PlantingSeedOverlay from "@/components/animations/PlantingSeedOverlay";
 import HatchOverlay from "@/components/animations/HatchOverlay";
+import { getPlantTypeForHabit } from "@/lib/plant-types";
 
 // Auto-assigned icons cycle through this list for custom habits
 const CUSTOM_ICONS = [
@@ -43,7 +44,10 @@ export default function HabitGrid() {
   } | null>(null);
 
   const [seedMoment, setSeedMoment] = useState<string | null>(null);
-  const [hatchMoment, setHatchMoment] = useState<string | null>(null);
+  const [hatchMoment, setHatchMoment] = useState<{
+    habitName: string;
+    habitId: string;
+  } | null>(null);
 
   const [plantOpen, setPlantOpen] = useState(false);
   const [weedOpen, setWeedOpen] = useState(false);
@@ -221,8 +225,8 @@ export default function HabitGrid() {
     });
   }
 
-  function handleStreakSeven(habitName: string) {
-    setHatchMoment(habitName);
+  function handleStreakSeven(habitName: string, habitId: string) {
+    setHatchMoment({ habitName, habitId });
   }
 
   async function dismissMilestone() {
@@ -401,7 +405,8 @@ export default function HabitGrid() {
       {/* Seven-day hatch animation */}
       {hatchMoment && (
         <HatchOverlay
-          habitName={hatchMoment}
+          habitName={hatchMoment.habitName}
+          plantType={getPlantTypeForHabit(hatchMoment.habitId)}
           onClose={() => setHatchMoment(null)}
         />
       )}

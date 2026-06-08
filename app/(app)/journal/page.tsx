@@ -7,6 +7,7 @@ import DiaryTab from "@/components/journal/tabs/DiaryTab";
 import FullPictureTab from "@/components/journal/tabs/FullPictureTab";
 import AffirmationsTab from "@/components/journal/tabs/AffirmationsTab";
 import WhyTab from "@/components/journal/tabs/WhyTab";
+import GratitudeJar from "@/components/garden/GratitudeJar";
 
 type JournalTab = "diary" | "full_picture" | "affirmations" | "why";
 
@@ -46,6 +47,14 @@ export default function JournalPage() {
       {activeTab === "full_picture" && <FullPictureTab />}
       {activeTab === "affirmations" && <AffirmationsTab />}
       {activeTab === "why" && <WhyTab />}
+
+      {/* Gratitude jar */}
+      <div className="px-2.5 pt-2">
+        <p className="font-mono text-[9px] uppercase tracking-widest text-muted mb-2">
+          Gratitude jar
+        </p>
+      </div>
+      <GratitudeJar />
     </>
   );
 }

@@ -42,7 +42,7 @@ interface FlowerHabitProps {
   isWilting: boolean;
   restToday?: boolean;
   onToggle: (habitId: string, completed: boolean) => void;
-  onStreakSeven?: (habitName: string) => void;
+  onStreakSeven?: (habitName: string, habitId: string) => void;
 }
 
 export default function FlowerHabit({
@@ -180,7 +180,7 @@ export default function FlowerHabit({
           const prevStreak = Math.max(0, newStreak - 1);
 
           if (newStreak === 7) {
-            onStreakSeven?.(habit.name);
+            onStreakSeven?.(habit.name, habit.objectId);
           }
 
           if (detectBlossomEarned(newStreak, prevStreak)) {

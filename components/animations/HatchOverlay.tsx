@@ -1,22 +1,62 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { PlantType, getOverlayBg } from "@/lib/plant-types";
 
 interface Props {
   habitName: string;
+  plantType: PlantType;
   onClose: () => void;
 }
 
-const MOTES = [
-  { x: -22, drift: "-18px", delay: "3.2s", size: 4, color: "#B8AADA" },
-  { x: 10, drift: "14px", delay: "3.35s", size: 3, color: "#9B8EC4" },
-  { x: -6, drift: "-8px", delay: "3.5s", size: 5, color: "#D4C9E8" },
-  { x: 18, drift: "22px", delay: "3.4s", size: 3, color: "#B8AADA" },
-  { x: -14, drift: "-24px", delay: "3.55s", size: 4, color: "#9B8EC4" },
-  { x: 4, drift: "6px", delay: "3.6s", size: 3, color: "#D4C9E8" },
-];
+function buildMotes(plantType: PlantType) {
+  return [
+    {
+      x: -22,
+      drift: "-18px",
+      delay: "3.2s",
+      size: 4,
+      color: plantType.petalColorLight,
+    },
+    {
+      x: 10,
+      drift: "14px",
+      delay: "3.35s",
+      size: 3,
+      color: plantType.moteColor,
+    },
+    {
+      x: -6,
+      drift: "-8px",
+      delay: "3.5s",
+      size: 5,
+      color: plantType.centerColor,
+    },
+    {
+      x: 18,
+      drift: "22px",
+      delay: "3.4s",
+      size: 3,
+      color: plantType.petalColorLight,
+    },
+    {
+      x: -14,
+      drift: "-24px",
+      delay: "3.55s",
+      size: 4,
+      color: plantType.moteColor,
+    },
+    {
+      x: 4,
+      drift: "6px",
+      delay: "3.6s",
+      size: 3,
+      color: plantType.centerColor,
+    },
+  ];
+}
 
-export default function HatchOverlay({ habitName, onClose }: Props) {
+export default function HatchOverlay({ habitName, plantType, onClose }: Props) {
   const [canDismiss, setCanDismiss] = useState(false);
 
   useEffect(() => {
@@ -27,6 +67,9 @@ export default function HatchOverlay({ habitName, onClose }: Props) {
   function handleClick() {
     if (canDismiss) onClose();
   }
+
+  const MOTES = buildMotes(plantType);
+  const overlayBg = getOverlayBg(plantType);
 
   return (
     <>
@@ -133,7 +176,6 @@ export default function HatchOverlay({ habitName, onClose }: Props) {
           width: 160px;
           height: 160px;
           border-radius: 50%;
-          background: radial-gradient(ellipse, rgba(155,142,196,0.22) 0%, transparent 70%);
           transform: translateX(-50%);
           opacity: 0;
           animation: hov-halo-in 0.8s 2.8s ease-out forwards;
@@ -170,7 +212,7 @@ export default function HatchOverlay({ habitName, onClose }: Props) {
           position: "fixed",
           inset: 0,
           zIndex: 50,
-          background: "rgba(10, 22, 14, 0.94)",
+          background: overlayBg,
           cursor: canDismiss ? "pointer" : "default",
         }}
       >
@@ -253,8 +295,7 @@ export default function HatchOverlay({ habitName, onClose }: Props) {
               width: 200,
               height: 200,
               borderRadius: "50%",
-              background:
-                "radial-gradient(ellipse, rgba(212,201,232,0.45) 0%, rgba(155,142,196,0.15) 40%, transparent 70%)",
+              background: `radial-gradient(ellipse, ${plantType.centerColor}72 0%, ${plantType.petalColor}26 40%, transparent 70%)`,
               animation: "hov-glow-burst 1.2s 1.5s ease-out both",
               transform: "translateX(-50%) scale(0.05)",
               opacity: 0,
@@ -304,7 +345,12 @@ export default function HatchOverlay({ habitName, onClose }: Props) {
           </svg>
 
           {/* Halo behind plant */}
-          <div className="hov-halo" />
+          <div
+            className="hov-halo"
+            style={{
+              background: `radial-gradient(ellipse, ${plantType.petalColor}38 0%, transparent 70%)`,
+            }}
+          />
 
           {/* Stem */}
           <svg
@@ -316,7 +362,7 @@ export default function HatchOverlay({ habitName, onClose }: Props) {
           >
             <path
               d="M4 115 Q3 80 4 60 Q5 30 4 0"
-              stroke="#4A7A42"
+              stroke={plantType.stemColor}
               strokeWidth="2.5"
               strokeLinecap="round"
               fill="none"
@@ -381,13 +427,15 @@ export default function HatchOverlay({ habitName, onClose }: Props) {
                 cy="36"
                 rx="7"
                 ry="13"
-                fill={i % 2 === 0 ? "#9B8EC4" : "#B8AADA"}
+                fill={
+                  i % 2 === 0 ? plantType.petalColor : plantType.petalColorLight
+                }
                 transform={`rotate(${angle} 36 36) translate(0 -13)`}
               />
             ))}
-            <circle cx="36" cy="36" r="9" fill="#D4C9E8" />
-            <circle cx="36" cy="36" r="5.5" fill="#F0EBF8" />
-            <circle cx="36" cy="36" r="2.5" fill="#7C6FAB" />
+            <circle cx="36" cy="36" r="9" fill={plantType.centerColor} />
+            <circle cx="36" cy="36" r="5.5" fill={plantType.petalColorLight} />
+            <circle cx="36" cy="36" r="2.5" fill={plantType.centerDark} />
           </svg>
 
           {/* Floating motes */}
@@ -432,7 +480,7 @@ export default function HatchOverlay({ habitName, onClose }: Props) {
               opacity: 0,
             }}
           >
-            Your lavender bloomed.
+            {`Your ${plantType.name} bloomed.`}
           </p>
           <p
             className="hov-copy-in"

@@ -277,6 +277,76 @@ export default function HomePage() {
   const randomCommitment =
     commitments[Math.floor(Math.random() * commitments.length)] ?? "";
 
+  // --- Greenhouse dynamic data ---
+  const SLOT_COLORS = [
+    {
+      petal: "rgba(201,122,110,0.86)",
+      center: "rgba(235,182,172,0.9)",
+      dark: "rgba(160,82,72,0.88)",
+    },
+    {
+      petal: "rgba(122,158,110,0.86)",
+      center: "rgba(168,215,148,0.9)",
+      dark: "rgba(62,102,50,0.88)",
+    },
+    {
+      petal: "rgba(185,148,90,0.86)",
+      center: "rgba(228,198,138,0.9)",
+      dark: "rgba(120,85,38,0.88)",
+    },
+    {
+      petal: "rgba(160,130,108,0.86)",
+      center: "rgba(208,188,158,0.9)",
+      dark: "rgba(100,78,55,0.88)",
+    },
+    {
+      petal: "rgba(155,142,196,0.86)",
+      center: "rgba(212,201,232,0.9)",
+      dark: "rgba(100,88,160,0.88)",
+    },
+    {
+      petal: "rgba(212,120,100,0.86)",
+      center: "rgba(240,180,168,0.9)",
+      dark: "rgba(150,70,58,0.88)",
+    },
+  ];
+
+  // All floor positions; which ones are active depends on habit count
+  const ALL_FLOOR_POSITIONS = [
+    { x: 42, y: 342 },
+    { x: 118, y: 350 },
+    { x: 195, y: 350 },
+    { x: 272, y: 350 },
+    { x: 348, y: 342 },
+    { x: 390, y: 342 },
+  ];
+
+  // Sort habits by streak descending, take top 6
+  const sortedHabits = [...habits]
+    .sort((a, b) => (streaks[b.objectId] ?? 0) - (streaks[a.objectId] ?? 0))
+    .slice(0, 6);
+
+  // Pick which position indices to use based on count
+  function getPositionIndices(count: number): number[] {
+    if (count <= 0) return [];
+    if (count === 1) return [1];
+    if (count === 2) return [1, 4];
+    if (count === 3) return [0, 2, 4];
+    if (count === 4) return [0, 1, 3, 4];
+    if (count === 5) return [0, 1, 2, 3, 4];
+    return [0, 1, 2, 3, 4, 5];
+  }
+
+  const positionIndices = getPositionIndices(sortedHabits.length);
+
+  // Bench seed pots: habits with streak < 7, capped at 3
+  const germinating = sortedHabits
+    .filter((h) => (streaks[h.objectId] ?? 0) < 7)
+    .slice(0, 3);
+
+  // Bench pot x positions (matching original 3-pot layout)
+  const BENCH_POT_X = [146, 183, 222];
+
   const whatsGrown =
     dayCount > 0 || habits.length > 0
       ? `You've been here ${dayCount} ${dayCount === 1 ? "day" : "days"}. Your garden has ${habits.length} ${habits.length === 1 ? "flower" : "flowers"}.${todaySpiralLabel ? ` The spiral you're in today is ${todaySpiralLabel}.` : ""}`
@@ -737,343 +807,262 @@ export default function HomePage() {
               fill="rgba(140,95,50,0.45)"
             />
 
-            {/* Seed pot 1: crack only */}
-            <path
-              d="M 136 256 Q 146 270 156 256 L 154 245 L 138 245 Z"
-              fill="rgba(190,146,94,0.82)"
-            />
-            <ellipse
-              cx="146"
-              cy="245"
-              rx="10"
-              ry="3.8"
-              fill="rgba(206,160,106,0.65)"
-            />
-            <ellipse
-              cx="146"
-              cy="243"
-              rx="8"
-              ry="3"
-              fill="rgba(85,58,28,0.7)"
-            />
-            <line
-              x1="146"
-              y1="242"
-              x2="146"
-              y2="239"
-              stroke="rgba(90,148,66,0.5)"
-              strokeWidth="1.2"
-            />
+            {/* Dynamic bench seed pots: germinating habits (streak < 7), up to 3 */}
+            {germinating.map((habit, i) => {
+              const cx = BENCH_POT_X[i] ?? 183;
+              const streak = streaks[habit.objectId] ?? 0;
+              // pot width varies slightly per slot
+              const hw = i === 0 ? 10 : i === 1 ? 11 : 12;
+              const hy = i === 0 ? 3.8 : 4;
+              const potLeft = cx - hw - 10;
+              const potRight = cx + hw + 10;
+              return (
+                <g key={habit.objectId}>
+                  {/* Pot body */}
+                  <path
+                    d={`M ${potLeft} 256 Q ${cx} 270 ${potRight} 256 L ${potRight - 2} 245 L ${potLeft + 2} 245 Z`}
+                    fill="rgba(190,146,94,0.82)"
+                  />
+                  <ellipse
+                    cx={cx}
+                    cy={245}
+                    rx={hw}
+                    ry={hy}
+                    fill="rgba(206,160,106,0.65)"
+                  />
+                  <ellipse
+                    cx={cx}
+                    cy={243}
+                    rx={hw - 2}
+                    ry={3}
+                    fill="rgba(82,55,26,0.7)"
+                  />
+                  {/* State A: crack only (streak 1) */}
+                  {streak <= 1 && (
+                    <line
+                      x1={cx}
+                      y1={242}
+                      x2={cx}
+                      y2={239}
+                      stroke="rgba(90,148,66,0.5)"
+                      strokeWidth="1.2"
+                    />
+                  )}
+                  {/* State B: two leaves (streak 2-3) */}
+                  {streak >= 2 && streak <= 3 && (
+                    <>
+                      <line
+                        x1={cx}
+                        y1={242}
+                        x2={cx}
+                        y2={228}
+                        stroke="rgba(86,140,62,0.82)"
+                        strokeWidth="1.8"
+                      />
+                      <ellipse
+                        cx={cx - 6}
+                        cy={232}
+                        rx={7}
+                        ry={3.8}
+                        fill="rgba(108,168,76,0.75)"
+                        transform={`rotate(-28 ${cx - 6} 232)`}
+                      />
+                      <ellipse
+                        cx={cx + 6}
+                        cy={231}
+                        rx={7}
+                        ry={3.8}
+                        fill="rgba(108,168,76,0.7)"
+                        transform={`rotate(28 ${cx + 6} 231)`}
+                      />
+                      <ellipse
+                        cx={cx}
+                        cy={226}
+                        rx={3.5}
+                        ry={2.2}
+                        fill="rgba(120,180,86,0.65)"
+                      />
+                    </>
+                  )}
+                  {/* State C: taller sprout (streak 4-6) */}
+                  {streak >= 4 && streak <= 6 && (
+                    <>
+                      <line
+                        x1={cx}
+                        y1={242}
+                        x2={cx - 1}
+                        y2={221}
+                        stroke="rgba(86,140,62,0.82)"
+                        strokeWidth="1.8"
+                      />
+                      <ellipse
+                        cx={cx - 9}
+                        cy={234}
+                        rx={8}
+                        ry={4.2}
+                        fill="rgba(108,168,76,0.72)"
+                        transform={`rotate(-30 ${cx - 9} 234)`}
+                      />
+                      <ellipse
+                        cx={cx + 9}
+                        cy={233}
+                        rx={8}
+                        ry={4.2}
+                        fill="rgba(108,168,76,0.68)"
+                        transform={`rotate(30 ${cx + 9} 233)`}
+                      />
+                      <ellipse
+                        cx={cx - 8}
+                        cy={227}
+                        rx={6}
+                        ry={3.5}
+                        fill="rgba(118,178,84,0.62)"
+                        transform={`rotate(-18 ${cx - 8} 227)`}
+                      />
+                      <ellipse
+                        cx={cx + 8}
+                        cy={226}
+                        rx={6}
+                        ry={3.5}
+                        fill="rgba(118,178,84,0.58)"
+                        transform={`rotate(18 ${cx + 8} 226)`}
+                      />
+                      <ellipse
+                        cx={cx - 1}
+                        cy={220}
+                        rx={3}
+                        ry={2}
+                        fill="rgba(128,188,94,0.58)"
+                      />
+                    </>
+                  )}
+                </g>
+              );
+            })}
 
-            {/* Seed pot 2: two leaves */}
-            <path
-              d="M 172 256 Q 183 270 194 256 L 192 245 L 174 245 Z"
-              fill="rgba(190,146,94,0.82)"
-            />
-            <ellipse
-              cx="183"
-              cy="245"
-              rx="11"
-              ry="4"
-              fill="rgba(206,160,106,0.65)"
-            />
-            <ellipse
-              cx="183"
-              cy="243"
-              rx="9"
-              ry="3"
-              fill="rgba(82,55,26,0.7)"
-            />
-            <line
-              x1="183"
-              y1="242"
-              x2="183"
-              y2="228"
-              stroke="rgba(86,140,62,0.82)"
-              strokeWidth="1.8"
-            />
-            <ellipse
-              cx="177"
-              cy="232"
-              rx="7"
-              ry="3.8"
-              fill="rgba(108,168,76,0.75)"
-              transform="rotate(-28 177 232)"
-            />
-            <ellipse
-              cx="189"
-              cy="231"
-              rx="7"
-              ry="3.8"
-              fill="rgba(108,168,76,0.7)"
-              transform="rotate(28 189 231)"
-            />
-            <ellipse
-              cx="183"
-              cy="226"
-              rx="3.5"
-              ry="2.2"
-              fill="rgba(120,180,86,0.65)"
-            />
+            {/* Dynamic floor plants - driven by habit streaks */}
+            {sortedHabits.map((habit, i) => {
+              const posIdx = positionIndices[i];
+              if (posIdx === undefined) return null;
+              const pos = ALL_FLOOR_POSITIONS[posIdx];
+              if (!pos) return null;
+              const streak = streaks[habit.objectId] ?? 0;
+              const color = SLOT_COLORS[i] ?? SLOT_COLORS[0];
 
-            {/* Seed pot 3: taller sprout */}
-            <path
-              d="M 210 256 Q 222 270 234 256 L 232 245 L 212 245 Z"
-              fill="rgba(190,146,94,0.82)"
-            />
-            <ellipse
-              cx="222"
-              cy="245"
-              rx="12"
-              ry="4"
-              fill="rgba(206,160,106,0.65)"
-            />
-            <ellipse
-              cx="222"
-              cy="243"
-              rx="10"
-              ry="3"
-              fill="rgba(82,55,26,0.7)"
-            />
-            <line
-              x1="222"
-              y1="242"
-              x2="221"
-              y2="221"
-              stroke="rgba(86,140,62,0.82)"
-              strokeWidth="1.8"
-            />
-            <ellipse
-              cx="213"
-              cy="234"
-              rx="8"
-              ry="4.2"
-              fill="rgba(108,168,76,0.72)"
-              transform="rotate(-30 213 234)"
-            />
-            <ellipse
-              cx="231"
-              cy="233"
-              rx="8"
-              ry="4.2"
-              fill="rgba(108,168,76,0.68)"
-              transform="rotate(30 231 233)"
-            />
-            <ellipse
-              cx="214"
-              cy="227"
-              rx="6"
-              ry="3.5"
-              fill="rgba(118,178,84,0.62)"
-              transform="rotate(-18 214 227)"
-            />
-            <ellipse
-              cx="230"
-              cy="226"
-              rx="6"
-              ry="3.5"
-              fill="rgba(118,178,84,0.58)"
-              transform="rotate(18 230 226)"
-            />
-            <ellipse
-              cx="221"
-              cy="220"
-              rx="3"
-              ry="2"
-              fill="rgba(128,188,94,0.58)"
-            />
+              // Pot shared structure
+              const pot = (
+                <>
+                  <line
+                    x1="0"
+                    y1="-8"
+                    x2="0"
+                    y2="1"
+                    stroke="rgba(78,128,58,0.7)"
+                    strokeWidth="2.8"
+                  />
+                  <path
+                    d="M -13 1 L -10 26 L 10 26 L 13 1 Z"
+                    fill="rgba(182,112,62,0.85)"
+                  />
+                  <ellipse
+                    cx="0"
+                    cy="1"
+                    rx="13"
+                    ry="5"
+                    fill="rgba(208,138,80,0.78)"
+                  />
+                  <ellipse
+                    cx="0"
+                    cy="0"
+                    rx="11"
+                    ry="3.8"
+                    fill="rgba(75,50,24,0.7)"
+                  />
+                  <ellipse
+                    cx="0"
+                    cy="26"
+                    rx="10"
+                    ry="3.2"
+                    fill="rgba(155,90,48,0.68)"
+                  />
+                </>
+              );
 
-            {/* Floor plants in terra cotta pots - symmetric, 2 each side */}
-            {/* Far left */}
-            <g transform="translate(52,342)">
-              <circle cx="0" cy="-22" r="10" fill="rgba(201,122,110,0.86)" />
-              <circle cx="-9" cy="-33" r="8.5" fill="rgba(201,122,110,0.78)" />
-              <circle cx="9" cy="-33" r="8.5" fill="rgba(201,122,110,0.78)" />
-              <circle cx="-13" cy="-21" r="8" fill="rgba(201,122,110,0.75)" />
-              <circle cx="13" cy="-21" r="8" fill="rgba(201,122,110,0.75)" />
-              <circle cx="0" cy="-22" r="6" fill="rgba(235,182,172,0.9)" />
-              <circle cx="0" cy="-22" r="2.8" fill="rgba(160,82,72,0.88)" />
-              <line
-                x1="0"
-                y1="-11"
-                x2="0"
-                y2="1"
-                stroke="rgba(78,128,58,0.7)"
-                strokeWidth="2.8"
-              />
-              <ellipse
-                cx="-11"
-                cy="-5"
-                rx="9"
-                ry="5"
-                fill="rgba(92,142,70,0.6)"
-                transform="rotate(-22 -11 -5)"
-              />
-              <path
-                d="M -13 1 L -10 26 L 10 26 L 13 1 Z"
-                fill="rgba(182,112,62,0.85)"
-              />
-              <ellipse
-                cx="0"
-                cy="1"
-                rx="13"
-                ry="5"
-                fill="rgba(208,138,80,0.78)"
-              />
-              <ellipse
-                cx="0"
-                cy="0"
-                rx="11"
-                ry="3.8"
-                fill="rgba(75,50,24,0.7)"
-              />
-              <ellipse
-                cx="0"
-                cy="26"
-                rx="10"
-                ry="3.2"
-                fill="rgba(155,90,48,0.68)"
-              />
-            </g>
-            {/* Near left */}
-            <g transform="translate(138,350)">
-              <circle cx="0" cy="-18" r="9" fill="rgba(122,158,110,0.86)" />
-              <circle cx="0" cy="-28" r="7.5" fill="rgba(122,158,110,0.78)" />
-              <circle cx="10" cy="-23" r="7.5" fill="rgba(122,158,110,0.78)" />
-              <circle cx="10" cy="-13" r="7.5" fill="rgba(122,158,110,0.75)" />
-              <circle cx="-10" cy="-23" r="7.5" fill="rgba(122,158,110,0.75)" />
-              <circle cx="-10" cy="-13" r="7.5" fill="rgba(122,158,110,0.72)" />
-              <circle cx="0" cy="-18" r="5.5" fill="rgba(168,215,148,0.9)" />
-              <circle cx="0" cy="-18" r="2.5" fill="rgba(62,102,50,0.88)" />
-              <line
-                x1="0"
-                y1="-8"
-                x2="0"
-                y2="1"
-                stroke="rgba(78,128,58,0.7)"
-                strokeWidth="2.8"
-              />
-              <path
-                d="M -13 1 L -10 26 L 10 26 L 13 1 Z"
-                fill="rgba(182,112,62,0.85)"
-              />
-              <ellipse
-                cx="0"
-                cy="1"
-                rx="13"
-                ry="5"
-                fill="rgba(208,138,80,0.78)"
-              />
-              <ellipse
-                cx="0"
-                cy="0"
-                rx="11"
-                ry="3.8"
-                fill="rgba(75,50,24,0.7)"
-              />
-              <ellipse
-                cx="0"
-                cy="26"
-                rx="10"
-                ry="3.2"
-                fill="rgba(155,90,48,0.68)"
-              />
-            </g>
-            {/* Near right */}
-            <g transform="translate(252,350)">
-              <circle cx="0" cy="-18" r="9" fill="rgba(185,148,90,0.86)" />
-              <circle cx="0" cy="-28" r="7.5" fill="rgba(185,148,90,0.78)" />
-              <circle cx="10" cy="-23" r="7.5" fill="rgba(185,148,90,0.78)" />
-              <circle cx="10" cy="-13" r="7.5" fill="rgba(185,148,90,0.75)" />
-              <circle cx="-10" cy="-23" r="7.5" fill="rgba(185,148,90,0.75)" />
-              <circle cx="-10" cy="-13" r="7.5" fill="rgba(185,148,90,0.72)" />
-              <circle cx="0" cy="-18" r="5.5" fill="rgba(228,198,138,0.9)" />
-              <circle cx="0" cy="-18" r="2.5" fill="rgba(120,85,38,0.88)" />
-              <line
-                x1="0"
-                y1="-8"
-                x2="0"
-                y2="1"
-                stroke="rgba(78,128,58,0.7)"
-                strokeWidth="2.8"
-              />
-              <path
-                d="M -13 1 L -10 26 L 10 26 L 13 1 Z"
-                fill="rgba(182,112,62,0.85)"
-              />
-              <ellipse
-                cx="0"
-                cy="1"
-                rx="13"
-                ry="5"
-                fill="rgba(208,138,80,0.78)"
-              />
-              <ellipse
-                cx="0"
-                cy="0"
-                rx="11"
-                ry="3.8"
-                fill="rgba(75,50,24,0.7)"
-              />
-              <ellipse
-                cx="0"
-                cy="26"
-                rx="10"
-                ry="3.2"
-                fill="rgba(155,90,48,0.68)"
-              />
-            </g>
-            {/* Far right */}
-            <g transform="translate(338,342)">
-              <circle cx="0" cy="-22" r="10" fill="rgba(160,130,108,0.86)" />
-              <circle cx="-9" cy="-33" r="8.5" fill="rgba(160,130,108,0.78)" />
-              <circle cx="9" cy="-33" r="8.5" fill="rgba(160,130,108,0.78)" />
-              <circle cx="-13" cy="-21" r="8" fill="rgba(160,130,108,0.75)" />
-              <circle cx="13" cy="-21" r="8" fill="rgba(160,130,108,0.75)" />
-              <circle cx="0" cy="-22" r="6" fill="rgba(208,188,158,0.9)" />
-              <circle cx="0" cy="-22" r="2.8" fill="rgba(100,78,55,0.88)" />
-              <line
-                x1="0"
-                y1="-11"
-                x2="0"
-                y2="1"
-                stroke="rgba(78,128,58,0.7)"
-                strokeWidth="2.8"
-              />
-              <ellipse
-                cx="11"
-                cy="-5"
-                rx="9"
-                ry="5"
-                fill="rgba(92,142,70,0.6)"
-                transform="rotate(22 11 -5)"
-              />
-              <path
-                d="M -13 1 L -10 26 L 10 26 L 13 1 Z"
-                fill="rgba(182,112,62,0.85)"
-              />
-              <ellipse
-                cx="0"
-                cy="1"
-                rx="13"
-                ry="5"
-                fill="rgba(208,138,80,0.78)"
-              />
-              <ellipse
-                cx="0"
-                cy="0"
-                rx="11"
-                ry="3.8"
-                fill="rgba(75,50,24,0.7)"
-              />
-              <ellipse
-                cx="0"
-                cy="26"
-                rx="10"
-                ry="3.2"
-                fill="rgba(155,90,48,0.68)"
-              />
-            </g>
+              if (streak >= 7) {
+                // State C: bloomed flower
+                return (
+                  <g
+                    key={habit.objectId}
+                    transform={`translate(${pos.x},${pos.y})`}
+                  >
+                    <circle cx="0" cy="-22" r="10" fill={color.petal} />
+                    <circle
+                      cx="-9"
+                      cy="-33"
+                      r="8.5"
+                      fill={color.petal.replace("0.86", "0.78")}
+                    />
+                    <circle
+                      cx="9"
+                      cy="-33"
+                      r="8.5"
+                      fill={color.petal.replace("0.86", "0.78")}
+                    />
+                    <circle
+                      cx="-13"
+                      cy="-21"
+                      r="8"
+                      fill={color.petal.replace("0.86", "0.75")}
+                    />
+                    <circle
+                      cx="13"
+                      cy="-21"
+                      r="8"
+                      fill={color.petal.replace("0.86", "0.75")}
+                    />
+                    <circle cx="0" cy="-22" r="6" fill={color.center} />
+                    <circle cx="0" cy="-22" r="2.8" fill={color.dark} />
+                    {pot}
+                  </g>
+                );
+              } else if (streak >= 4) {
+                // State B: small plant with leaves
+                return (
+                  <g
+                    key={habit.objectId}
+                    transform={`translate(${pos.x},${pos.y})`}
+                  >
+                    <ellipse
+                      cx="-10"
+                      cy="-5"
+                      rx="9"
+                      ry="5"
+                      fill="rgba(92,142,70,0.62)"
+                      transform="rotate(-22 -10 -5)"
+                    />
+                    <ellipse
+                      cx="10"
+                      cy="-5"
+                      rx="9"
+                      ry="5"
+                      fill="rgba(85,135,62,0.58)"
+                      transform="rotate(22 10 -5)"
+                    />
+                    {pot}
+                  </g>
+                );
+              } else {
+                // State A: sprout (streak 1-3)
+                return (
+                  <g
+                    key={habit.objectId}
+                    transform={`translate(${pos.x},${pos.y})`}
+                  >
+                    {pot}
+                  </g>
+                );
+              }
+            })}
 
             {/* Floor scatter blooms */}
             <circle cx="16" cy="406" r="6.5" fill="rgba(215,148,152,0.78)" />
